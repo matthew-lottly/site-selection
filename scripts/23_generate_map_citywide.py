@@ -180,8 +180,8 @@ def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
 
   <div style="{section_head}">Candidate sites (by score)</div>
   <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-    <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
-    <span style="{row_text}">Recommended site</span>
+    <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 0 0 2px #F5B700, 0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
+    <span style="{row_text}">Recommended site (fixed color + gold ring -- always distinct, regardless of score rank)</span>
   </div>
   <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
     <div style="width:18px; height:18px; border-radius:50%; background:#d03b3b; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0;"></div>
@@ -212,7 +212,7 @@ def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Flood zones</div>
   <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#93C5FD; opacity:.6; border:1px solid #2563EB; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">FEMA NFHL polygons</span></div>
-  <div style="color:#6B7280; font-size:10.5px; margin-bottom:2px;">Toggle on the layer control. SFHA zones are darker blue.</div>
+  <div style="color:#6B7280; font-size:10.5px; margin-bottom:2px;">Toggle on the layer control, then zoom in on a site (loads live from FEMA per-area to stay fast). SFHA zones are darker blue.</div>
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="color:#6B7280; font-size:10.5px;">Full scorecard, cannibalization math, confidence
@@ -221,15 +221,28 @@ def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
 """
 
 
+WINNER_FILL = "#0ca30c"  # fixed -- must never depend on rank-ramp position (see rank_badge_icon)
+WINNER_RING = "#F5B700"  # gold ring called out in README/legend as the recommendation's marker
+
+
 def rank_badge_icon(rank: int, color: str, is_winner: bool) -> folium.DivIcon:
     """A clean circular rank badge instead of a busy icon-in-a-pin marker --
     gives the 20 candidate sites clear visual priority over the competitor
-    dots and the choropleth without competing icon shapes."""
+    dots and the choropleth without competing icon shapes.
+
+    The winner's fill/ring are fixed constants, not `color` (the rank-ramp
+    color for its raw_score_rank) -- the scoring gate means the primary
+    recommendation is not always raw_score_rank #1 (a higher-raw-score site
+    that fails the AADT benchmark stays ranked above it but isn't
+    selectable), so tying the winner's marker color to rank position would
+    silently render it in whatever ramp color that rank happens to be
+    instead of the distinct gold-ringed star the legend promises.
+    """
     if is_winner:
         size = 36
         html = f"""
-        <div style="width:{size}px; height:{size}px; border-radius:50%; background:{color};
-                    border:3px solid #ffffff; box-shadow:0 0 0 2.5px {color}, 0 3px 8px rgba(0,0,0,.45);
+        <div style="width:{size}px; height:{size}px; border-radius:50%; background:{WINNER_FILL};
+                    border:3px solid #ffffff; box-shadow:0 0 0 2.5px {WINNER_RING}, 0 3px 8px rgba(0,0,0,.45);
                     display:flex; align-items:center; justify-content:center;
                     color:#ffffff; font-size:17px; font-family:'Segoe UI',Arial,sans-serif;">&#9733;</div>
         """
@@ -281,6 +294,18 @@ def build_fema_frontend_loader_script(map_name: str, layer_name: str) -> str:
     """Load FEMA NFHL polygons on-demand in the browser so large geometry
     payloads are not stored in repository outputs.
 
+    NFHL polygons are dense enough that a full-city envelope query blows
+    past FEMA's own server-side transfer limit (verified directly against
+    the live API: the citywide view's bounding box returns 'exceededTransferLimit'
+    on the *first* 2,000-feature page alone, ~25MB, with an unknown number of
+    pages still remaining) -- so a naive "fetch whatever the current map
+    bounds are" approach silently fails or never finishes, which is exactly
+    why the layer previously appeared empty. Fixed by (1) capping every query
+    to a fixed-size envelope around the map center regardless of zoom, so no
+    single request can ever approach the transfer limit, and (2) gating
+    fetches behind a minimum zoom level with an on-map hint, since "all flood
+    zones in Houston at once" is never a useful rendering at citywide scale.
+
     This is visualization-only. Analysis scoring still uses the existing
     pipeline outputs generated by enrichment scripts.
     """
@@ -289,8 +314,14 @@ def build_fema_frontend_loader_script(map_name: str, layer_name: str) -> str:
   const mapVarName = '{map_name}';
   const layerVarName = '{layer_name}';
   const queryUrl = 'https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28/query';
-  let femaLoaded = false;
+  const MIN_ZOOM = 12;          // below this, a full-viewport query risks/exceeds FEMA's transfer limit
+  const HALF_WIDTH_DEG = 0.035; // ~3.5mi fetch box centered on the map, regardless of zoom/pan -- keeps every request small and fast
+  const MOVE_DEBOUNCE_MS = 450;
+
   let femaLoading = false;
+  let femaGeoLayer = null;   // the currently-rendered L.geoJSON layer, replaced (not accumulated) on each refetch
+  let moveTimer = null;
+  let hintEl = null;
 
   function femaStyle(feature) {{
     const zone = String(((feature.properties || {{}}).FLD_ZONE || 'X')).toUpperCase().trim();
@@ -317,54 +348,65 @@ def build_fema_frontend_loader_script(map_name: str, layer_name: str) -> str:
     );
   }}
 
+  function ensureHint(mapRef) {{
+    if (hintEl) return hintEl;
+    hintEl = L.control({{ position: 'bottomleft' }});
+    hintEl.onAdd = function() {{
+      const div = L.DomUtil.create('div');
+      div.style.cssText = 'background:#1E3A8A; color:#fff; font:600 12px/1.3 "Segoe UI",Arial,sans-serif; ' +
+        'padding:7px 11px; border-radius:7px; box-shadow:0 2px 8px rgba(0,0,0,.3); margin-bottom:14px;';
+      div.innerText = 'Zoom in to load FEMA flood zones for this area';
+      return div;
+    }};
+    return hintEl;
+  }}
+
+  function showHint(mapRef) {{ ensureHint(mapRef).addTo(mapRef); }}
+  function hideHint(mapRef) {{ if (hintEl) mapRef.removeControl(hintEl); }}
+
   async function loadFemaFromApi(mapRef, femaLayerRef) {{
-    if (femaLoaded || femaLoading) return;
+    if (femaLoading) return;
+    if (mapRef.getZoom() < MIN_ZOOM) {{ showHint(mapRef); return; }}
+    hideHint(mapRef);
     femaLoading = true;
 
     try {{
-      const bounds = mapRef.getBounds();
-      const envelope = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()].join(',');
-      const pageSize = 2000;
-      let offset = 0;
-      const allFeatures = [];
+      const c = mapRef.getCenter();
+      const envelope = [c.lng - HALF_WIDTH_DEG, c.lat - HALF_WIDTH_DEG, c.lng + HALF_WIDTH_DEG, c.lat + HALF_WIDTH_DEG].join(',');
+      const params = new URLSearchParams({{
+        where: '1=1',
+        geometry: envelope,
+        geometryType: 'esriGeometryEnvelope',
+        inSR: '4326',
+        spatialRel: 'esriSpatialRelIntersects',
+        outFields: 'FLD_ZONE,ZONE_SUBTY,SFHA_TF,OBJECTID',
+        returnGeometry: 'true',
+        outSR: '4326',
+        resultRecordCount: '2000',
+        f: 'geojson',
+      }});
 
-      while (true) {{
-        const params = new URLSearchParams({{
-          where: '1=1',
-          geometry: envelope,
-          geometryType: 'esriGeometryEnvelope',
-          inSR: '4326',
-          spatialRel: 'esriSpatialRelIntersects',
-          outFields: 'FLD_ZONE,ZONE_SUBTY,SFHA_TF,OBJECTID',
-          returnGeometry: 'true',
-          outSR: '4326',
-          resultOffset: String(offset),
-          resultRecordCount: String(pageSize),
-          f: 'geojson',
-        }});
+      const resp = await fetch(queryUrl + '?' + params.toString());
+      if (!resp.ok) throw new Error('FEMA query failed with status ' + resp.status);
+      const data = await resp.json();
+      const features = (data && data.features) ? data.features : [];
 
-        const resp = await fetch(queryUrl + '?' + params.toString());
-        if (!resp.ok) throw new Error('FEMA query failed with status ' + resp.status);
-        const data = await resp.json();
-        const batch = (data && data.features) ? data.features : [];
-        allFeatures.push(...batch);
-
-        if (batch.length < pageSize) break;
-        offset += pageSize;
-        if (offset > 50000) break;
-      }}
-
-      L.geoJSON({{ type: 'FeatureCollection', features: allFeatures }}, {{
+      if (femaGeoLayer) {{ femaLayerRef.removeLayer(femaGeoLayer); }}
+      femaGeoLayer = L.geoJSON({{ type: 'FeatureCollection', features: features }}, {{
         style: femaStyle,
         onEachFeature: onEachFemaFeature,
-      }}).addTo(femaLayerRef);
-
-      femaLoaded = true;
+      }});
+      femaGeoLayer.addTo(femaLayerRef);
     }} catch (err) {{
       console.warn('Unable to load FEMA flood polygons from live API:', err);
     }} finally {{
       femaLoading = false;
     }}
+  }}
+
+  function scheduleReload(mapRef, femaLayerRef) {{
+    if (moveTimer) clearTimeout(moveTimer);
+    moveTimer = setTimeout(function() {{ loadFemaFromApi(mapRef, femaLayerRef); }}, MOVE_DEBOUNCE_MS);
   }}
 
   function bindWhenReady() {{
@@ -377,6 +419,12 @@ def build_fema_frontend_loader_script(map_name: str, layer_name: str) -> str:
 
     mapRef.on('overlayadd', function(ev) {{
       if (ev.layer === femaLayerRef) loadFemaFromApi(mapRef, femaLayerRef);
+    }});
+    mapRef.on('overlayremove', function(ev) {{
+      if (ev.layer === femaLayerRef) hideHint(mapRef);
+    }});
+    mapRef.on('moveend', function() {{
+      if (mapRef.hasLayer(femaLayerRef)) scheduleReload(mapRef, femaLayerRef);
     }});
 
     if (mapRef.hasLayer(femaLayerRef)) loadFemaFromApi(mapRef, femaLayerRef);

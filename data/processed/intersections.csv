@@ -1,24 +1,24 @@
 cluster_id,neighborhood,road_a,road_b,lat,lon
-C1,Alief,Brooks Street,US Highway 90A,29.619880856250003,-95.63506091250001
-C1,Alief,Failla Way,New Stafford Road,29.639052106250006,-95.54050510000002
-C1,Alief,Eldridge Road,West Airport Boulevard,29.650639084615385,-95.61899566153845
-C1,Alief,South Sam Houston Parkway West,Southwest Freeway Frontage Road,29.661225609090913,-95.55852345454547
-C1,Alief,Bissonnet Street,South Braeswood Boulevard,29.675924881818176,-95.53864234545455
-C1,Alief,Beechnut Street,Synott Road,29.68850889999999,-95.6143377652174
-C1,Alief,Bellaire Boulevard;Đại Lộ Sàigòn,South Kirkwood Road,29.703670827777778,-95.58791659999997
-C1,Alief,Eldridge Parkway,Westhollow Parkway,29.71438057142857,-95.62406966428571
-C1,Alief,West Sam Houston Parkway South,Westpark Drive,29.722258216666663,-95.558062725
-C1,Alief,Richmond Avenue,South Dairy Ashford Road,29.72973415,-95.60578355555556
-C2,Westchase,South Sam Houston Parkway West,West Bellfort Street,29.6534617,-95.55090265999999
-C2,Westchase,Hillcroft Avenue,Willowbend Boulevard,29.666418833333335,-95.49203257777779
-C2,Westchase,Hillcroft Avenue,South Braeswood Boulevard,29.677618769696963,-95.49353569393935
-C2,Westchase,Beechnut Street,Bissonnet Street,29.68980371923076,-95.50284369230768
-C2,Westchase,Bellaire Boulevard,Southwest Freeway Frontage Road,29.70465728,-95.51420700999999
-C2,Westchase,Hillcroft Avenue,Southwest Freeway Frontage Road,29.7170899,-95.49968042500001
-C2,Westchase,South Dairy Ashford Road,Westpark Drive,29.723603166666667,-95.60496064285714
-C2,Westchase,Hillcroft Avenue,Hillcroft Street,29.730552919999997,-95.50127526000001
-C2,Westchase,Hillcroft Avenue,South Voss Road,29.737655906249994,-95.50092289687498
-C2,Westchase,South Voss Road,Voss Road,29.760369374999996,-95.50087339999999
+C1,Westchase,Brooks Street,US Highway 90A,29.619880856250003,-95.63506091250001
+C1,Westchase,Failla Way,New Stafford Road,29.639052106250006,-95.54050510000002
+C1,Westchase,Eldridge Road,West Airport Boulevard,29.650639084615385,-95.61899566153845
+C1,Westchase,South Sam Houston Parkway West,Southwest Freeway Frontage Road,29.661225609090913,-95.55852345454547
+C1,Westchase,Bissonnet Street,South Braeswood Boulevard,29.675924881818176,-95.53864234545455
+C1,Westchase,Beechnut Street,Synott Road,29.68850889999999,-95.6143377652174
+C1,Westchase,Bellaire Boulevard;Đại Lộ Sàigòn,South Kirkwood Road,29.703670827777778,-95.58791659999997
+C1,Westchase,Eldridge Parkway,Westhollow Parkway,29.71438057142857,-95.62406966428571
+C1,Westchase,West Sam Houston Parkway South,Westpark Drive,29.722258216666663,-95.558062725
+C1,Westchase,Richmond Avenue,South Dairy Ashford Road,29.72973415,-95.60578355555556
+C2,Alief,South Sam Houston Parkway West,West Bellfort Street,29.6534617,-95.55090265999999
+C2,Alief,Hillcroft Avenue,Willowbend Boulevard,29.666418833333335,-95.49203257777779
+C2,Alief,Hillcroft Avenue,South Braeswood Boulevard,29.677618769696963,-95.49353569393935
+C2,Alief,Beechnut Street,Bissonnet Street,29.68980371923076,-95.50284369230768
+C2,Alief,Bellaire Boulevard,Southwest Freeway Frontage Road,29.70465728,-95.51420700999999
+C2,Alief,Hillcroft Avenue,Southwest Freeway Frontage Road,29.7170899,-95.49968042500001
+C2,Alief,South Dairy Ashford Road,Westpark Drive,29.723603166666667,-95.60496064285714
+C2,Alief,Hillcroft Avenue,Hillcroft Street,29.730552919999997,-95.50127526000001
+C2,Alief,Hillcroft Avenue,South Voss Road,29.737655906249994,-95.50092289687498
+C2,Alief,South Voss Road,Voss Road,29.760369374999996,-95.50087339999999
 C3,Sunnyside,Almeda-Genoa Road,Cullen Boulevard,29.61652585333334,-95.35511883333334
 C3,Sunnyside,Bellfort Street,West Bellfort Street,29.66781542,-95.38306150000001
 C3,Sunnyside,South Freeway Frontage Road,South Loop East Frontage Road,29.682937366666668,-95.37865166666666

@@ -1,8 +1,8 @@
 cluster_id,neighborhood,intersection,hcad_num,state_class,site_type,acreage,land_value,bld_value,total_appraised_val,address,city,zip,lat,lon,subdivision
-C1,Alief,Eldridge Parkway & Westhollow Parkway,0582970000612,C2,Vacant commercial land,1.0,217035.0,0.0,217035.0,ALIEF CLODINE RD,HOUSTON,77082,29.711759,-95.626533,ALIEF CLODINE RD / DAIRY ASHFORD
-C1,Alief,South Sam Houston Parkway West & Southwest Freeway Frontage Road,0410560010009,C2,Vacant commercial land,0.99,273887.0,0.0,273887.0,EMERALD LN,HOUSTON,77074,29.657915,-95.558036,BRAEBURN GARDENS
-C2,Westchase,Hillcroft Avenue & South Braeswood Boulevard,1041420000005,C2,Vacant commercial land,0.92,212850.0,0.0,212850.0,9651 GLENFIELD CT,HOUSTON,77096,29.675479,-95.495653,FONDREN SOUTHWEST
-C2,Westchase,South Sam Houston Parkway West & West Bellfort Street,1243410010006,C2,Vacant commercial land,0.65,449824.0,0.0,337368.0,SAM HOUSTON PKY,HOUSTON,77031,29.652612,-95.551142,BELTWAY 8 HWY 59 TO US 90
+C1,Westchase,Eldridge Parkway & Westhollow Parkway,0582970000612,C2,Vacant commercial land,1.0,217035.0,0.0,217035.0,ALIEF CLODINE RD,HOUSTON,77082,29.711759,-95.626533,ALIEF CLODINE RD / DAIRY ASHFORD
+C1,Westchase,South Sam Houston Parkway West & Southwest Freeway Frontage Road,0410560010009,C2,Vacant commercial land,0.99,273887.0,0.0,273887.0,EMERALD LN,HOUSTON,77074,29.657915,-95.558036,BRAEBURN GARDENS
+C2,Alief,Hillcroft Avenue & South Braeswood Boulevard,1041420000005,C2,Vacant commercial land,0.92,212850.0,0.0,212850.0,9651 GLENFIELD CT,HOUSTON,77096,29.675479,-95.495653,FONDREN SOUTHWEST
+C2,Alief,South Sam Houston Parkway West & West Bellfort Street,1243410010006,C2,Vacant commercial land,0.65,449824.0,0.0,337368.0,SAM HOUSTON PKY,HOUSTON,77031,29.652612,-95.551142,BELTWAY 8 HWY 59 TO US 90
 C3,Sunnyside,Griggs Road & Telephone Road,0410300000175,C2,Vacant commercial land,0.81,123494.0,0.0,123494.0,6600 STILLWELL ST,HOUSTON,77087,29.707081,-95.307012,GULFGATE
 C3,Sunnyside,Broadway Street & La Porte Freeway,0402370000053,C2,Vacant commercial land,0.6,287881.0,0.0,263803.0,LA PORTE RD,HOUSTON,77012,29.714372,-95.276945,PECAN PARK
 C4,Gulfton,South Post Oak Road & South Post Oak Road Frontage Road,1142750010016,C2,Vacant commercial land,0.67,233136.0,0.0,233136.0,POST OAK RD,HOUSTON,77096,29.675468,-95.458203,WESTBURY/ MEYERPARK
