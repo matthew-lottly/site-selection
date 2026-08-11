@@ -263,18 +263,19 @@ Two things a first pass at this analysis was missing:
 `scripts/22_isochrone_winner.py`, `scripts/23_generate_map_citywide.py`
 
 Built with Folium (Python) on top of Leaflet.js — 100% open source, no API key, deployable as a
-static file to GitHub Pages. Layers: real Houston city-limits boundary; citywide opportunity
-choropleth (643 tracts, amber→deep-red, with fill opacity scaled to score so low-opportunity tracts
-recede and high-opportunity ones stand out); competitors split into 5 toggleable tiers matching the
-categorization in Stage 1 (Family Dollar always visible for the cannibalization check; arch-rivals
-visible by default; sister banner, value grocery, and big-box anchors off by default as context
-layers) — colors were deliberately chosen from a validated cool-hue set (blue/violet/magenta/aqua)
-distinct from the warm rank-ramp and choropleth colors sharing the map, so the two encodings never
-get confused; all 20 candidate sites as clean numbered rank badges (white ring, small footprint) on
-a validated best→worst color ramp, with the recommendation as a distinct gold-ringed star; the 10
-opportunity areas searched; and the real drive-time trade area for the recommended site. A basemap
-switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every marker popup
-cites its data source, set in dark, bold text for at-a-glance legibility.
+static file to GitHub Pages. Layers: real Houston city-limits boundary (off by default for initial
+map clarity); citywide opportunity choropleth (643 tracts, blue sequential ramp with fill opacity
+scaled to score so low-opportunity tracts recede and high-opportunity ones stand out); competitors
+split into 5 toggleable tiers matching the categorization in Stage 1 (Family Dollar always visible
+for the cannibalization check; arch-rivals visible by default; sister banner, value grocery, and
+big-box anchors off by default as context layers) — colors were deliberately chosen from a validated
+cool-hue set (blue/violet/magenta/aqua) that remains visually distinct from the rank-badge color
+ramp; all 20 candidate sites as clean numbered rank badges (white ring, small footprint) on a
+validated best→worst color ramp, with the recommendation as a distinct gold-ringed star; the 10
+opportunity areas searched; and the real drive-time trade area for the recommended site. A FEMA
+NFHL flood-polygon layer is included as a toggleable off-by-default overlay for risk review. A
+basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
+marker popup cites its data source, set in dark, bold text for at-a-glance legibility.
 
 A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces seven tabs built
 live from the same CSVs referenced throughout this document: **Executive Checks**, the full 20-site

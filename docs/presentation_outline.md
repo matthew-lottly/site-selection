@@ -83,11 +83,11 @@
 
 ## Slide 5 — Interactive Web Map & Analysis Dashboard
 
-- `index.html` (Folium/Leaflet, hosted on GitHub Pages): real Houston city-limits boundary, citywide
-  opportunity choropleth (643 tracts, amber→deep-red by opportunity score), all 20 candidate sites as
-  clean numbered rank badges on a validated best (green) → worst (red) color ramp with the
-  recommendation as a large gold-ringed star, and the real drive-time trade area for the recommended
-  site.
+- `index.html` (Folium/Leaflet, hosted on GitHub Pages): real Houston city-limits boundary
+  (toggleable, off on page load), citywide opportunity choropleth (643 tracts, blue sequential ramp
+  by opportunity score), all 20 candidate sites as clean numbered rank badges on a validated
+  best (green) → worst (red) color ramp with the recommendation as a large gold-ringed star, and the
+  real drive-time trade area for the recommended site.
 - Competitors are split into 5 toggleable tiers, colored from a validated cool-hue palette
   (blue/violet/magenta/aqua) chosen to never be confused with the warm rank-ramp/choropleth colors
   sharing the map: **Family Dollar's own network** (always visible — the cannibalization check),
@@ -100,6 +100,8 @@
   co-tenant count, transit access, lot dimensions), **Confidence Intervals**, **Model Rigor**
   (Moran's I residual test + spatial block CV), and **Sources &amp; Validation**. The map stays visible
   and interactive alongside the open panel.
+- FEMA NFHL flood-zone polygons are included as a dedicated toggleable overlay, off by default at
+  load so executives can activate risk context only when needed.
 - Basemap switcher offers light/dark/streets/satellite/terrain. Popup and legend text is set in dark,
   bold type for readability at a glance in a room.
 

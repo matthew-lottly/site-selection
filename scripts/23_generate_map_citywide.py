@@ -8,7 +8,7 @@ Symbology:
   - competitors: 5 categories (Family Dollar / arch-rival / sister banner /
     value grocery / big-box), all cool hues, validated distinct from each
     other and from the warm rank-ramp/choropleth colors sharing the map
-  - choropleth: amber->deep-red sequential ramp, opacity scaled to score
+  - choropleth: blue sequential ramp, opacity scaled to score
   - a right-side sliding dashboard panel: Scorecard / Cannibalization / Confidence
     Intervals / Data Sources & Validation tabs
 """
@@ -22,7 +22,7 @@ import math
 import folium
 from folium import plugins
 
-from lib import COMPETITOR_COLORS, PROCESSED, ROOT, SEQUENTIAL_ORANGE, STATUS_RAMP, ramp_color
+from lib import COMPETITOR_COLORS, PROCESSED, ROOT, SEQUENTIAL_BLUE, STATUS_RAMP, ramp_color
 
 MAP_BOUNDS = {"lat_min": 29.52, "lat_max": 30.11, "lon_min": -95.79, "lon_max": -95.01}
 
@@ -47,7 +47,7 @@ def load_json(name: str) -> dict:
 PAGE_CHROME_CSS = """
 <style>
   .exec-card { font-family: 'Segoe UI', Arial, sans-serif; width: 300px; padding: 6px 8px; }
-  .exec-title { font-size: 14px; font-weight: 700; color: #1E3A8A; border-bottom: 2px solid #D97706; padding-bottom: 4px; margin-bottom: 6px; }
+  .exec-title { font-size: 14px; font-weight: 700; color: #0F172A; border-bottom: 2px solid #93C5FD; padding-bottom: 4px; margin-bottom: 6px; }
   .exec-metric { font-size: 12px; margin: 4px 0; color: #1F2937; font-weight: 700; display: flex; justify-content: space-between; gap: 8px; }
   .exec-metric span:first-child { color: #374151; font-weight: 600; }
   .exec-val { font-weight: 700; color: #1F2937; text-align: right; }
@@ -67,16 +67,20 @@ PAGE_CHROME_CSS = """
      classes down below the header -- this is what actually determines where the
      zoom/layer-control panel renders, regardless of the map div's real id. */
   .leaflet-top { top: 70px !important; }
-  #app-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 9999; background: white;
-                box-shadow: 0 2px 10px rgba(0,0,0,.18); font-family: 'Segoe UI', Arial, sans-serif;
+  #app-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 9999;
+                background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%);
+                border-bottom: 1px solid #CBD5E1; box-shadow: 0 2px 14px rgba(15,23,42,.12); font-family: 'Segoe UI', Arial, sans-serif;
                 display: flex; align-items: center; justify-content: space-between; padding: 0 18px; box-sizing: border-box; }
   #app-header .title-block { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; min-width: 0; }
-  #app-header .title-main { font-size: 16px; font-weight: 700; color: #1E3A8A; white-space: nowrap; }
+  #app-header .title-main { font-size: 16px; font-weight: 800; color: #0F172A; white-space: nowrap; letter-spacing: .01em; }
   #app-header .title-sub { font-size: 12px; color: #475569; white-space: nowrap; }
-  #app-header .title-rec { font-size: 12px; color: #0D9488; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #dash-toggle { flex-shrink: 0; background: #1E3A8A; color: white; border: none; padding: 10px 18px; border-radius: 8px;
-                 font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-  #dash-toggle:hover { background: #1E40AF; }
+  #app-header .title-rec { font-size: 12px; color: #1D4ED8; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+                           background: #DBEAFE; border: 1px solid #BFDBFE; padding: 4px 10px; border-radius: 999px; }
+  #dash-toggle { flex-shrink: 0; background: linear-gradient(135deg, #1D4ED8 0%, #0F766E 100%); color: #F8FAFC; border: none;
+                 padding: 10px 18px; border-radius: 10px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px;
+                 font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 10px rgba(29,78,216,.24); }
+  #dash-toggle:hover { filter: brightness(1.06); }
+  #dash-toggle:active { transform: translateY(1px); }
 
   /* Prevent the browser's default focus-outline rectangle from appearing
      around clicked map shapes (looked like a stray "boundary box" artifact) */
@@ -100,9 +104,9 @@ PAGE_CHROME_CSS = """
                   color: #475569; cursor: pointer; border-radius: 999px; white-space: nowrap; }
   .dash-tab-btn:hover { background: #F8FAFC; border-color: #94A3B8; }
   .dash-tab-btn.active { background: #1E3A8A; color: #FFFFFF; border-color: #1E3A8A; }
-  #dash-close { background: #EFF6FF; border: 1px solid #BFDBFE; font-size: 16px; color: #1E3A8A; cursor: pointer;
-                width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; }
-  #dash-close:hover { background: #DBEAFE; }
+  #dash-close { background: #DBEAFE; border: 1px solid #93C5FD; font-size: 16px; color: #1D4ED8; cursor: pointer;
+                width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(29,78,216,.10); }
+  #dash-close:hover { background: #BFDBFE; }
   .dash-body { overflow-y: auto; padding: 14px 14px 24px; flex: 1; }
   .dash-body p { line-height: 1.45; }
   .dash-body table { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden; }
@@ -152,7 +156,7 @@ def build_header_html(winner_address: str, winner_neighborhood: str) -> str:
 """
 
 
-def build_legend_html(rank_ramp_css: str) -> str:
+def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
     section_head = "font-weight:700; color:#1F2937; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:7px;"
     row_text = "color:#374151; font-weight:600;"
 
@@ -165,7 +169,7 @@ def build_legend_html(rank_ramp_css: str) -> str:
         )
 
     competitor_rows = "".join(
-        dot(COMPETITOR_COLORS[k], v.split(" (")[0]) for k, v in COMPETITOR_LABELS.items()
+      dot(COMPETITOR_COLORS[k], v.split(" (")[0]) for k, v in COMPETITOR_LABELS.items() if k != "family_dollar"
     )
 
     return f"""
@@ -190,6 +194,7 @@ def build_legend_html(rank_ramp_css: str) -> str:
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Competitors</div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:14px; height:14px; border-radius:50%; background:#2a78d6; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.28); display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Family Dollar (existing network)</span></div>
   {competitor_rows}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
@@ -199,10 +204,15 @@ def build_legend_html(rank_ramp_css: str) -> str:
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Opportunity score</div>
-  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:linear-gradient(90deg,{','.join(SEQUENTIAL_ORANGE)});"></div>
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{opportunity_ramp_css};"></div>
   <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
     <span>Lower (served)</span><span>Higher (underserved)</span>
   </div>
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Flood zones</div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#93C5FD; opacity:.6; border:1px solid #2563EB; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">FEMA NFHL polygons</span></div>
+  <div style="color:#6B7280; font-size:10.5px; margin-bottom:2px;">Toggle on the layer control. SFHA zones are darker blue.</div>
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="color:#6B7280; font-size:10.5px;">Full scorecard, cannibalization math, confidence
@@ -232,6 +242,39 @@ def rank_badge_icon(rank: int, color: str, is_winner: bool) -> folium.DivIcon:
                     color:#ffffff; font-weight:700; font-size:11px; font-family:'Segoe UI',Arial,sans-serif;">{rank}</div>
         """
     return folium.DivIcon(html=html, icon_size=(size, size), icon_anchor=(size // 2, size // 2))
+
+
+def family_dollar_icon() -> folium.DivIcon:
+    html = """
+    <div style="width:30px; height:30px; border-radius:50%; background:#2a78d6; border:3px solid #ffffff;
+          box-shadow:0 0 0 2px #1d4f91, 0 3px 8px rgba(0,0,0,.45); display:flex; align-items:center;
+          justify-content:center; color:#ffffff; font-size:11px; font-weight:800; font-family:'Segoe UI',Arial,sans-serif;">
+      FD
+    </div>
+    """
+    return folium.DivIcon(html=html, icon_size=(30, 30), icon_anchor=(15, 15))
+
+
+def competitor_dot_icon(color: str) -> folium.DivIcon:
+    html = f"""
+    <div style="width:14px; height:14px; border-radius:50%; background:{color}; border:2px solid #ffffff;
+          box-shadow:0 1px 3px rgba(0,0,0,.28);"></div>
+    """
+    return folium.DivIcon(html=html, icon_size=(14, 14), icon_anchor=(7, 7))
+
+
+
+def fema_zone_style(feature: dict) -> dict:
+    zone = str(feature.get("properties", {}).get("FLD_ZONE", "X") or "X").upper().strip()
+    if zone.startswith(("VE", "V")):
+        return {"fillColor": "#1D4ED8", "color": "#1E3A8A", "weight": 0.8, "fillOpacity": 0.42, "opacity": 0.65}
+    if zone.startswith(("A", "AE", "AH", "AO")):
+        return {"fillColor": "#60A5FA", "color": "#2563EB", "weight": 0.7, "fillOpacity": 0.28, "opacity": 0.55}
+    if zone.startswith("X"):
+        return {"fillColor": "#BFDBFE", "color": "#3B82F6", "weight": 0.55, "fillOpacity": 0.16, "opacity": 0.45}
+    if zone.startswith("D"):
+        return {"fillColor": "#C7D2FE", "color": "#6366F1", "weight": 0.65, "fillOpacity": 0.20, "opacity": 0.5}
+    return {"fillColor": "#93C5FD", "color": "#1D4ED8", "weight": 0.6, "fillOpacity": 0.22, "opacity": 0.5}
 
 
 # --------------------------------------------------------------------------
@@ -819,6 +862,8 @@ def build_map() -> Path:
     tracts = load_json("houston_tracts.geojson")
     boundary = load_json("houston_boundary.geojson")
     isochrone = load_json("isochrone_winner.json")
+    fema_flood_path = PROCESSED / "houston_fema_flood.geojson"
+    fema_flood = load_json("houston_fema_flood.geojson") if fema_flood_path.exists() else None
 
     m = folium.Map(location=[29.79, -95.45], zoom_start=11, tiles=None, control_scale=True)
 
@@ -847,13 +892,39 @@ def build_map() -> Path:
     m.get_root().html.add_child(folium.Element(build_header_html(scorecard[0]["address"], scorecard[0]["neighborhood"])))
 
     # --- Layer: Houston city limits (real boundary, for scale/context) ----------
-    boundary_layer = folium.FeatureGroup(name="Houston city limits", show=True)
+    boundary_layer = folium.FeatureGroup(name="Houston city limits", show=False)
     folium.GeoJson(
         boundary,
         style_function=lambda _f: {"fillOpacity": 0, "color": "#1E3A8A", "weight": 2.5, "dashArray": "6,4"},
         tooltip="City of Houston boundary (TIGERweb)",
     ).add_to(boundary_layer)
     boundary_layer.add_to(m)
+
+    # --- Layer: FEMA flood-zone polygons (NFHL, off by default) -----------------
+    if fema_flood is not None:
+      flood_layer = folium.FeatureGroup(name="FEMA flood zones (NFHL, off by default)", show=False)
+      for feature in fema_flood.get("features", []):
+        zone = str(feature.get("properties", {}).get("FLD_ZONE", "X") or "X").upper().strip()
+        zone_subty = feature.get("properties", {}).get("ZONE_SUBTY") or "n/a"
+        sfha = feature.get("properties", {}).get("SFHA_TF") or "n/a"
+        tooltip = f"FEMA flood zone {zone}"
+        if zone_subty and zone_subty != "n/a":
+          tooltip += f" / {zone_subty}"
+        popup = (
+          f"<div class='exec-card'><div class='exec-title'>FEMA NFHL Flood Zone</div>"
+          f"<div class='exec-metric'><span>Zone</span><span class='exec-val'>{zone}</span></div>"
+          f"<div class='exec-metric'><span>Subtype</span><span class='exec-val'>{zone_subty}</span></div>"
+          f"<div class='exec-metric'><span>SFHA</span><span class='exec-val'>{sfha}</span></div>"
+          f"<div class='src-note'>Source: FEMA NFHL MapServer layer 28</div></div>"
+        )
+        folium.GeoJson(
+          feature,
+          style_function=fema_zone_style,
+          highlight_function=lambda _f: {"weight": 2, "color": "#1D4ED8", "fillOpacity": 0.45},
+          tooltip=tooltip,
+          popup=folium.Popup(popup, max_width=300),
+        ).add_to(flood_layer)
+      flood_layer.add_to(m)
 
     # --- Layer: citywide opportunity (gap score) choropleth ---------------------
     gap_layer = folium.FeatureGroup(name="Opportunity score, all Houston tracts (643)", show=True)
@@ -866,7 +937,7 @@ def build_map() -> Path:
             continue
         score = float(p["gap_score"])
         t = (score - lo) / (hi - lo) if hi > lo else 0
-        color = ramp_color(t, SEQUENTIAL_ORANGE)
+        color = ramp_color(t, SEQUENTIAL_BLUE)
         fill_opacity = 0.12 + 0.5 * t
         pop = float(p["population"]) if p.get("population") else 0
         mhi = float(p["median_hh_income"]) if p.get("median_hh_income") else None
@@ -920,14 +991,22 @@ def build_map() -> Path:
         color = COMPETITOR_COLORS.get(c["category"], "#57534e")
         if layer is None:
             continue
-        # smaller + more transparent than the candidate-site markers, with a thin white
-        # ring instead of a saturated border, so these read as context, not the focus
-        folium.CircleMarker(
-            location=[lat, lon], radius=4.5, color="#ffffff", fill=True, fill_color=color,
-            fill_opacity=0.68, weight=0.75, opacity=0.9,
-            tooltip=f"{c['name']} ({c['brand']})",
+        if c["category"] == "family_dollar":
+          folium.Marker(
+            location=[lat, lon],
+            popup=f"<b style='color:#1F2937;'>Existing Family Dollar</b><br><span style='color:#374151;'>Brand: {c['brand']}<br>Category: {COMPETITOR_LABELS[c['category']]}<br>Typical size: {int(c['typical_sqft']):,} sq ft</span><br><span class='src-note'>Source: OpenStreetMap</span>",
+            tooltip=f"Family Dollar existing network: {c['name']}",
+            icon=family_dollar_icon(),
+          ).add_to(layer)
+        else:
+          # smaller + more transparent than the candidate-site markers, with a thin white
+          # ring instead of a saturated border, so these read as context, not the focus
+          folium.Marker(
+            location=[lat, lon],
             popup=f"<b style='color:#1F2937;'>{c['name']}</b><br><span style='color:#374151;'>Brand: {c['brand']}<br>Category: {COMPETITOR_LABELS[c['category']]}<br>Typical size: {int(c['typical_sqft']):,} sq ft</span><br><span class='src-note'>Source: OpenStreetMap</span>",
-        ).add_to(layer)
+            tooltip=f"{c['name']} ({c['brand']})",
+            icon=competitor_dot_icon(color),
+          ).add_to(layer)
     for layer in category_layers.values():
         layer.add_to(m)
 
@@ -1022,7 +1101,8 @@ def build_map() -> Path:
     iso_layer.add_to(m)
 
     rank_ramp_css = "linear-gradient(90deg," + ",".join(STATUS_RAMP) + ")"
-    m.get_root().html.add_child(folium.Element(build_legend_html(rank_ramp_css)))
+    opportunity_ramp_css = "linear-gradient(90deg," + ",".join(SEQUENTIAL_BLUE) + ")"
+    m.get_root().html.add_child(folium.Element(build_legend_html(rank_ramp_css, opportunity_ramp_css)))
     m.get_root().html.add_child(folium.Element(build_dashboard_html(
       scorecard,
       load_csv("cannibalization.csv"),

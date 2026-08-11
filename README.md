@@ -45,7 +45,8 @@ dataset for Houston — documented as a real limitation rather than estimated. S
 - `data/raw/` — cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
 - `data/processed/` — clean CSV/GeoJSON outputs consumed by later stages and the map
 - `docs/` — methodology, results, data validation, limitations & diligence roadmap, and a
-  presentation outline
+  presentation outline, plus PowerPoint build assets (`powerpoint_starter.md`,
+  `powerpoint_slide_copy.md`, `powerpoint_speaker_notes.md`)
 - `index.html` — the generated interactive web map (repo root, for GitHub Pages)
 
 ## Running the pipeline
