@@ -1,0 +1,12 @@
+metric,value,benchmark,status,notes
+moran_i_residuals,0.2315,Near 0.0,Watch,Global Moran's I on tract-model residuals using 8-nearest-neighbor weights.
+moran_i_expected,-0.0016,Approx. null expectation,Info,Expected Moran's I under spatial randomness.
+moran_i_permutation_pvalue,0.0050,>= 0.05 preferred,Watch,"Two-sided permutation p-value (199 permutations, fixed seed)."
+spatial_block_cv_rmse_mean,871.823,Lower is better,Info,Leave-one-spatial-block-out RMSE across valid folds.
+spatial_block_cv_r2_mean,0.411,> 0 preferred,Pass,Leave-one-spatial-block-out R^2 across valid folds.
+spatial_block_cv_r2_std,0.264,Lower is more stable,Info,Fold-to-fold variability in out-of-sample R^2.
+spatial_block_cv_n_folds,11,>= 6 preferred,Pass,Number of spatial holdout folds used.
+ols_in_sample_rmse,845.611,Context only,Info,In-sample fit for the tract-level OLS model.
+ols_in_sample_r2,0.620,Context only,Info,In-sample R^2 for the tract-level OLS model.
+winner_nearest_arch_rival_distance_mi,3.03,> 1.5 mi preferred,Pass,Winner's nearest direct arch-rival (Dollar General).
+winner_nearest_arch_rival_drive_time_min,7.4,> 5 min preferred,Pass,Winner-to-nearest-arch-rival OSRM network drive time.

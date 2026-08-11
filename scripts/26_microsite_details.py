@@ -51,6 +51,14 @@ POI_TAGS = {
     "pharmacy": "Pharmacy",
 }
 
+FUNCTIONAL_CLASS = {
+    "motorway": "Limited-access freeway",
+    "trunk": "Limited-access freeway",
+    "primary": "Principal arterial",
+    "secondary": "Minor arterial",
+    "tertiary": "Collector / local connector",
+}
+
 
 def query_microsite(lat: float, lon: float) -> dict:
     q = f"""[out:json][timeout:40];
@@ -110,13 +118,15 @@ def main() -> None:
             time.sleep(1.0)
 
         maxspeed = None
+        road_class = "Not tagged in OSM"
         for el in data["elements"]:
             t = el.get("tags", {})
             if t.get("highway") and t.get("maxspeed"):
                 m = re.search(r"\d+", t["maxspeed"])
                 if m:
                     maxspeed = int(m.group())
-                    break
+            if t.get("highway") in FUNCTIONAL_CLASS:
+                road_class = FUNCTIONAL_CLASS[t["highway"]]
 
         pois = []
         for el in data["elements"]:
@@ -134,9 +144,11 @@ def main() -> None:
             dist = haversine_miles(lat, lon, plat, plon)
             pois.append((dist, kind, t.get("name") or kind))
         pois.sort()
+        co_tenant_count = sum(1 for dist, _kind, _name in pois if dist <= 0.3)
         co_tenants = "; ".join(f"{name} ({dist*5280:.0f} ft)" for dist, kind, name in pois[:3]) or "none found within 0.3 mi"
 
         transit_dists = []
+        transit_within_500ft = 0
         for el in data["elements"]:
             t = el.get("tags", {})
             if t.get("highway") != "bus_stop" and t.get("public_transport") != "platform":
@@ -144,7 +156,10 @@ def main() -> None:
             plat, plon = (el["lat"], el["lon"]) if el["type"] == "node" else (None, None)
             if plat is None:
                 continue
-            transit_dists.append(haversine_miles(lat, lon, plat, plon))
+            dist_mi = haversine_miles(lat, lon, plat, plon)
+            transit_dists.append(dist_mi)
+            if dist_mi <= (500 / 5280):
+                transit_within_500ft += 1
         nearest_transit_ft = round(min(transit_dists) * 5280) if transit_dists else None
         transit_note = f"{nearest_transit_ft:,} ft" if nearest_transit_ft else "none within 1 mi"
 
@@ -163,7 +178,10 @@ def main() -> None:
                 "site_label": s["site_label"],
                 "posted_speed_limit_mph": maxspeed if maxspeed else "not tagged in OSM",
                 "speed_assessment": speed_note,
+                "road_functional_class": road_class,
+                "co_tenant_count_0_3mi": co_tenant_count,
                 "nearby_co_tenants": co_tenants,
+                "bus_stops_within_500ft": transit_within_500ft,
                 "nearest_transit_stop": transit_note,
                 "approx_lot_dimensions": lot_dims,
                 "deed_restrictions": "NOT VERIFIED -- requires a title search, no public API covers this",

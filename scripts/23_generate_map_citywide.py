@@ -17,6 +17,7 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
+import math
 
 import folium
 from folium import plugins
@@ -220,6 +221,240 @@ def _risk_badge(risk: str) -> str:
     color = "#0ca30c" if risk == "Low" else ("#fab219" if risk == "Moderate" else "#d03b3b")
     label = risk.split(" (")[0]
     return f'<span style="background:{color}; color:white; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">{label}</span>'
+
+
+def _parse_float(value: str | float | int | None) -> float | None:
+    if value is None:
+        return None
+    if isinstance(value, (float, int)):
+        return float(value)
+    s = str(value).strip()
+    if not s:
+        return None
+    filtered = "".join(ch for ch in s if ch.isdigit() or ch in ".-")
+    if filtered in {"", ".", "-", "-."}:
+        return None
+    try:
+        return float(filtered)
+    except ValueError:
+        return None
+
+
+def _status_chip(status: str) -> str:
+    palette = {
+        "Pass": ("#14532D", "#DCFCE7"),
+        "Watch": ("#92400E", "#FEF3C7"),
+        "Fail": ("#7F1D1D", "#FEE2E2"),
+        "Gap": ("#0F172A", "#E2E8F0"),
+        "Info": ("#334155", "#E2E8F0"),
+    }
+    fg, bg = palette.get(status, ("#334155", "#E2E8F0"))
+    return f'<span style="color:{fg}; background:{bg}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">{status}</span>'
+
+
+def _polygon_area_sqmi(geom: dict) -> float | None:
+    geometry = geom.get("geometry") if geom.get("type") == "Feature" else geom
+    if not geometry:
+        return None
+
+    def ring_area_sqmi(ring: list[list[float]]) -> float:
+        if len(ring) < 4:
+            return 0.0
+        lon0 = sum(pt[0] for pt in ring) / len(ring)
+        lat0 = sum(pt[1] for pt in ring) / len(ring)
+        cos_lat = math.cos(math.radians(lat0))
+        pts = [((pt[0] - lon0) * cos_lat * 69.172, (pt[1] - lat0) * 69.0) for pt in ring]
+        s = 0.0
+        for i in range(len(pts) - 1):
+            x1, y1 = pts[i]
+            x2, y2 = pts[i + 1]
+            s += (x1 * y2) - (x2 * y1)
+        return abs(s) * 0.5
+
+    gtype = geometry.get("type")
+    if gtype == "Polygon":
+        rings = geometry.get("coordinates", [])
+        if not rings:
+            return None
+        outer = ring_area_sqmi(rings[0])
+        holes = sum(ring_area_sqmi(r) for r in rings[1:])
+        return max(0.0, outer - holes)
+    if gtype == "MultiPolygon":
+        total = 0.0
+        for poly in geometry.get("coordinates", []):
+            if not poly:
+                continue
+            outer = ring_area_sqmi(poly[0])
+            holes = sum(ring_area_sqmi(r) for r in poly[1:])
+            total += max(0.0, outer - holes)
+        return total
+    return None
+
+
+def build_executive_indicator_table(
+    scorecard: list[dict],
+    sites: dict[str, dict],
+    trade: dict[str, dict],
+    cannibalization: dict[str, dict],
+    microsite: dict[str, dict],
+    ci_rows: list[dict],
+    isochrone: dict,
+    houston_tracts: list[dict],
+    county_tracts: list[dict],
+    ext_demo: dict[str, dict],
+    rigor_rows: list[dict],
+) -> str:
+    winner = next((r for r in scorecard if r.get("primary_recommendation") == "True"), scorecard[0])
+    h = winner["hcad_num"]
+    site = sites[h]
+    tr = trade[h]
+    can = cannibalization[h]
+    micro = microsite[h]
+
+    city_ci = {r["statistic"]: r for r in ci_rows}
+    rigor = {r["metric"]: r for r in rigor_rows}
+    county_idx = {r["geoid"]: r for r in county_tracts}
+
+    wlat, wlon = float(site["lat"]), float(site["lon"])
+    nearest_tract = min(
+        houston_tracts,
+        key=lambda r: (float(r["lat"]) - wlat) ** 2 + (float(r["lon"]) - wlon) ** 2,
+    )
+    geoid = nearest_tract["geoid"]
+    ext = ext_demo.get(geoid, {})
+    county_row = county_idx.get(geoid, {})
+
+    pop_5 = _parse_float(tr.get("pop_5min_drive")) or 0.0
+    hhi_5 = _parse_float(tr.get("trade_area_median_income"))
+    poverty_proxy = (_parse_float(nearest_tract.get("poverty_rate")) or 0.0) * 100
+    snap_proxy = (_parse_float(county_row.get("snap_rate")) or 0.0) * 100
+    zero_vehicle = (_parse_float(ext.get("zero_vehicle_rate")) or 0.0) * 100
+    renter = (_parse_float(ext.get("renter_occupied_rate")) or 0.0) * 100
+    foreign_born = (_parse_float(ext.get("foreign_born_rate")) or 0.0) * 100
+    spanish_home = (_parse_float(ext.get("spanish_at_home_rate")) or 0.0) * 100
+
+    iso_area = _polygon_area_sqmi(isochrone.get("isochrones", {}).get("5min", {}))
+    density_5 = (pop_5 / iso_area) if iso_area and iso_area > 0 else None
+
+    city_poverty = _parse_float(city_ci.get("Poverty rate", {}).get("estimate")) or 0.0
+    city_zero_vehicle = _parse_float(city_ci.get("Zero-vehicle household share", {}).get("estimate")) or 0.0
+    city_renter = _parse_float(city_ci.get("Renter-occupied housing share", {}).get("estimate")) or 0.0
+    city_foreign = _parse_float(city_ci.get("Foreign-born share", {}).get("estimate")) or 0.0
+    city_spanish = _parse_float(city_ci.get("Spanish spoken at home", {}).get("estimate")) or 0.0
+
+    aadt = _parse_float(site.get("aadt")) or 0.0
+    speed = _parse_float(micro.get("posted_speed_limit_mph"))
+    bus_500 = int(_parse_float(micro.get("bus_stops_within_500ft")) or 0)
+    cotenants_03 = int(_parse_float(micro.get("co_tenant_count_0_3mi")) or 0)
+
+    nearest_arch_mi = _parse_float(rigor.get("winner_nearest_arch_rival_distance_mi", {}).get("value"))
+    nearest_arch_drive_min = _parse_float(rigor.get("winner_nearest_arch_rival_drive_time_min", {}).get("value"))
+    nearest_fd_mi = _parse_float(can.get("nearest_family_dollar_mi")) or 0.0
+    overlap_pct = _parse_float(can.get("overlap_pct")) or 0.0
+    net_new = int(_parse_float(can.get("net_new_population_reach")) or 0.0)
+
+    flood_zone = site.get("flood_zone", "n/a")
+    acreage = _parse_float(site.get("acreage")) or 0.0
+    land_value = _parse_float(site.get("land_value")) or 0.0
+    value_per_acre = (land_value / acreage) if acreage > 0 else None
+
+    rows = [
+        ("Macro demand", "5-min trade-area median HHI", f"${hhi_5:,.0f}" if hhi_5 else "n/a", "$20k-$55k", "Pass" if hhi_5 is not None and 20000 <= hhi_5 <= 55000 else "Watch"),
+        ("Macro demand", "SNAP household share (nearest tract proxy)", f"{snap_proxy:.1f}%", "> 18%", "Pass" if snap_proxy > 18 else "Watch"),
+        ("Macro demand", "Poverty rate (nearest tract proxy)", f"{poverty_proxy:.1f}%", f"> city avg ({city_poverty:.1f}%)", "Pass" if poverty_proxy > city_poverty else "Watch"),
+        ("Macro demand", "5-min drive population", f"{int(pop_5):,}", "10,000-25,000+", "Pass" if pop_5 >= 10000 else "Fail"),
+        ("Macro demand", "5-min drive population density", f"{density_5:,.0f}/sq mi" if density_5 else "n/a", "> 2,500/sq mi", "Pass" if density_5 is not None and density_5 > 2500 else ("Watch" if density_5 is not None else "Gap")),
+        ("Macro demand", "Zero-vehicle household share", f"{zero_vehicle:.1f}%", f"> city avg ({city_zero_vehicle:.1f}%)", "Pass" if zero_vehicle > city_zero_vehicle else "Watch"),
+        ("Macro demand", "Renter-occupied housing share", f"{renter:.1f}%", f"> city avg ({city_renter:.1f}%)", "Pass" if renter > city_renter else "Watch"),
+        ("Macro demand", "Foreign-born share", f"{foreign_born:.1f}%", f"> city avg ({city_foreign:.1f}%)", "Pass" if foreign_born > city_foreign else "Watch"),
+        ("Macro demand", "Spanish spoken at home", f"{spanish_home:.1f}%", f"> city avg ({city_spanish:.1f}%)", "Pass" if spanish_home > city_spanish else "Watch"),
+        ("Micro accessibility", "Verified AADT", f"{int(aadt):,} vpd", ">= 8,000", "Pass" if aadt >= 8000 else "Fail"),
+        ("Micro accessibility", "Posted speed limit", f"{int(speed)} mph" if speed is not None else "n/a", "35-45 mph", "Pass" if speed is not None and 35 <= speed <= 45 else ("Watch" if speed is not None else "Gap")),
+        ("Micro accessibility", "Road functional class", micro.get("road_functional_class", "n/a"), "Arterial/frontage preferred", "Pass" if "freeway" not in micro.get("road_functional_class", "").lower() else "Watch"),
+        ("Micro accessibility", "Bus stops within 500 ft", str(bus_500), ">= 1 preferred", "Pass" if bus_500 >= 1 else "Watch"),
+        ("Micro accessibility", "Co-tenancy generators within 0.3 mi", str(cotenants_03), ">= 2 preferred", "Pass" if cotenants_03 >= 2 else "Watch"),
+        ("Competition/network", "Nearest direct arch-rival (straight-line)", f"{nearest_arch_mi:.2f} mi" if nearest_arch_mi is not None else "n/a", "> 1.5 mi", "Pass" if nearest_arch_mi is not None and nearest_arch_mi > 1.5 else ("Watch" if nearest_arch_mi is not None else "Gap")),
+        ("Competition/network", "Nearest direct arch-rival (OSRM drive)", f"{nearest_arch_drive_min:.1f} min" if nearest_arch_drive_min is not None else "n/a", "> 5 min", "Pass" if nearest_arch_drive_min is not None and nearest_arch_drive_min > 5 else ("Watch" if nearest_arch_drive_min is not None else "Gap")),
+        ("Competition/network", "Huff gravity capture", f"{tr.get('huff_capture_pct', 'n/a')}%", "Higher is better", "Info"),
+        ("Competition/network", "Nearest existing Family Dollar", f"{nearest_fd_mi:.2f} mi", "> 1.2 mi hard buffer", "Pass" if nearest_fd_mi >= 1.2 else "Fail"),
+        ("Competition/network", "Trade-area overlap with existing FD", f"{overlap_pct:.1f}%", "< 15% target", "Pass" if overlap_pct < 15 else ("Watch" if overlap_pct < 30 else "Fail")),
+        ("Competition/network", "Net-new population reach", f"{net_new:,}", "Higher is better", "Info"),
+        ("Physical/risk/cost", "FEMA flood zone", flood_zone, "Zone X preferred", "Pass" if str(flood_zone).upper().startswith("X") else "Fail"),
+        ("Physical/risk/cost", "Parcel size", f"{acreage:.2f} acres", "1.0-2.5 acres", "Pass" if 1.0 <= acreage <= 2.5 else ("Watch" if 0.5 <= acreage < 1.0 else "Fail")),
+        ("Physical/risk/cost", "Appraised land value", f"${land_value:,.0f}", "Feasibility input", "Info"),
+        ("Physical/risk/cost", "Appraised land value per acre", f"${value_per_acre:,.0f}/acre" if value_per_acre else "n/a", "Feasibility screening", "Info"),
+        ("Physical/risk/cost", "Local property crime density", "No queryable Houston open-data API", "Required for final diligence", "Gap"),
+    ]
+
+    body_rows = "".join(
+        f"<tr style='border-bottom:1px solid #E5E7EB;'>"
+        f"<td style='padding:6px 8px;'>{d}</td>"
+        f"<td style='padding:6px 8px; font-weight:700;'>{i}</td>"
+        f"<td style='padding:6px 8px; text-align:right;'>{v}</td>"
+        f"<td style='padding:6px 8px;'>{b}</td>"
+        f"<td style='padding:6px 8px; text-align:center;'>{_status_chip(s)}</td>"
+        f"</tr>"
+        for d, i, v, b, s in rows
+    )
+
+    return f"""
+    <p style='color:#374151; font-size:12.5px; margin:0 0 10px;'>Executive checklist for the current primary recommendation. Macro demographic rates use the nearest tract as a local proxy and are paired with city-wide ACS confidence-interval baselines.</p>
+    <div style='overflow-x:auto;'>
+      <table style='border-collapse:collapse; width:100%; font-size:12px; color:#1F2937;'>
+      <thead><tr style='background:#F3F4F6; text-align:left; border-bottom:2px solid #D1D5DB;'>
+        <th style='padding:6px 8px;'>Domain</th><th style='padding:6px 8px;'>Indicator</th><th style='padding:6px 8px; text-align:right;'>Current value</th>
+        <th style='padding:6px 8px;'>Benchmark</th><th style='padding:6px 8px; text-align:center;'>Status</th>
+      </tr></thead>
+      <tbody>{body_rows}</tbody>
+      </table>
+    </div>
+    """
+
+
+def build_rigor_table(rigor_rows: list[dict], sensitivity: list[dict]) -> str:
+    if not rigor_rows:
+        return "<p style='color:#92400E;'>Statistical rigor outputs are missing. Run scripts/29_statistical_rigor.py and regenerate the map.</p>"
+
+    display_order = [
+        "moran_i_residuals",
+        "moran_i_expected",
+        "moran_i_permutation_pvalue",
+        "spatial_block_cv_rmse_mean",
+        "spatial_block_cv_r2_mean",
+        "spatial_block_cv_r2_std",
+        "spatial_block_cv_n_folds",
+        "ols_in_sample_rmse",
+        "ols_in_sample_r2",
+    ]
+    idx = {r["metric"]: r for r in rigor_rows}
+    rows = [idx[m] for m in display_order if m in idx]
+
+    n_stable = sum(1 for r in sensitivity if r.get("same_as_base_recommendation") == "True")
+    row_html = "".join(
+        f"<tr style='border-bottom:1px solid #E5E7EB;'>"
+        f"<td style='padding:6px 8px; font-weight:700;'>{r['metric']}</td>"
+        f"<td style='padding:6px 8px; text-align:right;'>{r['value']}</td>"
+        f"<td style='padding:6px 8px;'>{r['benchmark']}</td>"
+        f"<td style='padding:6px 8px; text-align:center;'>{_status_chip(r['status'])}</td>"
+        f"<td style='padding:6px 8px; color:#475569; font-size:11px;'>{r['notes']}</td>"
+        f"</tr>"
+        for r in rows
+    )
+
+    return f"""
+    <p style='color:#374151; font-size:12.5px; margin:0 0 10px;'>Rigor outputs combine ACS uncertainty reporting, spatial autocorrelation diagnostics, and out-of-sample spatial block validation to reduce leakage and overconfidence.</p>
+    <div style='overflow-x:auto;'>
+      <table style='border-collapse:collapse; width:100%; font-size:12px; color:#1F2937;'>
+      <thead><tr style='background:#F3F4F6; text-align:left; border-bottom:2px solid #D1D5DB;'>
+        <th style='padding:6px 8px;'>Metric</th><th style='padding:6px 8px; text-align:right;'>Value</th>
+        <th style='padding:6px 8px;'>Benchmark</th><th style='padding:6px 8px; text-align:center;'>Status</th><th style='padding:6px 8px;'>Notes</th>
+      </tr></thead>
+      <tbody>{row_html}</tbody>
+      </table>
+    </div>
+    <p style='color:#374151; font-size:12px; margin-top:12px;'><b>Census ratio MOE formula used:</b> MOE<sub>p</sub> = (1/Y) × sqrt(MOE<sub>X</sub><sup>2</sup> - p<sup>2</sup> × MOE<sub>Y</sub><sup>2</sup>) with Census fallback to the + form when needed.</p>
+    <p style='color:#374151; font-size:12px; margin-top:6px;'><b>Ranking stability:</b> {n_stable} of {len(sensitivity)} sensitivity scenarios retain the same primary recommendation.</p>
+    """
 
 
 def build_scorecard_table(scorecard: list[dict]) -> str:
@@ -486,24 +721,43 @@ def build_validation_html() -> str:
     """
 
 
-def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_rows: list[dict], microsite: list[dict], sensitivity: list[dict]) -> str:
+def build_dashboard_html(
+  scorecard: list[dict],
+  cannibalization: list[dict],
+  ci_rows: list[dict],
+  microsite: list[dict],
+  sensitivity: list[dict],
+  sites: dict[str, dict],
+  trade: dict[str, dict],
+  canib_map: dict[str, dict],
+  micro_map: dict[str, dict],
+  isochrone: dict,
+  houston_tracts: list[dict],
+  county_tracts: list[dict],
+  ext_demo: dict[str, dict],
+  rigor_rows: list[dict],
+) -> str:
     return f"""
 <div id="dash-drawer">
   <div id="dash-header-row">
     <div id="dash-tabs">
-      <button class="dash-tab-btn active" id="tabbtn-scorecard" onclick="fdShowTab('scorecard')">Scorecard</button>
+      <button class="dash-tab-btn active" id="tabbtn-exec" onclick="fdShowTab('exec')">Executive Checks</button>
+      <button class="dash-tab-btn" id="tabbtn-scorecard" onclick="fdShowTab('scorecard')">Scorecard</button>
       <button class="dash-tab-btn" id="tabbtn-cannibalization" onclick="fdShowTab('cannibalization')">Cannibalization</button>
       <button class="dash-tab-btn" id="tabbtn-microsite" onclick="fdShowTab('microsite')">Site Details</button>
       <button class="dash-tab-btn" id="tabbtn-ci" onclick="fdShowTab('ci')">Confidence Intervals</button>
+      <button class="dash-tab-btn" id="tabbtn-rigor" onclick="fdShowTab('rigor')">Model Rigor</button>
       <button class="dash-tab-btn" id="tabbtn-validation" onclick="fdShowTab('validation')">Sources &amp; Validation</button>
     </div>
     <button id="dash-close" onclick="fdToggleDash()" title="Close">&#10005;</button>
   </div>
   <div class="dash-body">
-    <div class="dash-tab-content active" id="tab-scorecard">{build_scorecard_table(scorecard)}{build_sensitivity_table(sensitivity)}</div>
+    <div class="dash-tab-content active" id="tab-exec">{build_executive_indicator_table(scorecard, sites, trade, canib_map, micro_map, ci_rows, isochrone, houston_tracts, county_tracts, ext_demo, rigor_rows)}</div>
+    <div class="dash-tab-content" id="tab-scorecard">{build_scorecard_table(scorecard)}{build_sensitivity_table(sensitivity)}</div>
     <div class="dash-tab-content" id="tab-cannibalization">{build_cannibalization_table(cannibalization)}</div>
     <div class="dash-tab-content" id="tab-microsite">{build_microsite_table(microsite)}</div>
     <div class="dash-tab-content" id="tab-ci">{build_ci_table(ci_rows)}</div>
+    <div class="dash-tab-content" id="tab-rigor">{build_rigor_table(rigor_rows, sensitivity)}</div>
     <div class="dash-tab-content" id="tab-validation">{build_validation_html()}</div>
   </div>
 </div>
@@ -531,7 +785,10 @@ def build_map() -> Path:
     microsite = {r["hcad_num"]: r for r in load_csv("microsite_details.csv")}
     ci_rows = load_csv("city_confidence_intervals.csv")
     extended_demo = {r["geoid"]: r for r in load_csv("tract_extended_demographics.csv")}
+    houston_tracts = load_csv("houston_tracts.csv")
+    county_tracts = load_csv("tracts.csv")
     competitors = load_csv("competitors.csv")
+    rigor_rows = load_csv("statistical_rigor.csv") if (PROCESSED / "statistical_rigor.csv").exists() else []
     tracts = load_json("houston_tracts.geojson")
     boundary = load_json("houston_boundary.geojson")
     isochrone = load_json("isochrone_winner.json")
@@ -704,6 +961,9 @@ def build_map() -> Path:
           <div class="exec-metric"><span>Nearest Family Dollar</span><span class="exec-val">{s['nearest_family_dollar_mi']} mi</span></div>
           <div class="exec-metric"><span>FEMA Flood Zone</span><span class="exec-val">{s['flood_zone']}</span></div>
           <div class="exec-metric"><span>Posted Speed Limit</span><span class="exec-val">{micro['posted_speed_limit_mph']} mph</span></div>
+          <div class="exec-metric"><span>Road Class</span><span class="exec-val">{micro.get('road_functional_class', 'n/a')}</span></div>
+          <div class="exec-metric"><span>Bus Stops (500 ft)</span><span class="exec-val">{micro.get('bus_stops_within_500ft', 'n/a')}</span></div>
+          <div class="exec-metric"><span>Co-Tenants (0.3 mi)</span><span class="exec-val">{micro.get('co_tenant_count_0_3mi', 'n/a')}</span></div>
           <div class="exec-metric"><span>Nearby Co-Tenants</span><span class="exec-val" style="text-align:right; font-weight:600;">{micro['nearby_co_tenants']}</span></div>
           <div class="exec-metric"><span>Nearest Transit Stop</span><span class="exec-val">{micro['nearest_transit_stop']}</span></div>
           <div class="exec-metric"><span>Composite Score</span><span class="exec-val">{row['total_score']} / 100</span></div>
@@ -737,7 +997,20 @@ def build_map() -> Path:
     rank_ramp_css = "linear-gradient(90deg," + ",".join(STATUS_RAMP) + ")"
     m.get_root().html.add_child(folium.Element(build_legend_html(rank_ramp_css)))
     m.get_root().html.add_child(folium.Element(build_dashboard_html(
-        scorecard, load_csv("cannibalization.csv"), ci_rows, load_csv("microsite_details.csv"), load_csv("sensitivity_analysis.csv")
+      scorecard,
+      load_csv("cannibalization.csv"),
+      ci_rows,
+      load_csv("microsite_details.csv"),
+      load_csv("sensitivity_analysis.csv"),
+      sites,
+      trade,
+      cannibalization,
+      microsite,
+      isochrone,
+      houston_tracts,
+      county_tracts,
+      extended_demo,
+      rigor_rows,
     )))
 
     folium.LayerControl(collapsed=False).add_to(m)
