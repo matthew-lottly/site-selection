@@ -1,0 +1,6 @@
+site_label,hcad_num,address,acreage,site_type,flood_zone,aadt,nearest_dollar_store_mi,nearest_dollar_store,pop_5min_drive,pop_10min_drive,trade_area_median_income,demand_score,competition_score,traffic_score,cost_feasibility_score,flood_score,total_score
+Site B - 9104 Cullen Blvd @ Reed Rd,0730510120001,9104 CULLEN BLVD,0.46,Vacant commercial land,X,18429,3.22,Dollar General,29755,141724,41648,32.6,66.4,100.0,83.1,100.0,68.8
+Site D - 3839 Griggs Rd @ Scott St / Old Spanish Trail,0410070080062,3839 GRIGGS RD,0.49,Vacant commercial land,X,15421,2.58,Family Dollar,51452,182434,61377,100.0,16.4,79.2,10.0,100.0,61.4
+Site E - 9229 Martell St @ Scott St / Reed Rd,0771850040007,9229 MARTELL ST,0.58,Vacant commercial land,X,17168,2.85,Dollar General,27396,127121,53571,21.1,37.5,91.3,100.0,100.0,59.0
+Site C - 8707 MLK Jr Blvd @ Reed Rd,0470560000010,8707 MARTIN LUTHER KING JR BLVD,0.92,Under-improved commercial (redevelopment),X,8593,3.65,Dollar General,23071,115516,48281,0.0,100.0,32.0,73.1,100.0,52.4
+Site A - Cullen Blvd @ Griggs Rd / Old Spanish Trail,0410070160182,CULLEN,0.89,Vacant commercial land,X,3973,2.37,Family Dollar,25237,179924,52761,10.6,0.0,0.0,87.2,100.0,26.3

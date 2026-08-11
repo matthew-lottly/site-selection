@@ -1,0 +1,444 @@
+osm_id,name,brand,category,lat,lon,addr
+node/356831355,Family Dollar,Family Dollar,dollar_store,29.7944211,-95.338008,
+node/786435845,Kroger,Kroger,anchor,30.1242711,-95.4073828,"2301 Rayford Road, Spring"
+node/986020773,Target,Target,anchor,30.0192483,-95.2687528,"20777 Eastex Freeway, Humble"
+node/1924168265,ALDI,Aldi,anchor,29.6634086,-95.0975379,"9002 Spencer Highway, La Porte"
+node/1975611376,Fiesta Mart,Fiesta Mart,anchor,29.6902257,-95.4151183,"8130 Kirby Drive, Houston"
+node/2336270702,Family Dollar,Family Dollar,dollar_store,29.8450281,-95.3861183,"906 East Tidwell Road, Houston"
+node/2557741128,Target,Target,anchor,29.5963452,-95.6277838,"16300 Southwest Freeway, Sugar Land"
+node/2662076810,Dollar General,Dollar General,dollar_store,29.8210912,-95.5233309,
+node/2699368507,Kroger,Kroger,anchor,29.7896319,-95.4112065,"1035 North Shepherd Drive, Houston"
+node/2809305840,Kroger,Kroger,anchor,30.0218444,-95.4340646,"360 Cypress Creek Parkway, Houston"
+node/3203992082,Kroger,Kroger,anchor,30.1145981,-95.55271,"24350 Kuykendahl Road, Tomball"
+node/3204058605,Kroger,Kroger,anchor,29.7711432,-95.599194,"14344 Memorial Drive, Houston"
+node/3275482761,Family Dollar,Family Dollar,dollar_store,29.67243,-95.529619,"8646 South Braeswood Boulevard, Houston"
+node/3303484407,Target,Target,anchor,29.969248,-95.6962852,"25901 Northwest Freeway, Cypress"
+node/3311296099,Target,Target,anchor,29.7362906,-95.7759881,"23710 Westheimer Parkway, Katy"
+node/3321057929,Dollar Tree,Dollar Tree,dollar_store,30.0917127,-95.640425,
+node/3321060312,Target,Target,anchor,30.0917963,-95.6392689,"14302 FM 2920, Tomball"
+node/3390498259,Kroger,Kroger,anchor,29.558593,-95.1247749,"16400 El Camino Real, Houston"
+node/3494230793,Target,Target,anchor,30.0501898,-95.4348629,"19511 North Freeway, Spring"
+node/3511266693,Family Dollar,Family Dollar,dollar_store,29.7862364,-95.3616437,"2617 Fulton Street, Houston"
+node/3755266369,Kroger,Kroger,anchor,29.5779758,-95.1205712,"1950 El Dorado Boulevard, Houston"
+node/3818254203,Family Dollar,Family Dollar,dollar_store,29.733514,-95.3296637,"804 Telephone Road, Houston"
+node/3832798035,Family Dollar,Family Dollar,dollar_store,29.7182032,-95.2960716,"7053 Lawndale Street, Houston"
+node/3903671109,Kroger,Kroger,anchor,30.0666789,-95.1871315,"3410 Northpark Drive, Kingwood"
+node/3903896960,Target,Target,anchor,29.7821551,-95.7160541,"19955 Katy Freeway, Katy"
+node/3905103773,H-E-B,H-E-B,anchor,29.7892877,-95.7167418,"1550 North Fry Road, Houston"
+node/3911060264,Dollar Tree,Dollar Tree,dollar_store,29.781717,-95.7492548,
+node/3911060265,Fiesta Mart,Fiesta Mart,anchor,29.7809732,-95.7490959,
+node/4063682495,Family Dollar,Family Dollar,dollar_store,29.8686324,-95.3835231,"7404 Airline Drive, Houston"
+node/4227549107,Dollar Tree,Dollar Tree,dollar_store,29.6184394,-95.4943492,"14404 Hillcroft Avenue, Houston"
+node/4227549132,Dollar General,Dollar General,dollar_store,29.6001742,-95.5260033,"1783 Texas Parkway, Missouri City"
+node/4227549135,Fiesta Mart,Fiesta Mart,anchor,29.5973965,-95.5253515,"1530 Independence Boulevard, Missouri City"
+node/4227549140,Family Dollar,Family Dollar,dollar_store,29.5972753,-95.5282135,"2190 Texas Parkway, Missouri City"
+node/4227549173,Kroger,Kroger,anchor,29.5636313,-95.5655009,"6200 Alvin Sugarland Road, Missouri City"
+node/4227549174,Target,Target,anchor,29.5657916,-95.5677915,"6000 Alvin Sugarland Road, Missouri City"
+node/4227614596,Aldi,Aldi,anchor,29.5431629,-95.5481738,"6016 Sienna Ranch Road, Missouri City"
+node/4252070153,Walmart Neighborhood Market,Walmart,anchor,30.0693331,-95.214514,"2165 Northpark Drive, Kingwood"
+node/4289437579,Fiesta Mart,Fiesta Mart,anchor,29.8368658,-95.6446754,"4330 F, Houston"
+node/4308060199,Dollar Tree,Dollar Tree,dollar_store,29.9367824,-95.248631,
+node/4364112595,Family Dollar,Family Dollar,dollar_store,29.8597866,-95.4057467,"436 West Parker Road, Houston"
+node/4484885116,Kroger,Kroger,anchor,29.6535678,-95.0321936,"1300 West Fairmont Parkway, La Porte"
+node/4842212281,ALDI,Aldi,anchor,29.8229583,-95.4097761,"3938 North Shepherd Drive, Houston"
+node/4882434179,Family Dollar,Family Dollar,dollar_store,29.5878515,-95.4700098,
+node/5180374097,Dollar Tree,Dollar Tree,dollar_store,29.5496961,-95.1300803,
+node/5245875821,Family Dollar,Family Dollar,dollar_store,29.8441369,-95.6471012,"4707 North Highway 6, Houston"
+node/5245961915,Family Dollar,Family Dollar,dollar_store,29.8037596,-95.4899267,
+node/5246578669,Kroger,Kroger,anchor,29.8126507,-95.7701896,"2700 West Grand Parkway North, Katy"
+node/5246586823,Dollar Tree,Dollar Tree,dollar_store,29.7834884,-95.7940127,
+node/5250892279,Dollar Tree,Dollar Tree,dollar_store,29.88203,-95.6467254,
+node/5312062072,Family Dollar,Family Dollar,dollar_store,30.0050464,-95.3078824,"7815 FM 1960 Bypass Road West, Humble"
+node/5315597762,Walmart Supercenter,Walmart,anchor,29.894378,-95.065666,"14215 Fm 2100 Road, Crosby"
+node/5315597977,Walmart Neighborhood Market,Walmart,anchor,29.4990441,-95.1255913,"2625 West Main Street, League City"
+node/5372620387,ALDI,Aldi,anchor,29.6464818,-95.5827063,"11709 West Airport Boulevard, Meadows Place"
+node/5449778360,Kroger Marketplace,Kroger,anchor,30.1185241,-95.3816679,"3731 Riley Fuzzel Road, Spring"
+node/5461960762,Family Dollar,Family Dollar,dollar_store,29.9201794,-95.4923113,
+node/5843069939,ALDI,Aldi,anchor,29.9968762,-95.1736853,"6900 FM 1960 East, Humble"
+node/5867045587,Dollar Tree,Dollar Tree,dollar_store,29.8275853,-95.433001,"1345½ West 43rd Street, Houston"
+node/6252570645,H-E-B,H-E-B,anchor,29.8073613,-95.4088622,"2300 North Shepherd Drive, Houston"
+node/6292846505,Family Dollar,Family Dollar,dollar_store,30.0048476,-95.4634042,
+node/6292846514,Dollar Tree,Dollar Tree,dollar_store,30.0067497,-95.4624121,
+node/6299354185,Kroger,Kroger,anchor,29.7968241,-95.4864439,"1505 Wirt Road, Houston"
+node/6355441543,Dollar Tree,Dollar Tree,dollar_store,30.1018581,-95.2355544,"23741 Eastex Freeway, Porter"
+node/6655625789,Kroger,Kroger,anchor,29.5516946,-95.5843055,"18861 University Boulevard, Sugar Land"
+node/6775257588,Family Dollar,Family Dollar,dollar_store,29.9606721,-95.5518481,"12914 Willow Chase Drive, Houston"
+node/6840644122,H-E-B,H-E-B,anchor,29.7688039,-95.3966726,"3663 Washington Avenue, Houston"
+node/6873525060,Dollar Tree,Dollar Tree,dollar_store,29.8205578,-95.4676169,5360 West 34th Street
+node/6911757295,Dollar Tree,Dollar Tree,dollar_store,29.8329062,-95.3793144,"4428 North Freeway, Houston"
+node/6974712287,Dollar Tree,Dollar Tree,dollar_store,30.1252725,-95.45065,
+node/7152422412,Target,Target,anchor,29.7350204,-95.5678172,"10801 Westheimer Road, Houston"
+node/7161674735,Family Dollar,Family Dollar,dollar_store,29.8711919,-95.4047316,"428 West Little York Road, Houston"
+node/7734724402,Dollar Tree,Dollar Tree,dollar_store,29.8224285,-95.4097648,"3832 North Shepherd Drive, Houston"
+node/7874625124,Dollar Tree,Dollar Tree,dollar_store,29.8505954,-95.5033524,"5770 Hollister Street, Houston"
+node/7995521916,Kroger,Kroger,anchor,29.5298455,-95.5108212,"10250 Highway 6, Missouri City"
+node/8473529797,Dollar General,Dollar General,dollar_store,29.8336081,-95.4452625,
+node/8477396349,Dollar Tree,Dollar Tree,dollar_store,30.0028328,-95.265643,"216 FM 1960 Bypass Road East, Humble"
+node/8596101857,Family Dollar,Family Dollar,dollar_store,29.9117299,-95.5859309,
+node/8619281149,ALDI,Aldi,anchor,29.5370918,-95.0213367,"222 Fm 518, Kemah"
+node/8619302696,ALDI,Aldi,anchor,29.5563709,-95.1206663,"16701 El Camino Real, Houston"
+node/8619313528,ALDI,Aldi,anchor,29.5605703,-95.2768115,"3412 East Broadway Street, Pearland"
+node/8619314589,ALDI,Aldi,anchor,29.6640076,-95.6442046,"10402 Highway 6 South, Sugar Land"
+node/8619319421,ALDI,Aldi,anchor,29.5235776,-95.1600974,"3100 Fm 528, Webster"
+node/8619415909,ALDI,Aldi,anchor,29.7495557,-95.7502209,"2009 South Mason Road, Katy"
+node/8619427420,ALDI,Aldi,anchor,29.7068749,-95.8472445,"5840 FM 1463 Road, Fulshear"
+node/8619801592,ALDI,Aldi,anchor,29.736257,-95.5335557,"9525 Westheimer Road, Houston"
+node/8620139909,ALDI,Aldi,anchor,30.0501578,-95.2352033,"1387 Kingwood Drive, Kingwood"
+node/8620143175,Aldi,Aldi,anchor,30.0056875,-95.2927199,"8755 FM 1960 Bypass Road West, Humble"
+node/8620153723,ALDI,Aldi,anchor,30.1226827,-95.4045948,"2412 Rayford Road, Spring"
+node/8623735915,ALDI,Aldi,anchor,29.8180432,-95.5447357,"2550 Gessner Road, Houston"
+node/8623803023,ALDI,Aldi,anchor,29.9078721,-95.5857979,"9251 Jones Road, Houston"
+node/8623809141,ALDI,Aldi,anchor,30.0020036,-95.5599323,"9870 Louetta Road, Houston"
+node/8695378165,Dollar Tree,Dollar Tree,dollar_store,30.0221566,-95.4323221,
+node/8882810737,Kroger,Kroger,anchor,29.7823174,-95.5221864,"9325 Katy Freeway, Houston"
+node/9327602001,Dollar Tree,Dollar Tree,dollar_store,29.5736127,-95.5715743,
+node/9506349928,Dollar General,Dollar General,dollar_store,29.5390939,-95.7109044,"6025 FM 762 Road, Richmond"
+node/9795032378,Kroger,Kroger,anchor,29.603198,-95.2149315,"11701 South Sam Houston Parkway East, Houston"
+node/9826764393,Target,Target,anchor,29.6026242,-95.264021,"8503 South Sam Houston Parkway East, Houston"
+node/9828788908,Dollar Tree,Dollar Tree,dollar_store,29.9026854,-95.465968,
+node/9828788909,Family Dollar,Family Dollar,dollar_store,29.902959,-95.4661796,
+node/9847142034,Dollar Tree,Dollar Tree,dollar_store,29.6024059,-95.2652491,
+node/9866040327,Kroger,Kroger,anchor,29.6748622,-95.2910328,"6322 Telephone Road, Houston"
+node/9875500337,Family Dollar,Family Dollar,dollar_store,29.820181,-95.0583328,
+node/9883922042,Kroger,Kroger,anchor,29.7923441,-94.9829718,"6315 Garth Road, Baytown"
+node/9884048056,Kroger,Kroger,anchor,29.7896563,-95.2009461,"12620 Woodforest Boulevard, Houston"
+node/9921713892,Dollar Tree,Dollar Tree,dollar_store,29.733257,-95.6252846,
+node/10309429389,Dollar Tree,Dollar Tree,dollar_store,29.6147605,-95.2200611,
+node/10828099524,Dollar General,Dollar General,dollar_store,30.0097285,-95.4461468,
+node/10846649798,Family Dollar,Family Dollar,dollar_store,29.8897532,-95.3944158,
+node/10858840205,Dollar Tree,Dollar Tree,dollar_store,29.6884973,-95.5072559,
+node/11020901874,Dollar Tree,Dollar Tree,dollar_store,30.0191593,-95.3810024,
+node/11020911336,Dollar General,Dollar General,dollar_store,30.0211814,-95.3790171,3040 FM 1960 East
+node/11228181143,Family Dollar,Family Dollar,dollar_store,29.9822779,-95.4395381,
+node/11365121264,Dollar General,Dollar General,dollar_store,29.7866575,-95.1252961,777 Sheldon Road
+node/11378670149,Family Dollar,Family Dollar,dollar_store,29.7799023,-95.1259266,
+node/11415725686,Dollar Tree,Dollar Tree,dollar_store,29.9196345,-95.4955194,
+node/11569527874,Family Dollar,Family Dollar,dollar_store,29.826047,-95.3606727,
+node/11675220839,Dollar Tree,Dollar Tree,dollar_store,29.9016595,-95.5535643,
+node/11786725812,Dollar General,Dollar General,dollar_store,29.9457958,-95.3579982,Houston
+node/11786725813,Family Dollar,Family Dollar,dollar_store,29.978078,-95.489572,"13092 Veterans Memorial Drive, Houston"
+node/11786725814,Family Dollar,Family Dollar,dollar_store,29.9622,-95.477622,"12130 Veterans Memorial Drive, Houston"
+node/11786725815,Family Dollar,Family Dollar,dollar_store,29.94693,-95.466239,"3040 Gears Road, Houston"
+node/11786725816,Family Dollar,Family Dollar,dollar_store,29.965706,-95.452178,"2128 Spears Road, Houston"
+node/11786725817,DG Market,DG Market,anchor,29.945573,-95.442639,Houston
+node/11786725819,Dollar General,Dollar General,dollar_store,29.9118094,-95.4391636,Houston
+node/11786725821,Dollar Tree,Dollar Tree,dollar_store,29.9137056,-95.4165706,"10261 North Freeway, Houston"
+node/11786725822,Family Dollar,Family Dollar,dollar_store,29.91724,-95.404791,"11046 Airline Drive, Houston"
+node/11786725824,Dollar General,Dollar General,dollar_store,29.9312782,-95.4067973,Houston
+node/11786725825,Family Dollar,Family Dollar,dollar_store,29.966469,-95.403385,"657 Rankin Road, Houston"
+node/11786725829,Family Dollar,Family Dollar,dollar_store,29.9494859,-95.4236588,"430 West Greens Road, Houston"
+node/11786725830,Family Dollar,Family Dollar,dollar_store,29.9647359,-95.429903,"703 West Rankin Road, Houston"
+node/11786725831,Dollar Tree,Dollar Tree,dollar_store,29.9892192,-95.4259648,"15135 North Freeway, Houston"
+node/11786725832,Family Dollar,Family Dollar,dollar_store,29.9941126,-95.4087692,"20741 Imperial Valley Drive, Houston"
+node/11786725833,Family Dollar,Family Dollar,dollar_store,30.022524,-95.41975,"22522 Imperial Valley Drive, Houston"
+node/11796305336,Kroger,Kroger,anchor,29.7402016,-94.9520568,"1700 North Alexander Drive, Baytown"
+node/11796305338,Kroger,Kroger,anchor,29.5193785,-95.0753165,"250 South Egret Bay Boulevard, League City"
+node/11796305339,Kroger,Kroger,anchor,29.5208856,-95.1600336,"3135 East FM 528 Road, Friendswood"
+node/11796305340,Kroger,Kroger,anchor,29.6654233,-95.1352796,"6767 Spencer Highway, Pasadena"
+node/11796305341,Kroger,Kroger,anchor,29.6634041,-95.1895964,"3550 Spencer Highway, Pasadena"
+node/11796305342,Kroger,Kroger,anchor,29.6966036,-95.1737224,"2619 Red Bluff Road, Pasadena"
+node/11796305344,Kroger,Kroger,anchor,29.5606099,-95.2715022,"3245 Broadway Street, Pearland"
+node/11796305346,Kroger,Kroger,anchor,30.0457619,-95.34811,"5671 Treaschwig Road, Spring"
+node/11836006937,Family Dollar,Family Dollar,dollar_store,29.866815,-95.4853341,
+node/11920400027,Dollar Tree,Dollar Tree,dollar_store,29.8790854,-95.7254678,
+node/12000139576,Dollar Tree,Dollar Tree,dollar_store,29.9540266,-95.5453873,"17355 Tomball Parkway, Houston"
+node/12040685915,Dollar General,Dollar General,dollar_store,30.0219576,-95.4195732,
+node/12042730461,Family Dollar,Family Dollar,dollar_store,29.6756702,-95.2663806,"8404 Winkler Drive, Houston"
+node/12065612931,Dollar Tree,Dollar Tree,dollar_store,30.0504172,-95.235236,"1385 Kingwood Drive, Kingwood"
+node/12094057974,Dollar General,Dollar General,dollar_store,29.496585,-95.9128859,"411 South 1st Street, Beasley"
+node/12158386343,Dollar Tree,Dollar Tree,dollar_store,29.8480208,-95.3922107,
+node/12193515241,Dollar Tree,Dollar Tree,dollar_store,29.5887371,-95.5998194,
+node/12294822755,Dollar General,Dollar General,dollar_store,29.9426327,-95.3040508,
+node/12324824201,Dollar Tree,Dollar Tree,dollar_store,29.7724321,-95.1876584,1238 Uvalde Road
+node/12459766776,Dollar General,Dollar General,dollar_store,29.830538,-95.3182295,
+node/12475053661,Dollar Tree,Dollar Tree,dollar_store,29.6453505,-95.6501485,
+node/12534593175,Dollar Tree,Dollar Tree,dollar_store,29.7748944,-95.2360253,
+node/12542319325,Fiesta Mart,Fiesta Mart,anchor,29.7057347,-95.5395381,"8710 Bellaire Boulevard, Houston"
+node/12578111894,Walmart Supercenter,Walmart,anchor,29.7835112,-95.8040801,"25108 Market Place Drive, Katy"
+node/12665341001,Family Dollar,Family Dollar,dollar_store,29.789718,-95.1621332,14650 Woodforest Boulevard
+node/12695453859,H-E-B,H-E-B,anchor,29.5785263,-95.5826764,4724 State Highway 6 South
+node/12879493432,Dollar Tree,Dollar Tree,dollar_store,30.0431373,-95.3827637,
+node/13070911502,Dollar Tree,Dollar Tree,dollar_store,29.7976319,-95.7034772,2424 Greenhouse Road
+node/13158890081,Walmart Supercenter,Walmart,anchor,29.698222,-95.8419785,"26824 FM 1093, Katy"
+node/13161108282,Dollar Tree,Dollar Tree,dollar_store,29.6981672,-95.8442694,"26952 FM 1093, Katy"
+node/13173728783,Walmart Supercenter,Walmart,anchor,29.9113655,-95.7292199,
+node/13181305301,Dollar Tree,Dollar Tree,dollar_store,29.8098833,-95.1666411,5809 East Sam Houston Parkway North
+node/13205412703,Dollar General,Dollar General,dollar_store,29.9013409,-95.3555739,
+node/13248904101,Dollar Tree,Dollar Tree,dollar_store,29.9968838,-95.1727428,
+node/13289525537,Dollar Tree,Dollar Tree,dollar_store,29.9035543,-95.3134253,
+node/13289540974,Family Dollar,Family Dollar,dollar_store,29.9018425,-95.3145498,
+node/13290030111,Family Dollar,Family Dollar,dollar_store,29.9017778,-95.3343131,
+node/13391170569,Dollar Tree,Dollar Tree,dollar_store,29.9018454,-95.3541708,
+node/13409204091,Family Dollar,Family Dollar,dollar_store,29.6740068,-95.2762388,"8219 Broadway Street, Houston"
+node/13424500735,Fiesta Mart,Fiesta Mart,anchor,29.9598836,-95.5510372,
+node/13438325308,Dollar General,Dollar General,dollar_store,29.9020984,-95.3375866,
+node/13459304170,Dollar Tree,Dollar Tree,dollar_store,29.6756592,-95.6445982,
+node/13520290313,Dollar Tree,Dollar Tree,dollar_store,29.9872608,-95.4961772,
+node/13570636002,Dollar General,Dollar General,dollar_store,29.8213983,-95.0578479,
+node/13582108171,Dollar Tree,Dollar Tree,dollar_store,29.978001,-95.6706902,
+node/13639843570,Dollar General,Dollar General,dollar_store,29.5557221,-95.7836163,
+node/13650287823,Dollar General,Dollar General,dollar_store,30.0095633,-95.5901751,
+node/13809301601,Dollar Tree,Dollar Tree,dollar_store,29.8501808,-95.7181867,
+node/13936855947,H-E-B,H-E-B,anchor,29.9573283,-95.2072633,
+node/14001050133,Dollar General,Dollar General,dollar_store,29.9639517,-95.2433828,
+node/14055288374,Dollar Tree,Dollar Tree,dollar_store,29.6998625,-95.687079,
+node/14066980962,Dollar Tree,Dollar Tree,dollar_store,30.0422784,-95.4883515,
+way/45493255,H-E-B,H-E-B,anchor,29.6984836,-95.2949202,"3111 Woodridge Drive, Houston"
+way/46680443,Walmart Supercenter,Walmart,anchor,29.6308249,-95.237609,"9598 Rowlett Road, Houston"
+way/49233629,Walmart Supercenter,Walmart,anchor,29.6440501,-95.573156,"11210 West Airport Boulevard, Stafford"
+way/49418509,H-E-B,H-E-B,anchor,29.7351204,-95.5872145,"11815 Westheimer Road, Houston"
+way/49450755,Walmart Supercenter,Walmart,anchor,29.7331189,-95.5914313,"2700 South Kirkwood Road, Houston"
+way/50424508,Kroger,Kroger,anchor,29.736384,-95.5453589,"9919 Westheimer Road, Houston"
+way/51206348,Walmart Supercenter,Walmart,anchor,29.6935229,-95.2103684,"1107 Shaver Street, Pasadena"
+way/51901545,Kroger,Kroger,anchor,29.6959434,-95.4155382,"7747 Kirby Drive, Houston"
+way/51904004,Target,Target,anchor,29.6928168,-95.419061,"8500 Main Street, Houston"
+way/52062582,Target,Target,anchor,29.6527022,-95.1529301,"5757 Fairmont Parkway, Pasadena"
+way/99136983,Walmart Supercenter,Walmart,anchor,29.545899,-95.2359509,"1710 Broadway Street, Pearland"
+way/107638822,Walmart Supercenter,Walmart,anchor,29.613524,-95.6445604,"345 State Highway 6, Sugar Land"
+way/123415134,H-E-B,H-E-B,anchor,29.8214141,-95.5473742,"10251 Kempwood Drive, Houston"
+way/123421455,Walmart Supercenter,Walmart,anchor,29.7932161,-95.5648907,"10750 Westview Drive, Houston"
+way/129370941,H-E-B,H-E-B,anchor,29.787674,-95.5325166,"9710 Katy Freeway, Houston"
+way/129601970,Target,Target,anchor,29.7411161,-95.4094765,"2075 Westheimer Road, Houston"
+way/129728992,Kroger,Kroger,anchor,29.7482627,-95.5001206,"1801 South Voss Road, Houston"
+way/130597593,Walmart Supercenter,Walmart,anchor,29.8538959,-95.5091913,"13484 Northwest Freeway, Houston"
+way/130655778,Target,Target,anchor,29.8493796,-95.5020617,"13250 Northwest Freeway, Houston"
+way/131432880,Walmart Supercenter,Walmart,anchor,30.1234812,-95.4576952,"1025 Sawdust Road, Spring"
+way/136632490,Walmart Supercenter,Walmart,anchor,29.7887208,-95.4651448,"1118 Silber Road, Houston"
+way/147464704,Target,Target,anchor,29.782725,-95.5415089,"984 Gessner Road, Houston"
+way/169503168,Kroger,Kroger,anchor,29.7086637,-95.6858884,"6425 FM 1464, Richmond"
+way/170281644,Target,Target,anchor,29.7446076,-95.4531142,"4323 San Felipe Street, Houston"
+way/173380102,Summerwood Market H-E-B,H-E-B,anchor,29.9230337,-95.1970225,"12680 West Lake Houston Parkway, Houston"
+way/175042793,H-E-B,H-E-B,anchor,29.738117,-95.402809,"1701 West Alabama Street, Houston"
+way/177255707,Kroger,Kroger,anchor,30.0010805,-95.1609227,"19300 West Lake Houston Parkway, Humble"
+way/177255711,H-E-B,H-E-B,anchor,30.0004595,-95.164519,"7405 FM 1960, Humble"
+way/182103841,Kroger Marketplace,Kroger,anchor,29.5415183,-95.7507418,"24401 Brazos Town Crossing, Rosenberg"
+way/182997201,Walmart Supercenter,Walmart,anchor,30.0090256,-95.2833439,"9451 Fm 1960 Bypass, Humble"
+way/184062660,Target,Target,anchor,29.5483721,-95.7513061,"23912 Commercial Drive, Rosenberg"
+way/194533801,Target,Target,anchor,29.6870672,-95.4621252,"300 Meyerland Plaza Mall, Houston"
+way/198932100,H-E-B,H-E-B,anchor,30.1276214,-95.4457852,"130 Sawdust Road, Spring"
+way/207104306,Walmart Supercenter,Walmart,anchor,30.1070439,-95.2336016,"22600;23561 Eastex Freeway;Us Highway 59, Porter"
+way/209292903,H-E-B,H-E-B,anchor,29.5650328,-95.6852735,"19900 Southwest Freeway Frontage Road, Sugar Land"
+way/221922460,H-E-B,H-E-B,anchor,29.7270965,-95.4271677,"5225 Buffalo Speedway, Houston"
+way/226277767,Walmart Neighborhood Market,Walmart,anchor,29.6744245,-95.4955185,"9700 Hillcroft Avenue, Houston"
+way/226936280,Kroger,Kroger,anchor,29.7541123,-95.4055481,"1938 West Gray Street, Houston"
+way/227383005,Walmart,Walmart,anchor,29.6768841,-95.4575015,"9555 South Post Oak Road, Houston"
+way/228678949,H-E-B,H-E-B,anchor,29.9953466,-95.576188,"10919 Louetta Road, Houston"
+way/231007641,Kroger,Kroger,anchor,29.7272291,-95.4309078,"5150 Buffalo Speedway, Houston"
+way/235359833,Walmart Supercenter,Walmart,anchor,29.9759193,-95.6979639,"26270 Northwest Freeway, Cypress"
+way/235559515,Walmart Supercenter,Walmart,anchor,29.8769827,-95.6517828,"15955 Fm 529 Road, Houston"
+way/241055452,Target,Target,anchor,30.0009885,-95.1725832,"6931 FM 1960 East, Humble"
+way/247867506,Kroger,Kroger,anchor,29.8600734,-95.7217046,"6055 North Fry Road, Katy"
+way/254550921,Target,Target,anchor,29.9995423,-95.5843397,"21515 Tomball Parkway, Houston"
+way/254557655,Kroger,Kroger,anchor,29.9940492,-95.6215967,"13135 Louetta Road, Cypress"
+way/254607817,Walmart Supercenter,Walmart,anchor,30.0141096,-95.595162,"22605 Tomball Parkway, Tomball"
+way/256986701,H-E-B,H-E-B,anchor,29.5054436,-95.1909084,"701 West Parkwood Avenue, Friendswood"
+way/257038638,H-E-B,H-E-B,anchor,29.7569684,-95.7504441,"1621 South Mason Road, Katy"
+way/257047336,H-E-B,H-E-B,anchor,29.6017438,-95.2501247,"9828 Blackhawk Boulevard, Houston"
+way/257110581,H-E-B,H-E-B,anchor,29.7733876,-95.8224289,"25675 Nelson Way, Katy"
+way/257323890,Fairmont Pkwy H-E-B,H-E-B,anchor,29.6486323,-95.1445543,"6210 Fairmont Parkway, Pasadena"
+way/257489227,H-E-B Plus!,H-E-B,anchor,29.7127806,-95.7758771,"6711 South Fry Road, Katy"
+way/257524046,H-E-B,H-E-B,anchor,29.5592816,-95.3902088,"2805 Business Center Drive, Pearland"
+way/257705675,H-E-B,H-E-B,anchor,30.0686616,-95.4498741,"2121 FM 2920, Spring"
+way/257708003,H-E-B,H-E-B,anchor,30.0886793,-95.6291987,"28520 Tomball Parkway, Tomball"
+way/261720959,Walmart Supercenter,Walmart,anchor,29.7762178,-94.9744221,"4900 Garth Road, Baytown"
+way/263325236,Walmart Supercenter,Walmart,anchor,29.5571763,-95.760106,"5330 Farm-to-Market Road 1640, Richmond"
+way/263924830,Fiesta Mart,Fiesta Mart,anchor,29.5612807,-95.7897679,
+way/265697553,H-E-B,H-E-B,anchor,29.9924826,-95.7444804,"28550 Northwest Freeway, Cypress"
+way/267159456,Walmart Supercenter,Walmart,anchor,29.6669691,-95.0999774,"9025 Spencer Highway, La Porte"
+way/280287748,H-E-B,H-E-B,anchor,29.7074047,-95.4697773,"5106 Bissonnet Street, Bellaire"
+way/293729626,H-E-B,H-E-B,anchor,29.9575163,-95.6733641,"24224 Northwest Freeway, Cypress"
+way/293769726,Kroger,Kroger,anchor,29.9709246,-95.690184,"17455 Spring Cypress Road, Cypress"
+way/306783734,H-E-B,H-E-B,anchor,29.6910897,-95.5598646,"10100 Beechnut Street, Houston"
+way/308673109,H-E-B,H-E-B,anchor,29.9109995,-95.5860369,"9503 Jones Road, Houston"
+way/308679505,H-E-B,H-E-B,anchor,29.5367563,-95.5365054,"8900 TX 6, Missouri City"
+way/310899177,Kroger Marketplace,Kroger,anchor,29.6639076,-95.7383114,"8011 West Grand Parkway South, Richmond"
+way/314258872,Kroger,Kroger,anchor,29.7580738,-95.7784441,"1550 West Grand Parkway South Frontage Road, Katy"
+way/314260260,Kroger,Kroger,anchor,29.7355721,-95.7537786,"22150 Westheimer Parkway, Katy"
+way/314284791,Kroger,Kroger,anchor,29.8814468,-95.6855846,"18030 FM 529, Cypress"
+way/314333781,Kroger,Kroger,anchor,29.9025417,-95.631734,"8550 North Highway 6, Houston"
+way/314334335,Kroger,Kroger,anchor,29.9240473,-95.6044476,"12400 FM 1960 West, Houston"
+way/314335389,Kroger,Kroger,anchor,29.8653908,-95.6067498,"6350 North Eldridge Parkway, Houston"
+way/314335687,Kroger,Kroger,anchor,29.7574904,-95.6274509,"1520 Eldridge Parkway, Houston"
+way/314341833,Kroger,Kroger,anchor,29.6782695,-95.6410217,"9303 Highway 6 South, Houston"
+way/314351906,Kroger,Kroger,anchor,29.9517395,-95.5823595,"12222 Jones Road, Houston"
+way/314352248,Kroger,Kroger,anchor,29.9079284,-95.5835716,"9330 Jones Road, Houston"
+way/314352457,Kroger,Kroger,anchor,29.9833329,-95.5659242,"10010 Cypresswood Drive, Houston"
+way/314352698,Kroger,Kroger,anchor,29.6479736,-95.6494273,"11565 Highway 6 South, Sugar Land"
+way/314352998,Kroger,Kroger,anchor,29.7524271,-95.6053021,"12555 Briar Forest Drive, Houston"
+way/314359115,Kroger,Kroger,anchor,30.032708,-95.552747,"8745 Spring Cypress Road, Spring"
+way/314359292,Kroger,Kroger,anchor,29.9041055,-95.5556495,"9125 West Sam Houston Parkway North, Houston"
+way/314359398,Kroger,Kroger,anchor,29.5853421,-95.6333015,"4825 Sweetwater Boulevard, Sugar Land"
+way/314359723,Kroger,Kroger,anchor,30.0029394,-95.5316099,"15802 Champion Forest Drive, Spring"
+way/314359852,Kroger,Kroger,anchor,30.075824,-95.5170933,"6060 FM 2920, Spring"
+way/314361197,Kroger,Kroger,anchor,30.0403836,-95.4861886,"18518 Kuykendahl Road, Spring"
+way/314361375,Kroger,Kroger,anchor,29.9768155,-95.4915026,"13133 Veterans Memorial Drive, Houston"
+way/316352286,Family Dollar,Family Dollar,dollar_store,29.8484499,-95.3627673,"9605 Irvington Boulevard, Houston"
+way/317816016,Fiesta Mart,Fiesta Mart,anchor,29.7307504,-95.3109362,
+way/317926073,Dollar Tree,Dollar Tree,dollar_store,30.067074,-95.4309815,"20622 North Freeway, Spring"
+way/342028535,Kroger,Kroger,anchor,29.8288565,-95.4320496,"1352 West 43rd Street, Houston"
+way/344896043,Family Dollar,Family Dollar,dollar_store,29.8821822,-95.300096,"11240 Homestead Road, Houston"
+way/345838191,Fiesta Mart,Fiesta Mart,anchor,29.7973368,-95.3669955,"4141 Fulton Street, Houston"
+way/346664405,Target,Target,anchor,29.9186875,-95.605114,"12701 FM 1960 West, Houston"
+way/366871869,Walmart Supercenter,Walmart,anchor,29.716183,-95.3129549,"2391 South Wayside Drive, Houston"
+way/368086078,Kroger,Kroger,anchor,29.583068,-95.3898665,"11003 Shadow Creek Parkway, Pearland"
+way/371183163,Aldi,Aldi,anchor,29.6894581,-95.5015677,"6751 Bissonnet Street, Houston"
+way/374878795,Dollar Tree,Dollar Tree,dollar_store,29.7410251,-95.3770597,"1000 Elgin Street, Houston"
+way/375578535,Dollar General,Dollar General,dollar_store,29.7400228,-95.3402779,"4002 Polk Street, Houston"
+way/375578541,Kroger,Kroger,anchor,29.7397445,-95.3404793,"4000 Polk Street, Houston"
+way/383999053,Kroger,Kroger,anchor,29.6692856,-95.4639551,"10306 South Post Oak Road, Houston"
+way/384192770,Fiesta Mart,Fiesta Mart,anchor,29.7064289,-95.4913449,
+way/387040847,Walmart Supercenter,Walmart,anchor,29.7892433,-95.7223036,"1313 North Fry Road, Katy"
+way/395449443,Walmart Supercenter,Walmart,anchor,29.7728452,-95.4013994,"111 Yale Street, Houston"
+way/398421311,Kroger,Kroger,anchor,29.912304,-95.4778511,"12434 Tomball Parkway, Houston"
+way/404593189,Dollar General,Dollar General,dollar_store,29.9972428,-95.1943562,"5358 FM 1960 East, Humble"
+way/404986383,Kroger,Kroger,anchor,29.5355988,-95.2058622," North Friendswood Drive, Friendswood"
+way/421099797,Walmart Supercenter,Walmart,anchor,29.7229848,-95.4649875,"5405 South Rice Avenue, Houston"
+way/426001042,Kroger,Kroger,anchor,30.0720748,-95.2429674,"25651 Eastex Freeway, Kingwood"
+way/426513624,Walmart Supercenter,Walmart,anchor,29.5734324,-95.5680203,"5501 TX Highway 6/Alvin-Sugarland Road, Missouri City"
+way/427235452,Family Dollar,Family Dollar,dollar_store,29.8401048,-95.3419557,"8826 Jensen Drive, Houston"
+way/428377486,Walmart Supercenter,Walmart,anchor,29.9956546,-95.1764283,"6626 Fm 1960 Rd E, Humble"
+way/428980709,Walmart Neighborhood Market,Walmart,anchor,29.8441868,-95.6448007,"4810 North Highway 6, Houston"
+way/428980716,H-E-B,H-E-B,anchor,29.8473038,-95.6477258,"4955 North Highway 6, Houston"
+way/431482912,Walmart Supercenter,Walmart,anchor,29.9364618,-95.2527775,"9235 North Sam Houston Parkway East, Humble"
+way/437412870,Walmart Supercenter,Walmart,anchor,29.9179874,-95.4156201,"10411 North Freeway, Houston"
+way/437769214,H-E-B,H-E-B,anchor,30.1077629,-95.3874842,"3540 Rayford Road, Spring"
+way/438075553,Kroger,Kroger,anchor,29.7732636,-95.3898464,"1440 Studemont Street, Houston"
+way/438665953,Family Dollar,Family Dollar,dollar_store,29.8580545,-95.4225207,"6831 West Montgomery Road, Houston"
+way/460438512,San Felipe H-E-B,H-E-B,anchor,29.7479471,-95.4851166,"5895 San Felipe Street, Houston"
+way/465940833,ALDI,Aldi,anchor,29.7180508,-95.643006,"3601 South Highway 6, Houston"
+way/478539111,Family Dollar,Family Dollar,dollar_store,29.8964608,-95.5243064,
+way/483639212,Kroger,Kroger,anchor,29.7006093,-95.8115133,"2050 F.M. 1093, Richmond"
+way/493297855,Family Dollar,Family Dollar,dollar_store,29.6411161,-95.5090187,
+way/503510975,H-E-B,H-E-B,anchor,29.6599821,-95.7133745,"11105 Harlem Road, Richmond"
+way/504021016,Dollar General,Dollar General,dollar_store,29.8289558,-95.3923444,"525 Crosstimbers Street, Houston"
+way/508028229,Target,Target,anchor,29.6581169,-95.7099588,"10241 West Grand Parkway South, Richmond"
+way/509137965,Walmart Supercenter,Walmart,anchor,29.8189041,-95.76761,"22850 Morton Ranch Road, Katy"
+way/518895734,Walmart Neighborhood Market,Walmart,anchor,29.9780173,-95.1931632,"12312 Will Clayton Parkway, Humble"
+way/518945866,ALDI,Aldi,anchor,29.7013507,-95.3633552,"3618 Old Spanish Trail, Houston"
+way/520602552,Aldi,Aldi,anchor,29.8927949,-95.0622838,"14130 FM 2100 Road, Crosby"
+way/520606877,ALDI,Aldi,anchor,29.861647,-95.6465185,"5855 North Highway 6, Houston"
+way/521352667,Aldi,Aldi,anchor,30.0744901,-95.5275131,"6912 FM 2920, Spring"
+way/521378899,Target,Target,anchor,29.7326691,-95.6273463,"2700 Eldridge Parkway, Houston"
+way/521640842,Target,Target,anchor,29.8774046,-95.6474592,"6955 North Highway 6, Houston"
+way/525232727,Kroger,Kroger,anchor,29.9246942,-95.2038836,"14221 East Sam Houston Parkway North, Houston"
+way/528128676,Dollar Tree,Dollar Tree,dollar_store,29.6742591,-95.4573026,"9755 Meyer Park Boulevard, Houston"
+way/540033295,Walmart Supercenter,Walmart,anchor,29.5518191,-95.1592268,"150 West El Dorado Boulevard, Friendswood"
+way/542525192,Walmart Neighborhood Market,Walmart,anchor,29.8979698,-95.6832743,"8208 Barker Cypress Road, Cypress"
+way/542527374,ALDI,Aldi,anchor,29.9045548,-95.6845913,"8650 Barker Cypress Road, Cypress"
+way/542928461,Family Dollar,Family Dollar,dollar_store,29.9485338,-95.5842078,"12022 Jones Road, Houston"
+way/543715855,Kroger Marketplace,Kroger,anchor,29.762859,-95.8439008,"1712 Spring Green Boulevard, Katy"
+way/543835680,H-E-B,H-E-B,anchor,29.7057906,-95.6416748,"14498 Bellaire Boulevard, Houston"
+way/549069562,Walmart Supercenter,Walmart,anchor,30.0647729,-95.4303527,"155 Louetta Crossing, Spring"
+way/549599388,Kroger,Kroger,anchor,30.0072142,-95.2812559,"9475 FM 1960 Bypass Road West, Humble"
+way/567421119,ALDI,Aldi,anchor,29.9161057,-95.4857646,"13340 Tomball Parkway, Houston"
+way/568342947,Walmart Supercenter,Walmart,anchor,29.9131643,-95.4867862,"13003 Tomball Parkway, Houston"
+way/579768215,Walmart Supercenter,Walmart,anchor,29.5581898,-95.3827885,"10505 West Broadway Street, Pearland"
+way/579779275,Target,Target,anchor,29.5531845,-95.3833992,"3045 Silverlake Village Drive, Pearland"
+way/589008444,Walmart Neighborhood Market,Walmart,anchor,29.5563553,-95.4157881,"12631 West Broadway Street, Pearland"
+way/590272820,ALDI,Aldi,anchor,29.5550285,-95.3988174,"11510 West Broadway Street, Pearland"
+way/592902131,Kingwood Market H-E-B,H-E-B,anchor,30.0531121,-95.1835882,"4517 Kingwood Drive, Kingwood"
+way/602724576,H-E-B,H-E-B,anchor,29.5582026,-95.2649779,"2710 Pearland Parkway, Pearland"
+way/605941362,Kroger,Kroger,anchor,29.5605392,-95.3489394,"8323 West Broadway Street, Pearland"
+way/608468631,Walmart Supercenter,Walmart,anchor,29.6901121,-95.7745741,"5660 West Grand Parkway South, Richmond"
+way/614359470,Target,Target,anchor,29.9677524,-95.5305658,"6801 Cypress Creek Parkway, Houston"
+way/615216975,H-E-B,H-E-B,anchor,29.6884698,-95.4641413,"4955 Beechnut Street, Houston"
+way/616126700,Kroger,Kroger,anchor,30.0921608,-95.6343199,"14060 FM 2920, Tomball"
+way/621515899,H-E-B,H-E-B,anchor,29.5056539,-95.0387769,"2755 League City Parkway, League City"
+way/621646896,H-E-B,H-E-B,anchor,29.9270985,-95.7252085,"9722 Tuckerton Road, Cypress"
+way/622895525,Kroger,Kroger,anchor,29.9789781,-95.2150643,"3820 Atascocita Road, Humble"
+way/622902194,Family Dollar,Family Dollar,dollar_store,29.9808101,-95.2189597,"10803 Will Clayton Boulevard, Humble"
+way/629275504,Walmart Supercenter,Walmart,anchor,29.5347722,-95.0183078,"255 Fm 518 Road, Kemah"
+way/654873922,Walmart Supercenter,Walmart,anchor,29.8606441,-95.7163877,"6060 North Fry Road, Katy"
+way/655731438,ALDI,Aldi,anchor,29.8579664,-95.7182682,"5930 North Fry Road, Katy"
+way/658338903,H-E-B,H-E-B,anchor,29.551759,-95.7475155,"23500 Berry Parkway, Richmond"
+way/671985490,ALDI,Aldi,anchor,29.993679,-95.4859034,"3715 FM 1960 Road West, Houston"
+way/671985509,Walmart Supercenter,Walmart,anchor,29.9982086,-95.4841357,"3450 FM 1960 Road West, Houston"
+way/680204579,Walmart Supercenter,Walmart,anchor,30.0758703,-95.6247614,"27650 TX 249 Business, Tomball"
+way/680783493,Target,Target,anchor,29.5360501,-95.1511963,"1801 West Bay Area Boulevard, Webster"
+way/686754539,Walmart Supercenter,Walmart,anchor,29.8299095,-95.3771067,"4412 North Freeway, Houston"
+way/690329545,Walmart Neighborhood Market,Walmart,anchor,29.7584869,-95.731105,"20903 Highland Knolls Drive, Katy"
+way/692347197,Target,Target,anchor,29.7743548,-95.3853979,"2580 Shearn Street, Houston"
+way/706790722,Kroger,Kroger,anchor,30.0855449,-95.4484315,"2150 Spring Stuebner Road, Spring"
+way/706808181,H-E-B,H-E-B,anchor,30.0717349,-95.5019009,"5251 FM 2920, Spring"
+way/707043803,ALDI,Aldi,anchor,30.0710988,-95.4519342,"2302 Fm 2920, Spring"
+way/707043835,Walmart Supercenter,Walmart,anchor,30.0773879,-95.5128161,"21150 Kuykendahl Road, Spring"
+way/708064669,Dollar Tree,Dollar Tree,dollar_store,29.862711,-95.4728391,
+way/740010552,Kroger Marketplace,Kroger,anchor,29.9190144,-95.6896318,"9703 Barker Cypress Road, Cypress"
+way/759085631,H-E-B,H-E-B,anchor,29.6062492,-95.1269357,"3501 Clear Lake City Boulevard, Houston"
+way/762456911,Baytown H-E-B,H-E-B,anchor,29.7955367,-94.9773709,"6430 Garth Road, Baytown"
+way/765321384,Walmart Neighborhood Market,Walmart,anchor,29.6873959,-95.586074,"11755 Beechnut Street, Houston"
+way/766131037,Walmart Supercenter,Walmart,anchor,29.8059144,-95.1650885,"5655 East Sam Houston Parkway North, Houston"
+way/766567521,Walmart Supercenter,Walmart,anchor,29.721126,-95.6474879,"3506 South Highway 6, Houston"
+way/781719521,H-E-B,H-E-B,anchor,30.0686081,-95.2516876,"19529 Northpark Drive, Kingwood"
+way/784207272,Kroger,Kroger,anchor,29.7366725,-95.8100262,"9806 Gaston Road, Katy"
+way/820787487,Family Dollar,Family Dollar,dollar_store,29.6351453,-95.4457967,
+way/823562112,Kroger,Kroger,anchor,29.5688672,-95.0255203,"1905 El Mar Lane, Seabrook"
+way/826816157,H-E-B,H-E-B,anchor,29.7139657,-95.3768665,"6055 South Freeway, Houston"
+way/828902198,Dollar General,Dollar General,dollar_store,29.9837934,-95.4071463,"919 East Airtex Drive, Houston"
+way/839649312,Spring Green Market H-E-B,H-E-B,anchor,29.6957581,-95.8160474,"9211 FM 723, Richmond"
+way/840289466,Dollar General,Dollar General,dollar_store,29.9862395,-95.43425,"15045 Ella Boulevard, Houston"
+way/844396650,Grant and Spring Cypress H-E-B,H-E-B,anchor,30.0029864,-95.6390211,"14100 Spring Cypress Road, Cypress"
+way/846945461,Dollar Tree,Dollar Tree,dollar_store,29.6986705,-95.4842735,
+way/847364920,H-E-B,H-E-B,anchor,30.0223608,-95.5274032,"7310 Louetta Road, Spring"
+way/849319681,Walmart Supercenter,Walmart,anchor,29.7680981,-95.1770872,"13750 East Freeway, Houston"
+way/849327255,Kroger,Kroger,anchor,29.7896285,-95.159347,"14710 Woodforest Boulevard, Houston"
+way/850505505,H-E-B,H-E-B,anchor,29.6079651,-95.6459172,"530 State Highway 6, Sugar Land"
+way/851665938,H-E-B,H-E-B,anchor,29.6670246,-95.0967813,"4701 East Boulevard, Deer Park"
+way/851949728,H-E-B,H-E-B,anchor,29.7197807,-95.8484006,"4950 FM 1463, Katy"
+way/852036248,Champion Forest Market H-E-B,H-E-B,anchor,30.0537671,-95.5769388,"20311 Champion Forest Drive, Spring"
+way/857006596,Walmart Supercenter,Walmart,anchor,29.536632,-95.5166148,"9929 Highway 6, Missouri City"
+way/859518920,Walmart Neighborhood Market,Walmart,anchor,29.942386,-95.6805365,"11425 Barker Cypress Road, Cypress"
+way/871541057,Walmart Supercenter,Walmart,anchor,30.1144573,-95.3870022,"2901 Riley Fuzzel Road, Spring"
+way/878541479,Dollar General,Dollar General,dollar_store,29.8881255,-95.4232654,"1420 West Gulf Bank Road, Houston"
+way/886287882,Walmart Neighborhood Market,Walmart,anchor,29.6569959,-95.5300833,"11242 South Gessner Drive, Houston"
+way/897512688,ALDI,Aldi,anchor,29.9144902,-95.4096325,"161 West Road, Houston"
+way/905271711,Dollar General,Dollar General,dollar_store,29.8026244,-95.0160588,"7214 Wade Road, Baytown"
+way/911004055,Walmart Supercenter,Walmart,anchor,29.9199075,-95.6023515,"12353 FM 1960 West, Houston"
+way/929435102,ALDI,Aldi,anchor,29.5433328,-95.7604669,"6450 Reading Road, Rosenberg"
+way/929437800,ALDI,Aldi,anchor,29.6639631,-95.7410787,"7945 West Grand Parkway South, Richmond"
+way/929466657,ALDI,Aldi,anchor,29.6267406,-95.2370641,"10064 Almeda-Genoa Road, Houston"
+way/929468197,ALDI,Aldi,anchor,29.6496433,-95.179767,"4140 Fairmont Parkway, Pasadena"
+way/929469828,ALDI,Aldi,anchor,29.7834768,-94.9796302,"5521 Garth Road, Baytown"
+way/930757811,Walmart Neighborhood Market,Walmart,anchor,30.0644034,-95.4060015,"24809 Aldine Westfield Road, Spring"
+way/935513347,Family Dollar,Family Dollar,dollar_store,29.8707202,-95.3011954,
+way/940571834,Kroger,Kroger,anchor,29.5078179,-95.0412385,"2750 League City Parkway, League City"
+way/961092404,Target,Target,anchor,29.5386458,-95.0228844,"255 Marina Bay Drive, Clear Lake Shores"
+way/975327838,Dollar General,Dollar General,dollar_store,29.8803085,-95.7025134,
+way/978924749,Family Dollar,Family Dollar,dollar_store,29.7229711,-95.6054726,
+way/984985983,Walmart Supercenter,Walmart,anchor,29.7355805,-95.5116245,"2727 Dunvale Road, Houston"
+way/993140886,Dollar Tree,Dollar Tree,dollar_store,29.5317255,-95.206313,
+way/999294900,Dollar Tree,Dollar Tree,dollar_store,29.6281257,-95.2355869,
+way/1013864525,Dollar General,Dollar General,dollar_store,29.6159264,-95.3747404,
+way/1019229417,Kroger Marketplace,Kroger,anchor,29.990267,-95.7365963,"20355 Cypresswood Drive, Cypress"
+way/1080833054,H-E-B,H-E-B,anchor,29.5524938,-95.1486058,"18611 Eastfield Drive, Webster"
+way/1083651531,Family Dollar,Family Dollar,dollar_store,29.8507759,-95.2617269,"9630 Mesa Drive, Houston"
+way/1086296584,Family Dollar,Family Dollar,dollar_store,29.8493829,-95.4895025,"5723 Bingle Road, Houston"
+way/1086339144,Fiesta Mart,Fiesta Mart,anchor,29.7754946,-95.3121122,"5800 Lyons Avenue, Houston"
+way/1091897471,Target,Target,anchor,29.7719637,-94.9758653,"4510 Garth Road, Baytown"
+way/1096155330,Family Dollar,Family Dollar,dollar_store,29.698672,-95.4838575,"5861 Bissonnet Street, Bellaire"
+way/1126104978,Target,Target,anchor,29.8726811,-95.7585543,"22165 FM 529, Katy"
+way/1127969438,Dollar General,Dollar General,dollar_store,29.4969147,-94.9929257,
+way/1128123012,Dollar General,Dollar General,dollar_store,29.5702674,-95.2874411,
+way/1128123019,Walmart Supercenter,Walmart,anchor,29.5732266,-95.2830939,"1919 North Main Street, Pearland"
+way/1187881246,Dollar General,Dollar General,dollar_store,30.0334059,-95.3823989,"21735 Aldine Westfield Road, Humble"
+way/1234872732,Dollar General,Dollar General,dollar_store,29.6274246,-95.0191666,
+way/1235653935,Dollar Tree,Dollar Tree,dollar_store,29.5467359,-95.7586866,"24984 Commercial Drive, Rosenberg"
+way/1243139697,Dollar Tree,Dollar Tree,dollar_store,29.8629426,-95.6839254,"6211 Barker Cypress Road, Katy"
+way/1247555430,Walmart Neighborhood Market,Walmart,anchor,29.6520955,-95.6171449,"13322 West Airport Boulevard, Sugar Land"
+way/1259173759,H-E-B,H-E-B,anchor,29.8189252,-95.8055294,
+way/1293539500,Family Dollar,Family Dollar,dollar_store,29.6909238,-95.6887927,
+way/1306102062,Walmart Supercenter,Walmart,anchor,29.6792427,-95.5612345,"9460 West Sam Houston Parkway South, Houston"
+way/1307698223,Target,Target,anchor,30.0868689,-95.5205011,"6635 North Grand Parkway West, Spring"
+way/1308944995,Family Dollar,Family Dollar,dollar_store,29.6828594,-95.1926587,"2017 Strawberry Road, Pasadena"
+way/1311911715,Walmart Supercenter,Walmart,anchor,29.6465817,-95.1614024,"5200 Fairmont Parkway, Pasadena"
+way/1326137800,Fiesta Mart,Fiesta Mart,anchor,29.6569244,-95.5101105,"11240 Fondren Road, Houston"
+way/1326179986,Family Dollar,Family Dollar,dollar_store,29.6390591,-95.5088953,
+way/1327887561,Family Dollar,Family Dollar,dollar_store,29.6273185,-95.4153035,2913 West Orem Drive
+way/1354863081,Dollar Tree,Dollar Tree,dollar_store,30.0779963,-95.5154459,"21330 Kuykendahl Road, Spring"
+way/1356236811,H-E-B,H-E-B,anchor,29.9393255,-95.7600997,"20017 Bridgeland Creek Parkway, Cypress"
+way/1359243670,Family Dollar,Family Dollar,dollar_store,29.931282,-95.3962312,"366 Aldine Bender Road, Houston"
+way/1409601934,Family Dollar,Family Dollar,dollar_store,29.9277954,-95.4532205,"10425 Veterans Memorial Drive, Houston"
+way/1411069978,Dollar Tree,Dollar Tree,dollar_store,29.7396884,-95.5029999,"7560 Westheimer Road, Houston"
+way/1411240794,Target,Target,anchor,29.7346086,-95.5177456,"8605 Westheimer Road, Houston"
+way/1441709214,Family Dollar,Family Dollar,dollar_store,29.9512608,-95.3910436,"925 Greens Road, Houston"
+way/1491101056,Fiesta Mart,Fiesta Mart,anchor,29.8781552,-95.7220445,"20331 FM 529, Katy"
