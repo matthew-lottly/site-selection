@@ -18,7 +18,7 @@ from pathlib import Path
 import folium
 from folium import plugins
 
-from lib import PROCESSED, ROOT, SEQUENTIAL_BLUE, STATUS_RAMP, ramp_color
+from lib import PROCESSED, ROOT, SEQUENTIAL_ORANGE, STATUS_RAMP, ramp_color
 
 MAP_BOUNDS = {"lat_min": 29.52, "lat_max": 30.11, "lon_min": -95.79, "lon_max": -95.01}
 
@@ -36,12 +36,13 @@ POPUP_CSS = """
 <style>
   .exec-card { font-family: 'Segoe UI', Arial, sans-serif; width: 290px; padding: 6px 8px; }
   .exec-title { font-size: 14px; font-weight: 700; color: #1E3A8A; border-bottom: 2px solid #D97706; padding-bottom: 4px; margin-bottom: 6px; }
-  .exec-metric { font-size: 12px; margin: 3px 0; color: #1E293B; display: flex; justify-content: space-between; gap: 8px; }
-  .exec-val { font-weight: 700; color: #0D9488; text-align: right; }
+  .exec-metric { font-size: 12px; margin: 4px 0; color: #1F2937; font-weight: 700; display: flex; justify-content: space-between; gap: 8px; }
+  .exec-metric span:first-child { color: #374151; font-weight: 600; }
+  .exec-val { font-weight: 700; color: #1F2937; text-align: right; }
   .winner-tag { background-color: #0ca30c; color: white; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .03em; }
   .rank-tag { color: white; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; }
-  .src-note { font-size: 10px; color: #64748B; margin-top: 6px; border-top: 1px solid #E2E8F0; padding-top: 4px; }
-  .warn-note { font-size: 11px; color: #92400E; background: #FEF3C7; padding: 4px 6px; border-radius: 4px; margin-top: 4px; }
+  .src-note { font-size: 10px; color: #64748B; margin-top: 6px; border-top: 1px solid #E2E8F0; padding-top: 4px; font-weight: 400; }
+  .warn-note { font-size: 11px; color: #92400E; background: #FEF3C7; padding: 4px 6px; border-radius: 4px; margin-top: 4px; font-weight: 600; }
 </style>
 """
 
@@ -57,41 +58,71 @@ TITLE_HTML = """
 
 
 def build_legend_html(rank_ramp_css: str) -> str:
+    section_head = "font-weight:700; color:#1F2937; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:7px;"
+    row_text = "color:#374151; font-weight:600;"
     return f"""
 <div style="position: fixed; bottom: 20px; left: 12px; z-index: 9999; background: white;
             padding: 14px 16px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.28);
-            font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; max-width: 268px;">
-  <div style="font-weight:700; font-size:13px; color:#1E3A8A; margin-bottom:10px;">Legend</div>
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; max-width: 272px;">
+  <div style="font-weight:700; font-size:13px; color:#1E3A8A; margin-bottom:12px;">Legend</div>
 
-  <div style="font-weight:700; color:#334155; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Candidate sites (by score)</div>
-  <div style="height:10px; border-radius:5px; margin-bottom:3px; background:{rank_ramp_css};"></div>
-  <div style="display:flex; justify-content:space-between; color:#64748B; font-size:10.5px; margin-bottom:10px;">
-    <span>Best (Rank 1)</span><span>Worst (Rank 20)</span>
+  <div style="{section_head}">Candidate sites (by score)</div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+    <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
+    <span style="{row_text}">Recommended site (Rank 1)</span>
   </div>
-  <div style="display:flex; align-items:center; gap:6px; margin-bottom:10px;">
-    <span style="color:#0ca30c; font-size:16px; line-height:1;">&#9733;</span>
-    <span style="color:#334155;">Recommended site</span>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+    <div style="width:18px; height:18px; border-radius:50%; background:#d03b3b; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0;"></div>
+    <span style="{row_text}">Other candidate sites, numbered by rank</span>
+  </div>
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{rank_ramp_css};"></div>
+  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; margin-bottom:12px; font-weight:600;">
+    <span>Best</span><span>Worst</span>
   </div>
 
-  <div style="border-top:1px solid #E2E8F0; margin:10px 0;"></div>
-  <div style="font-weight:700; color:#334155; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Competitors</div>
-  <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#DC2626; display:inline-block;"></span><span style="color:#334155;">Direct dollar-store</span></div>
-  <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#7C3AED; display:inline-block;"></span><span style="color:#334155;">Off-price / general merch.</span></div>
-  <div style="display:flex; align-items:center; gap:7px; margin-bottom:10px;"><span style="width:10px; height:10px; border-radius:50%; background:#2563EB; display:inline-block;"></span><span style="color:#334155;">Grocery / big-box anchor</span></div>
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Competitors</div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:11px; height:11px; border-radius:50%; background:#DC2626; border:1.5px solid #fff; box-shadow:0 0 0 .5px #DC2626; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Family Dollar (existing)</span></div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:11px; height:11px; border-radius:50%; background:#DB2777; border:1.5px solid #fff; box-shadow:0 0 0 .5px #DB2777; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Other dollar stores</span></div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:11px; height:11px; border-radius:50%; background:#7C3AED; border:1.5px solid #fff; box-shadow:0 0 0 .5px #7C3AED; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Off-price / general merch.</span></div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="width:11px; height:11px; border-radius:50%; background:#2563EB; border:1.5px solid #fff; box-shadow:0 0 0 .5px #2563EB; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Grocery / big-box anchor</span></div>
 
-  <div style="border-top:1px solid #E2E8F0; margin:10px 0;"></div>
-  <div style="font-weight:700; color:#334155; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Trade area (recommended site)</div>
-  <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;"><span style="width:14px; height:10px; background:#0D9488; opacity:.35; border:1px solid #0D9488; display:inline-block;"></span><span style="color:#334155;">5-min drive (OSRM)</span></div>
-  <div style="display:flex; align-items:center; gap:7px; margin-bottom:10px;"><span style="width:14px; height:10px; background:#0D9488; opacity:.12; border:1px dashed #0D9488; display:inline-block;"></span><span style="color:#334155;">10-min drive (OSRM)</span></div>
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Trade area (recommended site)</div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.4; border:1px solid #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">5-min drive (OSRM)</span></div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.14; border:1px dashed #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">10-min drive (OSRM)</span></div>
 
-  <div style="border-top:1px solid #E2E8F0; margin:10px 0;"></div>
-  <div style="font-weight:700; color:#334155; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Opportunity score</div>
-  <div style="height:10px; border-radius:5px; margin-bottom:3px; background:linear-gradient(90deg,{','.join(SEQUENTIAL_BLUE)});"></div>
-  <div style="display:flex; justify-content:space-between; color:#64748B; font-size:10.5px;">
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Opportunity score</div>
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:linear-gradient(90deg,{','.join(SEQUENTIAL_ORANGE)});"></div>
+  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
     <span>Lower (served)</span><span>Higher (underserved)</span>
   </div>
 </div>
 """
+
+
+def rank_badge_icon(rank: int, color: str, is_winner: bool) -> folium.DivIcon:
+    """A clean circular rank badge instead of a busy icon-in-a-pin marker --
+    gives the 20 candidate sites clear visual priority over the competitor
+    dots and the choropleth without competing icon shapes."""
+    if is_winner:
+        size = 36
+        html = f"""
+        <div style="width:{size}px; height:{size}px; border-radius:50%; background:{color};
+                    border:3px solid #ffffff; box-shadow:0 0 0 2.5px {color}, 0 3px 8px rgba(0,0,0,.45);
+                    display:flex; align-items:center; justify-content:center;
+                    color:#ffffff; font-size:17px; font-family:'Segoe UI',Arial,sans-serif;">&#9733;</div>
+        """
+    else:
+        size = 24
+        html = f"""
+        <div style="width:{size}px; height:{size}px; border-radius:50%; background:{color};
+                    border:2px solid #ffffff; box-shadow:0 1px 4px rgba(0,0,0,.4);
+                    display:flex; align-items:center; justify-content:center;
+                    color:#ffffff; font-weight:700; font-size:11px; font-family:'Segoe UI',Arial,sans-serif;">{rank}</div>
+        """
+    return folium.DivIcon(html=html, icon_size=(size, size), icon_anchor=(size // 2, size // 2))
 
 
 def build_map() -> Path:
@@ -154,7 +185,10 @@ def build_map() -> Path:
             continue
         score = float(p["gap_score"])
         t = (score - lo) / (hi - lo) if hi > lo else 0
-        color = ramp_color(t, SEQUENTIAL_BLUE)
+        color = ramp_color(t, SEQUENTIAL_ORANGE)
+        # let low-opportunity tracts recede and high-opportunity tracts stand out,
+        # instead of one flat fill weight across all 643 polygons
+        fill_opacity = 0.12 + 0.5 * t
         pop = float(p["population"]) if p.get("population") else 0
         mhi = float(p["median_hh_income"]) if p.get("median_hh_income") else None
         pov = float(p["poverty_rate"]) * 100 if p.get("poverty_rate") else None
@@ -169,30 +203,48 @@ def build_map() -> Path:
         )
         folium.GeoJson(
             f,
-            style_function=lambda _f, c=color: {"fillColor": c, "color": "#94a3b8", "weight": 0.4, "fillOpacity": 0.6},
-            highlight_function=lambda _f: {"weight": 2, "color": "#1E3A8A"},
+            style_function=lambda _f, c=color, o=fill_opacity: {"fillColor": c, "color": "#c2996b", "weight": 0.3, "fillOpacity": o},
+            highlight_function=lambda _f: {"weight": 2, "color": "#7a2d0f"},
             tooltip=f"{p['name']}: opportunity score {score:.0f}",
             popup=folium.Popup(popup, max_width=300),
         ).add_to(gap_layer)
     gap_layer.add_to(m)
 
-    # --- Layer: competitors, split by tier ---------------------------------------
-    dollar_layer = folium.FeatureGroup(name="Direct dollar-store competitors (OSM)", show=True)
+    # --- Layer: competitors, split by tier -- Family Dollar gets its own layer -----
+    # since this analysis is FOR Family Dollar: existing FD locations (cannibalization
+    # check) are the single most important competitor fact on the map, so they get
+    # their own toggle and color rather than being buried in "dollar stores" broadly.
+    fd_layer = folium.FeatureGroup(name="Family Dollar (existing)", show=True)
+    other_dollar_layer = folium.FeatureGroup(name="Other dollar stores (DG, Dollar Tree, etc.)", show=True)
     offprice_layer = folium.FeatureGroup(name="Off-price / general merchandise (OSM)", show=False)
     anchor_layer = folium.FeatureGroup(name="Grocery / big-box anchors (OSM)", show=False)
-    layer_by_category = {"dollar_store": (dollar_layer, "#DC2626"), "offprice": (offprice_layer, "#7C3AED"), "grocery_anchor": (anchor_layer, "#2563EB")}
+
+    COMPETITOR_STYLE = {
+        "family_dollar": (fd_layer, "#DC2626"),
+        "other_dollar": (other_dollar_layer, "#DB2777"),
+        "offprice": (offprice_layer, "#7C3AED"),
+        "grocery_anchor": (anchor_layer, "#2563EB"),
+    }
 
     for c in competitors:
         lat, lon = float(c["lat"]), float(c["lon"])
         if not (MAP_BOUNDS["lat_min"] <= lat <= MAP_BOUNDS["lat_max"] and MAP_BOUNDS["lon_min"] <= lon <= MAP_BOUNDS["lon_max"]):
             continue
-        layer, color = layer_by_category.get(c["category"], (anchor_layer, "#2563EB"))
+        if c["category"] == "dollar_store":
+            key = "family_dollar" if c["brand"] == "Family Dollar" else "other_dollar"
+        else:
+            key = c["category"]
+        layer, color = COMPETITOR_STYLE.get(key, (anchor_layer, "#2563EB"))
+        # smaller + more transparent than the candidate-site markers, with a thin white
+        # ring instead of a saturated border, so these read as context, not the focus
         folium.CircleMarker(
-            location=[lat, lon], radius=5, color=color, fill=True, fill_color=color, fill_opacity=0.85, weight=1,
+            location=[lat, lon], radius=4.5, color="#ffffff", fill=True, fill_color=color,
+            fill_opacity=0.62, weight=0.75, opacity=0.9,
             tooltip=f"{c['name']} ({c['brand']})",
-            popup=f"<b>{c['name']}</b><br>Brand: {c['brand']}<br>Typical size: {int(c['typical_sqft']):,} sq ft<br><span class='src-note'>Source: OpenStreetMap</span>",
+            popup=f"<b style='color:#1F2937;'>{c['name']}</b><br><span style='color:#374151;'>Brand: {c['brand']}<br>Typical size: {int(c['typical_sqft']):,} sq ft</span><br><span class='src-note'>Source: OpenStreetMap</span>",
         ).add_to(layer)
-    dollar_layer.add_to(m)
+    fd_layer.add_to(m)
+    other_dollar_layer.add_to(m)
     offprice_layer.add_to(m)
     anchor_layer.add_to(m)
 
@@ -245,13 +297,7 @@ def build_map() -> Path:
           <div class="src-note">Sources: HCAD parcels &middot; TxDOT AADT (Nominatim-verified) &middot; FEMA NFHL &middot; OSM &middot; OSRM drive times &middot; Huff gravity model</div>
         </div>
         """
-        if is_winner:
-            icon = folium.Icon(color="green", icon="star", prefix="fa")
-        else:
-            icon = plugins.BeautifyIcon(
-                icon="shopping-cart", icon_shape="marker", background_color=rank_color,
-                border_color="#334155", text_color="white", inner_icon_style="font-size:12px;padding-top:2px;",
-            )
+        icon = rank_badge_icon(i, rank_color, is_winner)
         folium.Marker(
             location=[float(s["lat"]), float(s["lon"])],
             popup=folium.Popup(popup, max_width=330),

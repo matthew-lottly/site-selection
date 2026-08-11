@@ -50,9 +50,15 @@
 ## Slide 5 — Interactive Web Map
 
 - `index.html` (Folium/Leaflet, hosted on GitHub Pages): real Houston city-limits boundary, citywide
-  opportunity choropleth (643 tracts), competitors split into 3 toggleable tiers, all 20 candidate
-  sites on a best→worst color ramp, and the real drive-time trade area for the recommended site.
-  Basemap switcher offers light/dark/streets/satellite/terrain.
+  opportunity choropleth (643 tracts, amber→deep-red by opportunity score), all 20 candidate sites as
+  clean numbered rank badges on a best (green) → worst (red) color ramp with the recommendation as a
+  large gold-ringed star, and the real drive-time trade area for the recommended site.
+- Competitors are split into 4 toggleable tiers so the VP can isolate what matters most: **existing
+  Family Dollar locations get their own dedicated layer** (the direct cannibalization check), then
+  other dollar-store banners, then off-price/general merchandise and grocery/big-box anchors as
+  lower-opacity context layers, on by request rather than by default.
+- Basemap switcher offers light/dark/streets/satellite/terrain. Popup and legend text is set in dark,
+  bold type for readability at a glance in a room.
 
 ---
 

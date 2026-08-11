@@ -60,6 +60,9 @@ def cached_get(url: str, params: dict, cache_name: str, verify: bool = True, tim
 SEQUENTIAL_BLUE = [  # magnitude ramp, light->dark: for the tract opportunity-score choropleth
     "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b",
 ]
+SEQUENTIAL_ORANGE = [  # magnitude ramp, light->dark: alternate choropleth hue (categorical slot 2)
+    "#fde3d3", "#fbc9a3", "#f5a56a", "#eb6834", "#c94f20", "#a13d16", "#7a2d0f",
+]
 STATUS_RAMP = [  # ordered good->critical: for "best to worst ranked" site symbology
     "#0ca30c", "#fab219", "#ec835a", "#d03b3b",
 ]
