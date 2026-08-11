@@ -39,14 +39,17 @@
 - Stage 6: Weighted scorecard (25% demand / 20% Huff capture / 15% competitive gap / 15% traffic /
   15% cost-feasibility / 10% flood risk) with the 8,000 AADT benchmark enforced as a **hard gate** on
   the primary recommendation, not just a soft-weighted factor.
-- Stage 7: Real 90% confidence intervals for every city-wide headline statistic (population, income,
-  poverty, foreign-born share, Spanish-at-home share, household size, zero-vehicle household share,
-  renter-occupied share), computed with the Census Bureau's own ratio-MOE propagation formula.
-- Stage 8: Multi-scenario sensitivity analysis — re-aggregates the same real per-factor scores under
-  5 different weighting schemes to test whether the recommendation is an artifact of the specific
-  weights chosen. This check is what caught a real classification bug in the AADT traffic-matching
-  logic (freeway vs. frontage road), which was fixed and changed the actual recommendation — see
+- Stage 7: Trade-area visualization — tract choropleth across the 643 in-city tracts and the real
+  OSRM 5-minute / 10-minute isochrone for the recommended site.
+- Stage 8: Extended demographics & confidence intervals — real Houston-specific ACS context plus
+  citywide 90% confidence intervals for population, income, poverty, foreign-born share,
+  Spanish-at-home share, and household size.
+- Stage 8b: Vehicle access, housing tenure, and sensitivity analysis — zero-vehicle share,
+  renter-occupied share, and the 5-scenario score re-aggregation check that caught a real
+  freeway-vs.-frontage-road traffic classification bug and changed the actual recommendation; see
   `docs/data_validation.md` §2.
+- Stage 9: Web map and dashboard — Folium/Leaflet delivery of the scorecard, cannibalization,
+  confidence intervals, and validation tabs for an executive audience.
 - All data is public and free (US Census, OpenStreetMap, HCAD, FEMA, TxDOT, OSRM); no API keys
   required. Full source list, formulas, and every audit/validation check performed: see
   `docs/methodology.md` and `docs/data_validation.md`.

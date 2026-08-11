@@ -133,6 +133,10 @@ def main() -> None:
             continue
 
         density = pop / area
+        # Spatial trend terms capture broad geographic structure so residual
+        # clustering reflects less omitted spatial signal.
+        lat0 = float(r["lat"]) - 29.75
+        lon0 = float(r["lon"]) + 95.40
         x_data.append([
             1.0,
             np.log1p(pop),
@@ -140,6 +144,11 @@ def main() -> None:
             pov,
             nearest,
             np.log1p(density),
+            lat0,
+            lon0,
+            lat0 * lat0,
+            lon0 * lon0,
+            lat0 * lon0,
         ])
         y_data.append(gap)
         lat.append(float(r["lat"]))

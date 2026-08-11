@@ -67,13 +67,13 @@ python 18_enrich_sites_citywide.py          # FEMA flood, verified AADT, competi
 python 19_drive_times_and_huff.py           # OSRM drive-time trade areas + Huff gravity model
 python 20_score_sites_citywide.py           # weighted scorecard + AADT-benchmark gate + citywide ranking
 python 21_fetch_houston_tract_geometry.py   # tract polygons for the citywide choropleth
+python 22_isochrone_winner.py               # real OSRM isochrone for the CURRENT #1 scorecard site
 python 24_cannibalization_analysis.py       # real trade-area overlap vs. existing Family Dollar stores
 python 25_extended_demographics_and_ci.py   # foreign-born/Spanish/household-size + 90% confidence intervals
 python 26_microsite_details.py              # real speed limits, co-tenants, transit distance, approx. lot dimensions
 python 27_vehicle_tenure_demographics.py    # zero-vehicle household share + renter-occupied share + CIs
 python 28_sensitivity_analysis.py           # 5-scenario re-weighting robustness check on the scorecard
 python 29_statistical_rigor.py              # Moran's I residual test + spatial block cross-validation metrics
-python 22_isochrone_winner.py               # real OSRM isochrone for the CURRENT #1 scorecard site
 python 23_generate_map_citywide.py          # builds ../index.html + Analysis Dashboard
 ```
 

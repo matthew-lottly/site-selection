@@ -82,21 +82,42 @@ PAGE_CHROME_CSS = """
      around clicked map shapes (looked like a stray "boundary box" artifact) */
   .leaflet-interactive:focus, path:focus, svg:focus { outline: none !important; }
 
-  #dash-drawer { position: fixed; top: 60px; right: -460px; bottom: 0; width: 440px; max-width: 92vw;
-                 background: white; z-index: 10000; box-shadow: -6px 0 24px rgba(0,0,0,.3);
-                 transition: right .32s ease; display: flex; flex-direction: column;
-                 border-left: 3px solid #1E3A8A; font-family: 'Segoe UI', Arial, sans-serif; }
+  #dash-drawer { position: fixed; top: 60px; right: -600px; bottom: 0; width: 580px; max-width: 96vw;
+                 background: #F8FAFC; z-index: 10000; box-shadow: -10px 0 28px rgba(15,23,42,.28);
+                 transition: right .30s ease; display: flex; flex-direction: column;
+                 border-left: 2px solid #1E3A8A; font-family: 'Segoe UI', Arial, sans-serif; }
   #dash-drawer.open { right: 0; }
-  #dash-header-row { display: flex; align-items: center; justify-content: space-between;
-                      padding: 10px 12px 0; background: #F8FAFC; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; }
-  #dash-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
-  .dash-tab-btn { padding: 7px 10px; border: none; background: transparent; font-size: 11.5px; font-weight: 700;
-                  color: #64748B; cursor: pointer; border-radius: 6px 6px 0 0; }
-  .dash-tab-btn.active { background: white; color: #1E3A8A; border: 1px solid #E5E7EB; border-bottom: 1px solid white; margin-bottom: -1px; }
-  #dash-close { background: none; border: none; font-size: 18px; color: #64748B; cursor: pointer; padding: 2px 6px; flex-shrink: 0; }
-  .dash-body { overflow-y: auto; padding: 16px 18px; flex: 1; }
+  #dash-titlebar { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+                   padding: 14px 14px 10px; background: linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 80%);
+                   border-bottom: 1px solid #E5E7EB; flex-shrink: 0; }
+  #dash-title-main { color: #1E3A8A; font-size: 15px; font-weight: 800; letter-spacing: .01em; }
+  #dash-title-sub { color: #475569; font-size: 11.5px; margin-top: 3px; }
+  #dash-tabs-row { padding: 10px 12px 10px; border-bottom: 1px solid #E2E8F0; background: #FFFFFF; flex-shrink: 0; }
+  #dash-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  #dash-tabs::-webkit-scrollbar { height: 6px; }
+  #dash-tabs::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+  .dash-tab-btn { padding: 7px 11px; border: 1px solid #D1D5DB; background: #FFFFFF; font-size: 11.5px; font-weight: 700;
+                  color: #475569; cursor: pointer; border-radius: 999px; white-space: nowrap; }
+  .dash-tab-btn:hover { background: #F8FAFC; border-color: #94A3B8; }
+  .dash-tab-btn.active { background: #1E3A8A; color: #FFFFFF; border-color: #1E3A8A; }
+  #dash-close { background: #EFF6FF; border: 1px solid #BFDBFE; font-size: 16px; color: #1E3A8A; cursor: pointer;
+                width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; }
+  #dash-close:hover { background: #DBEAFE; }
+  .dash-body { overflow-y: auto; padding: 14px 14px 24px; flex: 1; }
+  .dash-body p { line-height: 1.45; }
+  .dash-body table { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden; }
+  .dash-body thead tr { background: #F1F5F9 !important; }
+  .dash-body th { color: #334155; font-size: 11.5px; letter-spacing: .01em; }
+  .dash-body td { background: #FFFFFF; }
   .dash-tab-content { display: none; }
   .dash-tab-content.active { display: block; }
+
+  @media (max-width: 900px) {
+    #dash-drawer { width: 100vw; max-width: 100vw; right: -100vw; }
+    #dash-title-main { font-size: 14px; }
+    #dash-title-sub { font-size: 11px; }
+    .dash-body { padding: 12px; }
+  }
 
   @media print {
     @page { size: landscape; margin: 10mm; }
@@ -739,7 +760,14 @@ def build_dashboard_html(
 ) -> str:
     return f"""
 <div id="dash-drawer">
-  <div id="dash-header-row">
+  <div id="dash-titlebar">
+    <div>
+      <div id="dash-title-main">Analysis Dashboard</div>
+      <div id="dash-title-sub">Executive-ready metrics, model checks, and audit traceability</div>
+    </div>
+    <button id="dash-close" onclick="fdToggleDash()" title="Close">&#10005;</button>
+  </div>
+  <div id="dash-tabs-row">
     <div id="dash-tabs">
       <button class="dash-tab-btn active" id="tabbtn-exec" onclick="fdShowTab('exec')">Executive Checks</button>
       <button class="dash-tab-btn" id="tabbtn-scorecard" onclick="fdShowTab('scorecard')">Scorecard</button>
@@ -749,7 +777,6 @@ def build_dashboard_html(
       <button class="dash-tab-btn" id="tabbtn-rigor" onclick="fdShowTab('rigor')">Model Rigor</button>
       <button class="dash-tab-btn" id="tabbtn-validation" onclick="fdShowTab('validation')">Sources &amp; Validation</button>
     </div>
-    <button id="dash-close" onclick="fdToggleDash()" title="Close">&#10005;</button>
   </div>
   <div class="dash-body">
     <div class="dash-tab-content active" id="tab-exec">{build_executive_indicator_table(scorecard, sites, trade, canib_map, micro_map, ci_rows, isochrone, houston_tracts, county_tracts, ext_demo, rigor_rows)}</div>

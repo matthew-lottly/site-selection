@@ -216,14 +216,14 @@ weighted average. See `docs/results.md` for the current ranking, and
 traffic-count matching) was found and fixed via the sensitivity analysis in Stage 8b below.
 
 ### Stage 7 — Trade-area visualization
-`scripts/21_fetch_houston_tract_geometry.py`, existing isochrone logic
+`scripts/21_fetch_houston_tract_geometry.py`, `scripts/22_isochrone_winner.py`
 
-Built a real 5-minute / 10-minute drive-time isochrone for the recommended site by querying OSRM
-along 16 compass bearings at 8 candidate distances each, keeping the farthest point on each bearing
-still under the time threshold — the actual reachable shape given the real road network, not a
-generic circle. Pulled tract polygon geometry for all 643 Houston-city tracts (simplified for file
-size with Douglas-Peucker line simplification, ~9x fewer vertices, no change to the underlying
-values) so the map's opportunity choropleth covers the whole city that was actually screened.
+Pulled tract polygon geometry for all 643 Houston-city tracts (simplified for file size with
+Douglas-Peucker line simplification, ~9x fewer vertices, no change to the underlying values) so the
+map's opportunity choropleth covers the whole city that was actually screened. Built a real 5-minute
+/ 10-minute drive-time isochrone for the recommended site by querying OSRM along 16 compass bearings
+at 8 candidate distances each, keeping the farthest point on each bearing still under the time
+threshold — the actual reachable shape given the real road network, not a generic circle.
 
 ### Stage 8 — Extended demographics & confidence intervals
 `scripts/25_extended_demographics_and_ci.py`
@@ -276,12 +276,12 @@ opportunity areas searched; and the real drive-time trade area for the recommend
 switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every marker popup
 cites its data source, set in dark, bold text for at-a-glance legibility.
 
-A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces five tabs built
-live from the same CSVs referenced throughout this document: the full 20-site **Scorecard** (with the
-sensitivity analysis beneath it), the **Cannibalization** table, **Site Details** (micro-site
-operational data including transit distance), **Confidence Intervals** (including the vehicle-access
-and housing-tenure rates from Stage 8b), and **Sources & Validation** — a condensed version of the
-audit trail in `data_validation.md`.
+A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces seven tabs built
+live from the same CSVs referenced throughout this document: **Executive Checks**, the full 20-site
+**Scorecard** (with the sensitivity analysis beneath it), the **Cannibalization** table, **Site
+Details** (micro-site operational data including transit distance), **Confidence Intervals**
+(including the vehicle-access and housing-tenure rates from Stage 8b), **Model Rigor**, and
+**Sources & Validation** — a condensed version of the audit trail in `data_validation.md`.
 
 ## 3. Known limitations
 
