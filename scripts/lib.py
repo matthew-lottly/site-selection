@@ -56,6 +56,35 @@ def cached_get(url: str, params: dict, cache_name: str, verify: bool = True, tim
     return data
 
 
+# Validated palettes (dataviz skill, references/palette.md)
+SEQUENTIAL_BLUE = [  # magnitude ramp, light->dark: for the tract opportunity-score choropleth
+    "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b",
+]
+STATUS_RAMP = [  # ordered good->critical: for "best to worst ranked" site symbology
+    "#0ca30c", "#fab219", "#ec835a", "#d03b3b",
+]
+
+
+def _hex_to_rgb(h: str) -> tuple[int, int, int]:
+    h = h.lstrip("#")
+    return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+
+
+def _rgb_to_hex(rgb: tuple[float, float, float]) -> str:
+    return "#{:02x}{:02x}{:02x}".format(*(max(0, min(255, round(c))) for c in rgb))
+
+
+def ramp_color(t: float, stops: list[str]) -> str:
+    """t in [0,1] -> interpolated hex color across an ordered list of hex stops."""
+    t = max(0.0, min(1.0, t))
+    n = len(stops) - 1
+    pos = t * n
+    i = min(int(pos), n - 1)
+    frac = pos - i
+    c0, c1 = _hex_to_rgb(stops[i]), _hex_to_rgb(stops[i + 1])
+    return _rgb_to_hex(tuple(c0[k] + (c1[k] - c0[k]) * frac for k in range(3)))
+
+
 def haversine_miles(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     r = 3958.8
     p1, p2 = math.radians(lat1), math.radians(lat2)
@@ -63,6 +92,70 @@ def haversine_miles(lat1: float, lon1: float, lat2: float, lon2: float) -> float
     dlambda = math.radians(lon2 - lon1)
     a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlambda / 2) ** 2
     return 2 * r * math.asin(math.sqrt(a))
+
+
+def ring_bbox(ring: list) -> tuple[float, float, float, float]:
+    lons = [p[0] for p in ring]
+    lats = [p[1] for p in ring]
+    return min(lons), min(lats), max(lons), max(lats)
+
+
+def point_in_rings_fast(lat: float, lon: float, rings: list, bboxes: list) -> bool:
+    """Ray-casting point-in-polygon with a per-ring bbox short-circuit --
+    needed for Houston's real city boundary (100 rings, ~70,800 vertices)."""
+    inside = False
+    for ring, (minx, miny, maxx, maxy) in zip(rings, bboxes):
+        if not (minx <= lon <= maxx and miny <= lat <= maxy):
+            continue
+        n = len(ring)
+        j = n - 1
+        ring_inside = False
+        for i in range(n):
+            xi, yi = ring[i][0], ring[i][1]
+            xj, yj = ring[j][0], ring[j][1]
+            if ((yi > lat) != (yj > lat)) and (lon < (xj - xi) * (lat - yi) / (yj - yi + 1e-15) + xi):
+                ring_inside = not ring_inside
+            j = i
+        if ring_inside:
+            inside = not inside
+    return inside
+
+
+def simplify_ring(points: list[list[float]], tolerance: float) -> list[list[float]]:
+    """Douglas-Peucker line simplification for a single ring of [lon, lat] points.
+    Used only to shrink display-map file size; source data is untouched."""
+    if len(points) <= 4:
+        return points
+
+    def perpendicular_distance(pt, start, end):
+        if start == end:
+            return math.hypot(pt[0] - start[0], pt[1] - start[1])
+        x, y = pt
+        x1, y1 = start
+        x2, y2 = end
+        num = abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)
+        den = math.hypot(y2 - y1, x2 - x1)
+        return num / den if den else 0.0
+
+    def rdp(pts):
+        if len(pts) <= 2:
+            return pts
+        start, end = pts[0], pts[-1]
+        max_dist, max_idx = 0.0, 0
+        for i in range(1, len(pts) - 1):
+            d = perpendicular_distance(pts[i], start, end)
+            if d > max_dist:
+                max_dist, max_idx = d, i
+        if max_dist > tolerance:
+            left = rdp(pts[: max_idx + 1])
+            right = rdp(pts[max_idx:])
+            return left[:-1] + right
+        return [start, end]
+
+    simplified = rdp(points)
+    if simplified[0] != simplified[-1]:
+        simplified.append(simplified[0])
+    return simplified if len(simplified) >= 4 else points
 
 
 def point_in_polygon(lat: float, lon: float, rings: list[list[list[float]]]) -> bool:

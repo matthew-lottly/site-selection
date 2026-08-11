@@ -1,43 +1,58 @@
 # Presentation Outline
 
 ## Slide 1 — Executive Summary
-- **Recommendation:** acquire the 0.46-acre vacant commercial parcel at **9104 Cullen Blvd, Houston,
-  TX 77051** (Cullen Blvd & Reed Rd, Sunnyside / South Union).
-- Core drivers: verified zero-competitor gap, highest confirmed traffic count among finalists
-  (18,429 vpd on Cullen Blvd), lowest land cost per acre, on-target trade-area income ($41,648
-  median HH income vs. Family Dollar's ~$20k–$55k core band), Zone X (minimal) flood risk.
+
+- **Recommendation:** acquire the 0.66-acre vacant commercial parcel at **Cullen Blvd & Brookhaven
+  St, Sunnyside, Houston, TX 77051** (HCAD 0430390000003).
+- Core drivers: won a **citywide** comparison against 19 other real candidates in 9 other
+  neighborhoods; verified 20,532 vpd on Cullen Blvd; widest real competitive gap (4.07 mi) among
+  finalists that also clear traffic and flood screens; highest Huff gravity-model market-capture
+  rate (16.6%) of all 20 candidates; Zone X (minimal) flood risk.
 
 ## Slide 2 — Methodology and Data Pipeline
+
 - Stage 1: County-wide macro gap screen — 1,115 Harris County Census tracts scored on demand
-  (population × income fit × poverty) vs. supply (distance to nearest existing dollar store).
-- Stage 2: Submarket lock-in — Sunnyside / South Union, the strongest underserved cluster, verified
-  to have zero existing Family Dollar / Dollar General / Dollar Tree locations.
-- Stage 3: Candidate discovery — real HCAD parcels at real arterial intersections (Cullen Blvd, MLK
-  Jr Blvd, Scott St, Reed Rd, Old Spanish Trail), filtered to vacant/under-improved commercial land.
-- Stage 4: Site enrichment — FEMA flood zone, TxDOT AADT traffic, OSM competitor distances, OSRM
-  real drive-time trade-area population.
-- Stage 5: Weighted scorecard (30% demand / 25% competitive gap / 20% traffic / 15% cost-feasibility
-  / 10% flood risk) → ranked recommendation.
-- All data is public and free (US Census, OpenStreetMap, HCAD, FEMA, TxDOT); no API keys required.
-  See `docs/methodology.md` for full source list and formulas.
+  (population × income fit × poverty) vs. supply (distance to nearest of 156 existing dollar
+  stores).
+- Stage 2: Real City of Houston boundary (not all of Harris County) used to scope 643 in-city
+  tracts, clustered into **10 opportunity neighborhoods at least 2.75 miles apart** — not one
+  submarket.
+- Stage 3: Candidate discovery — real HCAD parcels at real arterial intersections, auto-discovered
+  from OpenStreetMap (no hand-picked streets), across all 10 neighborhoods — 275 qualifying parcels,
+  20-site citywide shortlist.
+- Stage 4: Site enrichment — FEMA flood zone, TxDOT AADT traffic (verified by reverse-geocoding each
+  station, freeway mainlane counts rejected), broadened OSM competitor distances (13 banners, 516
+  locations), OSRM real drive-time trade-area population.
+- Stage 5: Huff gravity market-capture model against real nearby direct dollar-store competitors
+  (published typical prototype square footage, β = 2.0 distance decay).
+- Stage 6: Weighted scorecard (25% demand / 20% Huff capture / 15% competitive gap / 15% traffic /
+  15% cost-feasibility / 10% flood risk) → citywide ranking.
+- All data is public and free (US Census, OpenStreetMap, HCAD, FEMA, TxDOT, OSRM); no API keys
+  required. See `docs/methodology.md` for full source list and formulas.
 
 ## Slide 3 — Trade Area and Competitive Landscape
-- Show the real 5-minute and 10-minute OSRM drive-time isochrones (actual road network, not a
-  circle buffer) around the recommended site.
-- 29,755 people within a 5-minute drive; 141,724 within 10 minutes.
-- Nearest existing dollar-store competitor: 3.22 miles away. Nearest anchor retail (Walmart, Aldi,
-  H-E-B): all on the corridor's northern edge, over a mile out — supports a standalone location.
+
+- Real 5-minute and 10-minute OSRM drive-time isochrones (actual road network) around the
+  recommended site: 43,688 people within 5 minutes; 258,423 within 10 minutes.
+- Nearest existing dollar-store competitor: 4.07 miles away — the widest qualifying gap of any
+  finalist. Huff model estimates a 16.6% market-capture rate against real nearby direct competitors.
 
 ## Slide 4 — Site-Level Evaluation
-- Present the 5-site scorecard (`docs/results.md`): income fit, traffic, population, parcel size,
-  competition, land cost, and flood risk side by side, with the Site B vs. Site D trade-off called
-  out explicitly (Site D draws more raw population but at nearly double the land cost per acre and
-  an above-target trade-area income).
+
+- Present the 20-site citywide scorecard (`docs/results.md`): the top 2 finalists are both in
+  Sunnyside, essentially tied (73.5 vs. 73.3) — but #2 fails the 8,000 AADT minimum-traffic
+  benchmark (1,547 vpd), which is why #1 is the recommendation and #2 is the fallback pending a
+  traffic-engineering read.
+- Every other neighborhood searched (Alief, Westchase, Gulfton, Braeswood, Denver Harbor, East
+  Houston, Braeburn, Acres Homes, Central Southwest Houston) produced real candidates that scored
+  lower — shown on the map so the VP can see the comparison, not just the winner.
 
 ## Slide 5 — Interactive Web Map
-- `index.html` (Folium/Leaflet, hosted on GitHub Pages): submarket opportunity choropleth, all
-  competitor and anchor locations, all 5 candidate sites with full data-backed popups, and the real
-  drive-time trade area for the recommended site.
+
+- `index.html` (Folium/Leaflet, hosted on GitHub Pages): real Houston city-limits boundary, citywide
+  opportunity choropleth (643 tracts), competitors split into 3 toggleable tiers, all 20 candidate
+  sites on a best→worst color ramp, and the real drive-time trade area for the recommended site.
+  Basemap switcher offers light/dark/streets/satellite/terrain.
 
 ---
 
@@ -46,11 +61,12 @@
 Hi Hossein,
 
 Attached is the completed Houston Family Dollar site-selection case study. I built an end-to-end,
-reproducible pipeline in Python (`scripts/01`–`12`) that pulls exclusively from free, public,
-key-free data sources — US Census (via TIGERweb + Census Reporter), OpenStreetMap/Overpass, Harris
-County Appraisal District parcels, FEMA's flood layer, TxDOT traffic counts, and OSRM for real
-drive-time routing — to screen the entire county, lock in an underserved submarket (Sunnyside /
-South Union), source real candidate parcels, and rank them into a recommendation.
+reproducible pipeline in Python that pulls exclusively from free, public, key-free data sources —
+US Census (via TIGERweb + Census Reporter), OpenStreetMap/Overpass, Harris County Appraisal
+District parcels, FEMA's flood layer, TxDOT traffic counts, and OSRM for real drive-time routing and
+a Huff gravity market-capture model — to screen the entire county, scope the search to Houston's
+real city boundary, source real candidate parcels from 10 different neighborhoods (not just the
+first promising one), and rank them into a citywide recommendation.
 
 - Methodology: `docs/methodology.md`
 - Results & recommendation: `docs/results.md`

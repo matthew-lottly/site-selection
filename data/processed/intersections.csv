@@ -1,7 +1,101 @@
-road_a,road_b,lat,lon
-Cullen Boulevard,Old Spanish Trail,29.704046,-95.348638
-Cullen Boulevard,Reed Road,29.658322,-95.355416
-Martin Luther King Jr Boulevard,Reed Road,29.658578,-95.336659
-Scott Street,Old Spanish Trail,29.702365,-95.359507
-Scott Street,Reed Road,29.658366,-95.368106
-Reed Road,Mykawa Road,29.659317,-95.315952
+cluster_id,neighborhood,road_a,road_b,lat,lon
+C1,Alief,Brooks Street,US Highway 90A,29.619880856250003,-95.63506091250001
+C1,Alief,Failla Way,New Stafford Road,29.639052106250006,-95.54050510000002
+C1,Alief,Eldridge Road,West Airport Boulevard,29.650639084615385,-95.61899566153845
+C1,Alief,South Sam Houston Parkway West,Southwest Freeway Frontage Road,29.661225609090913,-95.55852345454547
+C1,Alief,Bissonnet Street,South Braeswood Boulevard,29.675924881818176,-95.53864234545455
+C1,Alief,Beechnut Street,Synott Road,29.68850889999999,-95.6143377652174
+C1,Alief,Bellaire Boulevard;Đại Lộ Sàigòn,South Kirkwood Road,29.703670827777778,-95.58791659999997
+C1,Alief,Eldridge Parkway,Westhollow Parkway,29.71438057142857,-95.62406966428571
+C1,Alief,West Sam Houston Parkway South,Westpark Drive,29.722258216666663,-95.558062725
+C1,Alief,Richmond Avenue,South Dairy Ashford Road,29.72973415,-95.60578355555556
+C2,Westchase,South Sam Houston Parkway West,West Bellfort Street,29.6534617,-95.55090265999999
+C2,Westchase,Hillcroft Avenue,Willowbend Boulevard,29.666418833333335,-95.49203257777779
+C2,Westchase,Hillcroft Avenue,South Braeswood Boulevard,29.677618769696963,-95.49353569393935
+C2,Westchase,Beechnut Street,Bissonnet Street,29.68980371923076,-95.50284369230768
+C2,Westchase,Bellaire Boulevard,Southwest Freeway Frontage Road,29.70465728,-95.51420700999999
+C2,Westchase,Hillcroft Avenue,Southwest Freeway Frontage Road,29.7170899,-95.49968042500001
+C2,Westchase,South Dairy Ashford Road,Westpark Drive,29.723603166666667,-95.60496064285714
+C2,Westchase,Hillcroft Avenue,Hillcroft Street,29.730552919999997,-95.50127526000001
+C2,Westchase,Hillcroft Avenue,South Voss Road,29.737655906249994,-95.50092289687498
+C2,Westchase,South Voss Road,Voss Road,29.760369374999996,-95.50087339999999
+C3,Sunnyside,Almeda-Genoa Road,Cullen Boulevard,29.61652585333334,-95.35511883333334
+C3,Sunnyside,Bellfort Street,West Bellfort Street,29.66781542,-95.38306150000001
+C3,Sunnyside,South Freeway Frontage Road,South Loop East Frontage Road,29.682937366666668,-95.37865166666666
+C3,Sunnyside,Gulf Freeway Frontage Road,Reveille Street,29.6970743875,-95.2917895125
+C3,Sunnyside,Griggs Road,Telephone Road,29.706394451515152,-95.30909546969697
+C3,Sunnyside,Broadway Street,La Porte Freeway,29.714237500000003,-95.27840568000002
+C3,Sunnyside,Fannin Street,Main Street,29.72177933333333,-95.39260136666667
+C3,Sunnyside,San Jacinto Street,Southmore Boulevard,29.727630499999997,-95.38566108
+C3,Sunnyside,Main Street,Wentworth Street,29.7312409,-95.38527543333333
+C3,Sunnyside,Leeland Street,South Lockwood Drive,29.735174688888883,-95.33171998888889
+C4,Gulfton,Hillcroft Avenue,West Bellfort Street,29.657471933333337,-95.4916439
+C4,Gulfton,South Post Oak Road,South Post Oak Road Frontage Road,29.6761139,-95.4600571
+C4,Gulfton,North Braeswood Boulevard,South Braeswood Boulevard,29.685382971428574,-95.4495408
+C4,Gulfton,Bissonnet Street,Hillcroft Avenue,29.694748159999993,-95.49299607714286
+C4,Gulfton,Bellaire Boulevard,Stella Link Road,29.706081511111115,-95.44028352222223
+C4,Gulfton,Harwin Drive,Southwest Freeway Frontage Road,29.71906492,-95.49782668
+C4,Gulfton,West Loop South Frontage Road,Westpark Drive,29.726183117857147,-95.46112869285714
+C4,Gulfton,Hillcroft Avenue,Hillcroft Street,29.730552919999997,-95.50127526000001
+C4,Gulfton,Chimney Rock Road,Westheimer Road,29.737885838235282,-95.47658330588234
+C4,Gulfton,Memorial Drive,San Felipe Street,29.751220915384618,-95.51427486923077
+C5,Braeswood,Hiram Clarke Road,West Airport Boulevard,29.640965900000005,-95.44610173999999
+C5,Braeswood,South Post Oak Road Frontage Road,West Bellfort Street,29.670940705,-95.46137268499999
+C5,Braeswood,Brookhaven Street,Cullen Boulevard,29.681207744444446,-95.35591395555555
+C5,Braeswood,North Braeswood Boulevard,South Braeswood Boulevard,29.697553900000003,-95.41518453333333
+C5,Braeswood,Braeswood Boulevard,Holcombe Boulevard,29.706265510000016,-95.39454737500003
+C5,Braeswood,Buffalo Speedway,Rice Boulevard,29.717131499999997,-95.42762245833332
+C5,Braeswood,Bissonnet Street,Edloe Street,29.72529086363637,-95.4333881181818
+C5,Braeswood,Kirby Drive,Westpark Drive,29.728675327272732,-95.41875573636365
+C5,Braeswood,Almeda Road,Cleburne Street,29.732382213333334,-95.37544860000003
+C5,Braeswood,Holman Street,La Branch Street,29.737008099999997,-95.3739309
+C6,Denver Harbor,Elgin Street,Spur 5,29.726200600000002,-95.33815591666666
+C6,Denver Harbor,Harrisburg Boulevard,North Staff Sergeant Macario Garcia Drive,29.736191166666668,-95.30440814666667
+C6,Denver Harbor,Clinton Drive,McCarty Street,29.750311349999993,-95.28354079999998
+C6,Denver Harbor,Fannin Street,San Jacinto Street,29.756703140000003,-95.36298343
+C6,Denver Harbor,Milam Street,Texas Avenue,29.760996662500002,-95.36425618750002
+C6,Denver Harbor,Hardy Street,McKee Street,29.767556021428565,-95.35204720714283
+C6,Denver Harbor,Crosby Freeway Frontage Road,East Freeway Frontage Road,29.77745938888889,-95.26152330000001
+C6,Denver Harbor,North Wayside Drive,Wallisville Road,29.787463400000004,-95.29175964285714
+C6,Denver Harbor,Cavalcade Street,Hirsch Road,29.80021912941177,-95.32825231764707
+C6,Denver Harbor,Elysian Street,Kelley Street,29.812614600000003,-95.35169733333333
+C7,East Houston,East Freeway Frontage Road,Mercury Drive,29.773118493749998,-95.2475937125
+C7,East Houston,Crosby Freeway Frontage Road,East Freeway Frontage Road,29.77745938888889,-95.26152330000001
+C7,East Houston,Maxey Road,Woodforest Boulevard,29.786455649999997,-95.21868960833332
+C7,East Houston,East Loop North Frontage Road,North Loop East Frontage Road,29.7934273,-95.26916365999998
+C7,East Houston,Cavalcade Street,Lockwood Drive,29.80059902941176,-95.3170497117647
+C7,East Houston,Homestead Road,North Loop East Frontage Road,29.80701255294118,-95.30195217058824
+C7,East Houston,Beaumont Highway,North McCarty Street,29.812237533333334,-95.2577852
+C7,East Houston,East Crosstimbers Street,Lockwood Drive,29.83110939444445,-95.31890279999999
+C7,East Houston,C E King Parkway,Green River Drive,29.838754419999997,-95.2139112
+C7,East Houston,C E King Parkway,Tidwell Road,29.850215181249997,-95.21447522500003
+C8,Braeburn,Fondren Road,West Orem Drive,29.624711487499997,-95.507323875
+C8,Braeburn,Fondren Road,West Airport Boulevard,29.644204408000004,-95.50823530799998
+C8,Braeburn,Chimney Rock Road,West Bellfort Street,29.659442378947364,-95.47650948421054
+C8,Braeburn,South Post Oak Road,South Post Oak Road Frontage Road,29.6761139,-95.4600571
+C8,Braeburn,South Gessner Drive,South Gessner Road,29.68822256666667,-95.53063118888889
+C8,Braeburn,Fondren Road,Southwest Freeway Frontage Road,29.70064580526316,-95.51794062105262
+C8,Braeburn,Bissonnet Street,West Loop South Frontage Road,29.711814078947373,-95.45962709999999
+C8,Braeburn,Fondren Road,Westpark Drive,29.721536940909093,-95.52035531818183
+C8,Braeburn,Sage Road,South Rice Avenue,29.726866596296297,-95.4681940703704
+C8,Braeburn,Hillcroft Avenue,Richmond Avenue,29.731630682608692,-95.50143379130435
+C9,Acres Homes,Watonga Boulevard,West 43rd Street,29.832497616129036,-95.45572526774191
+C9,Acres Homes,Bingle Road,Northwest Freeway Frontage Road,29.837552787499995,-95.48894778750001
+C9,Acres Homes,Northwest Freeway Frontage Road,Pinemont Drive,29.841499885714285,-95.49360977142858
+C9,Acres Homes,North Shepherd Drive,West Montgomery Road,29.8486575375,-95.411416
+C9,Acres Homes,North Freeway Frontage Road,West Parker Road,29.859518162499995,-95.40200590000002
+C9,Acres Homes,North Freeway Frontage Road,West Little York Road,29.869950805263155,-95.40816276315789
+C9,Acres Homes,Ella Boulevard,Wheatley Street,29.882818049999997,-95.42998865
+C9,Acres Homes,North Houston Rosslyn Road,West Mount Houston Road,29.89626297692308,-95.49560030769231
+C9,Acres Homes,Tomball Parkway,West Montgomery Road,29.903513675,-95.46833042499999
+C9,Acres Homes,Bammel North Houston Road,North Houston Rosslyn Road,29.91977782,-95.49371965
+C10,Central Southwest Houston,Kingsley Drive,Shadow Creek Parkway,29.576943177777782,-95.41736742222223
+C10,Central Southwest Houston,McHard Road,South Post Oak Road,29.580967079999997,-95.47113651333333
+C10,Central Southwest Houston,Chimney Rock Road,West Fuqua Street,29.60004183888889,-95.48354431666667
+C10,Central Southwest Houston,Chimney Rock Road,Rockwell Boulevard,29.60833910625,-95.4845002125
+C10,Central Southwest Houston,Hiram Clarke Road,West Fuqua Street,29.613401284210525,-95.44592275789476
+C10,Central Southwest Houston,Almeda-Genoa Road,South Freeway Frontage Road,29.613875679999996,-95.38824012
+C10,Central Southwest Houston,South Post Oak Road,West Orem Drive,29.627201953333326,-95.46503340666666
+C10,Central Southwest Houston,Hiram Clarke Road,West Airport Boulevard,29.640965900000005,-95.44610173999999
+C10,Central Southwest Houston,Hillcroft Avenue,West Airport Boulevard,29.644413944444437,-95.4929542296296
+C10,Central Southwest Houston,North Holmes Road,South Main Street,29.6545574,-95.4457747

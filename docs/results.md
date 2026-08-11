@@ -1,71 +1,78 @@
-# Results & Recommendation — Houston Family Dollar Site Selection
+# Results & Recommendation — Houston Family Dollar Site Selection (Citywide)
 
 See `docs/methodology.md` for how every number below was produced, and `index.html` for the
-interactive map.
+interactive map. This is the citywide revision: 20 real candidate sites sourced from 10
+geographically distinct Houston neighborhoods, not one submarket.
 
 ## Recommendation
 
-> **Open at 9104 Cullen Blvd, Houston, TX 77051** (Cullen Blvd & Reed Rd, Sunnyside / South Union)
-> — a 0.46-acre vacant commercial parcel, HCAD account 0730510120001.
+> **Cullen Blvd & Brookhaven St, Sunnyside, Houston, TX 77051** — a 0.66-acre vacant commercial
+> parcel, HCAD account 0430390000003.
 
-This site scored highest (68.8 / 100) across five real, HCAD-verified candidate parcels evaluated
-in the Sunnyside / South Union submarket — the strongest underserved discount-retail corridor
-identified in a county-wide, data-driven gap screen of all 1,115 Harris County Census tracts.
+This site scored highest (73.5 / 100) across 20 real, HCAD-verified candidate parcels spanning 10
+Houston neighborhoods (Alief, Westchase, Sunnyside, Gulfton, Braeswood, Denver Harbor, East Houston,
+Braeburn, Acres Homes, and Central Southwest Houston) — the result of a citywide opportunity screen
+across all 1,115 Harris County Census tracts, scoped to the 643 tracts actually inside Houston city
+limits.
 
-**Why this site, in three points:**
-1. **It sits in a real, verified competitive gap.** Zero Family Dollar / Dollar General / Dollar
-   Tree locations exist inside the Sunnyside / South Union corridor today. The nearest existing
-   dollar store (a Dollar General) is 3.22 miles away — well outside a normal urban trade area.
-2. **It has the traffic to support the box.** 18,429 vehicles/day on Cullen Blvd (TxDOT 2025 AADT,
-   confirmed via reverse-geocode to be the Cullen Blvd corridor, not a mismatched route) — the
-   highest verified frontage count of the five finalists.
-3. **It is the cheapest, lowest-risk way in.** $260,000 land value ($565k/acre) for a vacant,
-   shovel-ready parcel — no demolition, no teardown — in FEMA Zone X (minimal flood risk, outside
-   the mapped Special Flood Hazard Area).
+**Why this site, in four points:**
 
-Its main trade-off: two other candidates (Site D in particular) sit closer to a busier multi-road
-hub and capture more raw population within a 5-minute drive. Site B was still the top overall pick
-because it wins decisively on cost, traffic, and flood risk while remaining solidly competitive on
-demand (29,755 people within a 5-minute drive; 141,724 within 10 minutes) — see the trade-off
-discussion below.
+1. **It won on a citywide comparison, not a first-look pick.** Two of the top three finalists both
+   landed in Sunnyside (ranks #1 and #2, essentially tied at 73.5 and 73.3), even after searching
+   nine other demographically similar Houston neighborhoods for something stronger. That convergence
+   is itself evidence the pick is real, not an artifact of where the search started.
+2. **It has real, verified traffic.** 20,532 vehicles/day on Cullen Blvd (TxDOT 2025 AADT) — the
+   station's coordinates were independently reverse-geocoded to confirm it really is Cullen Blvd and
+   not a mismatched freeway route. Clears the industry-standard 8,000 AADT minimum-viable-traffic
+   benchmark.
+3. **It sits in a real, wide-open competitive gap.** The nearest existing dollar store is 4.07 miles
+   away — the largest gap of any finalist that also clears the traffic and flood screens — and this
+   site posted the highest Huff gravity-model market-capture rate of all 20 candidates (16.6%,
+   against every real nearby Family Dollar / Dollar General / Dollar Tree).
+4. **It is shovel-ready and low-risk.** Vacant commercial land (no demolition), FEMA Zone X (outside
+   the mapped Special Flood Hazard Area), $373,516 land value ($566k/acre — mid-range among the
+   finalists, not the cheapest but far from the most expensive).
 
-## Full scorecard (5 finalists, ranked)
+**Runner-up, for context:** Site #2, also in Sunnyside (1023 Niagara St, 0.4 mile away), scored
+almost identically (73.3) but fails the traffic benchmark (1,547 AADT on a frontage road) — a
+reminder that these two top scores are close enough that a site visit and a real traffic-engineering
+read should settle the final call between them before acquisition.
 
-| Rank | Site | Address | Type | Acreage | AADT | Nearest Competitor | 5-min Pop | Flood Zone | **Score** |
-|---|---|---|---|---|---|---|---|---|---|
-| **1** | **Site B** | **9104 Cullen Blvd** | Vacant land | 0.46 ac | 18,429 vpd | 3.22 mi (Dollar General) | 29,755 | X | **68.8** |
-| 2 | Site D | 3839 Griggs Rd | Vacant land | 0.49 ac | 15,421 vpd | 2.58 mi (Family Dollar) | 51,452 | X | 61.4 |
-| 3 | Site E | 9229 Martell St | Vacant land | 0.58 ac | 17,168 vpd | 2.85 mi (Dollar General) | 27,396 | X | 59.0 |
-| 4 | Site C | 8707 MLK Jr Blvd | Redevelopment | 0.92 ac | 8,593 vpd | 3.65 mi (Dollar General) | 23,071 | X | 52.4 |
-| 5 | Site A | Cullen Blvd (unaddressed tract) | Vacant land | 0.89 ac | 3,973 vpd | 2.37 mi (Family Dollar) | 25,237 | X | 26.3 |
+## Top 5 of 20 citywide finalists
 
-*All five sites cleared FEMA flood screening (Zone X). Full per-factor scoring detail is in
-`data/processed/scorecard.csv`.*
+| Rank | Neighborhood | Site | Type | Traffic (verified) | Nearest Competitor | Huff Capture | Flood | **Score** |
+|---|---|---|---|---|---|---|---|---|
+| **1** | **Sunnyside** | **Cullen Blvd & Brookhaven St** | Vacant land, 0.66 ac | 20,532 vpd (Cullen Blvd) ✅ ≥8k | 4.07 mi | 16.6% | X | **73.5** |
+| 2 | Sunnyside | 1023 Niagara St | Vacant land, 0.72 ac | 1,547 vpd ❌ &lt;8k | 4.16 mi | 16.5% | X | 73.3 |
+| 3 | Pecan Park | 6600 Stillwell St | Vacant land, 0.81 ac | 2,980 vpd ❌ &lt;8k | 1.01 mi | 10.5% | X | 59.9 |
+| 4 | Parkridge (Alief) | Eldridge Pkwy & Westhollow Pkwy | Vacant land, 1.00 ac | 32,634 vpd ✅ ≥8k | 1.48 mi | 70.7%* | X | 58.7 |
+| 5 | Braeburn | 7818 Hillcroft St | Vacant land, 0.63 ac | 13,371 vpd ✅ ≥8k | 0.66 mi | 27.2% | X | 53.6 |
 
-### Reading the trade-off: Site B vs. Site D
+\* Site #4's high Huff score reflects very few nearby dollar-store competitors in that specific
+pocket of Alief — it did not win overall because its trade-area income skews above the $20k–$55k
+target band and its competitive gap (1.48 mi) is much tighter. Full 20-site detail, including every
+per-factor score, is in `data/processed/scorecard.csv`.
 
-Site D (Griggs Rd, near the Scott St / Old Spanish Trail hub close to the Third Ward / TSU edge of
-the corridor) captures far more raw population — but its 5-minute-drive-area population-weighted
-median household income is **$61,377**, above Family Dollar's core $20k–$55k customer band, and its
-land cost ($1.31M/acre) is more than double Site B's. Site B's trade area skews to **$41,648** median
-income — squarely in the target band — at roughly a quarter of the land cost per acre. For a
-value-retail concept, the deeper, on-target underserved population at Site B outweighs Site D's
-larger but less-targeted draw and higher entry cost.
+## Citywide context
 
-## Submarket context
-
-- Sunnyside / South Union corridor: **79 Census tracts**, **283,962 people**, 24.6% average poverty
-  rate (ACS 2024 5-yr).
-- Zero existing Family Dollar / Dollar General / Dollar Tree inside the corridor (of 154 found
-  county-wide).
-- Nearest anchors to the recommended site: Walmart Supercenter, Aldi, and H-E-B all sit on the
-  corridor's northern edge, more than a mile away — supporting a standalone value-retail play rather
-  than a shopping-center pad.
+- **10 opportunity neighborhoods screened**, chosen to be at least 2.75 miles apart so the search
+  covered geographically distinct parts of the city, not one cluster of adjacent tracts.
+- **516 real competitor/anchor locations** pulled from OpenStreetMap across 13 banners: 156 direct
+  dollar stores (Family Dollar, Dollar General, Dollar Tree), 147 off-price/general-merchandise
+  (Walmart, Target, Burlington, Five Below, Ross), and 213 grocery anchors (Kroger, H-E-B, Aldi,
+  Fiesta Mart, Food Town).
+- **2,312,201 people** live inside the real Houston city boundary used for this analysis (1,603
+  Census block groups) — a figure that lines up with Houston's published population, a useful sanity
+  check that the city-limits filtering worked correctly.
+- **275 real HCAD parcels** qualified as realistic new-store sites across all 10 neighborhoods before
+  narrowing to the 20-site finalist shortlist.
 
 ## Suggested next steps for the VP
 
-1. Confirm zoning/permitting and utility availability for 9104 Cullen Blvd with the City of Houston.
-2. Commission a formal traffic/ingress-egress study for the Cullen Blvd frontage.
-3. Site visit to confirm ground conditions and visibility (satellite/HCAD data can't replace a walk).
-4. If 9104 Cullen Blvd falls through in acquisition, Site D (Griggs Rd) and Site E (Martell St) are
-   the next-best, data-supported fallbacks.
+1. Confirm zoning/permitting and utility availability for the Cullen Blvd & Brookhaven St parcel
+   with the City of Houston.
+2. Commission a formal traffic/ingress-egress study for the Cullen Blvd frontage, and use it to make
+   the final call against the near-tied runner-up (1023 Niagara St, also Sunnyside).
+3. Site visit to confirm ground conditions and visibility (HCAD/satellite data can't replace a walk).
+4. If the Sunnyside sites fall through in acquisition, Pecan Park (6600 Stillwell St) is the
+   next-best, data-supported fallback from a different part of the city.

@@ -1,0 +1,11 @@
+cluster_id,score,n_tracts,lat,lon,bbox_min_lat,bbox_max_lat,bbox_min_lon,bbox_max_lon,sample_tracts,neighborhood
+C1,47439,11,29.67949,-95.58791,29.61903,29.74131,-95.6452,-95.52857,Census Tract 4535.01; Census Tract 4534.04; Census Tract 4534.03; Census Tract 4534.05,Alief
+C2,43570,14,29.71834,-95.5471,29.65339,29.77746,-95.60973,-95.489,Census Tract 4330.03; Census Tract 4324.01; Census Tract 4324.02; Census Tract 4323.01,Westchase
+C3,33924,7,29.67793,-95.33961,29.61767,29.73919,-95.39289,-95.27836,Census Tract 3320; Census Tract 3322; Census Tract 3134; Census Tract 3321,Sunnyside
+C4,28218,15,29.71878,-95.48548,29.66371,29.77458,-95.54128,-95.41962,Census Tract 4211.04; Census Tract 4327.05; Census Tract 4319.01; Census Tract 4212.04,Gulfton
+C5,17216,7,29.68792,-95.40741,29.63503,29.74204,-95.46692,-95.35202,Census Tract 3140.03; Census Tract 3140.05; Census Tract 3140.04; Census Tract 3143.01,Braeswood
+C6,12924,5,29.78675,-95.30786,29.72559,29.84523,-95.36537,-95.25451,Census Tract 2119; Census Tract 2117; Census Tract 2115.02; Census Tract 2116,Denver Harbor
+C7,8959,2,29.82341,-95.26677,29.77287,29.87396,-95.32598,-95.20756,Census Tract 2309; Census Tract 2311,East Houston
+C8,8269,6,29.68062,-95.51102,29.62449,29.74238,-95.57516,-95.45471,Census Tract 4225.01; Census Tract 4225.02; Census Tract 4227.01; Census Tract 4233.01,Braeburn
+C9,8082,3,29.88351,-95.45351,29.8312,29.93432,-95.50673,-95.39809,Census Tract 5331; Census Tract 5334.02; Census Tract 5330,Acres Homes
+C10,7231,2,29.61488,-95.44424,29.56807,29.66169,-95.50051,-95.38797,Census Tract 3306; Census Tract 3304,Central Southwest Houston

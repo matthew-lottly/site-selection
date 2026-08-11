@@ -2,7 +2,7 @@
   "version": 0.6,
   "generator": "Overpass API 0.7.62.11 87bfad18",
   "osm3s": {
-    "timestamp_osm_base": "2026-08-10T22:08:55Z",
+    "timestamp_osm_base": "2026-08-11T00:49:17Z",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
   },
   "elements": [
@@ -18,6 +18,16 @@
     "ele": "16",
     "name": "Family Dollar",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 523558657,
+  "lat": 29.8779870,
+  "lon": -95.6488309,
+  "tags": {
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
@@ -97,6 +107,16 @@
 },
 {
   "type": "node",
+  "id": 1924294724,
+  "lat": 29.6810897,
+  "lon": -95.1246385,
+  "tags": {
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 1975611376,
   "lat": 29.6902257,
   "lon": -95.4151183,
@@ -110,6 +130,25 @@
     "brand:wikidata": "Q5447326",
     "name": "Fiesta Mart",
     "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 1975611380,
+  "lat": 29.6913698,
+  "lon": -95.4136404,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "8202",
+    "addr:postcode": "77054",
+    "addr:state": "TX",
+    "addr:street": "Kirby Drive",
+    "addr:unit": "1240",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "shop": "department_store"
   }
 },
 {
@@ -210,6 +249,21 @@
 },
 {
   "type": "node",
+  "id": 2821133101,
+  "lat": 29.8711790,
+  "lon": -95.4061220,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "442",
+    "addr:state": "TX",
+    "addr:street": "West Little York Road",
+    "check_date": "2024-01-09",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 3203992082,
   "lat": 30.1145981,
   "lon": -95.5527100,
@@ -250,6 +304,22 @@
     "ref": "03400161",
     "shop": "supermarket",
     "website": "https://www.kroger.com/stores/grocery/tx/houston/country-place/034/00161"
+  }
+},
+{
+  "type": "node",
+  "id": 3275418261,
+  "lat": 29.6723340,
+  "lon": -95.5300380,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "8650",
+    "addr:postcode": "77031",
+    "addr:street": "South Braeswood Boulevard",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "name": "Fiesta",
+    "shop": "supermarket"
   }
 },
 {
@@ -756,6 +826,28 @@
 },
 {
   "type": "node",
+  "id": 4265354439,
+  "lat": 29.5688904,
+  "lon": -95.5703047,
+  "tags": {
+    "addr:city": "Missouri City",
+    "addr:housenumber": "5754",
+    "addr:postcode": "77459",
+    "addr:state": "TX",
+    "addr:street": "Alvin Sugarland Road",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 281-261-3081",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/missouri-city/5754-highway-6"
+  }
+},
+{
+  "type": "node",
   "id": 4289437579,
   "lat": 29.8368658,
   "lon": -95.6446754,
@@ -944,6 +1036,28 @@
 },
 {
   "type": "node",
+  "id": 5249763729,
+  "lat": 29.8779269,
+  "lon": -95.6560123,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "16311",
+    "addr:postcode": "77084",
+    "addr:state": "TX",
+    "addr:street": "FM529",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 08:00-24:00; Su 08:00-23:00",
+    "phone": "+1 281-858-8793",
+    "ref": "889",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/889"
+  }
+},
+{
+  "type": "node",
   "id": 5250892279,
   "lat": 29.8820300,
   "lon": -95.6467254,
@@ -1037,6 +1151,27 @@
 },
 {
   "type": "node",
+  "id": 5353041653,
+  "lat": 30.0043290,
+  "lon": -95.2724030,
+  "tags": {
+    "addr:city": "Humble",
+    "addr:housenumber": "19659",
+    "addr:state": "TX",
+    "addr:street": "Eastex Freeway",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 281-540-7014",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/humble/19659-us-hwy-59"
+  }
+},
+{
+  "type": "node",
   "id": 5372620387,
   "lat": 29.6464818,
   "lon": -95.5827063,
@@ -1082,6 +1217,23 @@
 },
 {
   "type": "node",
+  "id": 5461730346,
+  "lat": 29.9161600,
+  "lon": -95.4043967,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "11006",
+    "addr:state": "TX",
+    "addr:street": "Airline Drive",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "check_date": "2024-08-01",
+    "name": "Fiesta",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 5461960762,
   "lat": 29.9201794,
   "lon": -95.4923113,
@@ -1089,6 +1241,28 @@
     "check_date": "2022-10-18",
     "name": "Family Dollar",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 5651816440,
+  "lat": 29.5571819,
+  "lon": -95.3944572,
+  "tags": {
+    "addr:city": "Pearland",
+    "addr:housenumber": "2812",
+    "addr:postcode": "77584",
+    "addr:state": "TX",
+    "addr:street": "Business Center Drive",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 09:00-24:00; Su 09:00-23:00",
+    "phone": "+1 713-340-2809",
+    "ref": "814",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/pearland/814"
   }
 },
 {
@@ -1169,6 +1343,23 @@
     "shop": "supermarket",
     "toilets": "yes",
     "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6284793859,
+  "lat": 29.7364468,
+  "lon": -95.5018802,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "7525",
+    "addr:state": "TX",
+    "addr:street": "Westheimer Road",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2025-07-13",
+    "name": "Five Below",
+    "shop": "variety_store"
   }
 },
 {
@@ -1323,6 +1514,51 @@
 },
 {
   "type": "node",
+  "id": 6904082560,
+  "lat": 29.8328632,
+  "lon": -95.3819057,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "4444",
+    "addr:postcode": "77022",
+    "addr:state": "TX",
+    "addr:street": "North Freeway",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2026-07-13",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 713-691-7925",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/4444-north-fwy"
+  }
+},
+{
+  "type": "node",
+  "id": 6911757294,
+  "lat": 29.8329136,
+  "lon": -95.3788659,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "4426",
+    "addr:postcode": "77022",
+    "addr:state": "TX",
+    "addr:street": "North Freeway",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2022-06-21",
+    "name": "Burlington",
+    "opening_hours": "Mo-Th 09:00-22:00; Fr-Sa 09:00-22:30; Su 09:00-22:00",
+    "phone": "+1 713-695-5134",
+    "ref": "787",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/787"
+  }
+},
+{
+  "type": "node",
   "id": 6911757295,
   "lat": 29.8329062,
   "lon": -95.3793144,
@@ -1396,6 +1632,20 @@
 },
 {
   "type": "node",
+  "id": 7708784356,
+  "lat": 29.9313432,
+  "lon": -95.4012529,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "224",
+    "addr:state": "TX",
+    "addr:street": "Aldine Bender Road",
+    "name": "Aldine Mini Market",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
   "id": 7734724402,
   "lat": 29.8224285,
   "lon": -95.4097648,
@@ -1437,6 +1687,29 @@
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/houston/4598/",
     "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7925109111,
+  "lat": 29.7876210,
+  "lon": -95.5354813,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "9730",
+    "addr:postcode": "77055",
+    "addr:state": "TX",
+    "addr:street": "Katy Freeway",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2023-02-10",
+    "name": "Burlington",
+    "opening_hours": "Mo-Th 09:00-23:00; Fr-Sa 09:00-24:00; Su 09:00-23:00",
+    "phone": "+1 346-201-6563",
+    "ref": "1159",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/1159"
   }
 },
 {
@@ -1489,6 +1762,53 @@
     "brand:wikidata": "Q5289230",
     "name": "Dollar Tree",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 8581396975,
+  "lat": 29.8098119,
+  "lon": -95.4549533,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "4518",
+    "addr:postcode": "77092",
+    "addr:state": "TX",
+    "addr:street": "Dacoma Street",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2025-08-13",
+    "name": "Burlington",
+    "opening_hours": "Mo-Su 08:00-23:00",
+    "phone": "+1 713-476-9500",
+    "ref": "488",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/488",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8581396976,
+  "lat": 29.8098394,
+  "lon": -95.4537402,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "4514",
+    "addr:postcode": "77092",
+    "addr:state": "TX",
+    "addr:street": "Dacoma Street",
+    "addr:unit": "300",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2025-08-13",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-20:00; Su 11:00-19:00",
+    "phone": "+1 832-856-7301",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/4514-dacoma",
+    "wheelchair": "yes"
   }
 },
 {
@@ -1843,6 +2163,47 @@
 },
 {
   "type": "node",
+  "id": 9136612188,
+  "lat": 30.0024178,
+  "lon": -95.2804145,
+  "tags": {
+    "addr:city": "Humble",
+    "addr:housenumber": "9470",
+    "addr:postcode": "77338",
+    "addr:state": "TX",
+    "addr:street": "FM 1960 Bypass Road West",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2024-01-05",
+    "fixme": "unit/suite",
+    "name": "Burlington",
+    "opening_hours": "Mo-Th 08:00-24:00; Fr-Sa 08:00-23:30; Su 08:00-23:00",
+    "phone": "+1 281-319-4582",
+    "ref": "796",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/humble/796"
+  }
+},
+{
+  "type": "node",
+  "id": 9225549862,
+  "lat": 29.6290434,
+  "lon": -95.2380206,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 713-943-1905",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/10007-almeda-genoa"
+  }
+},
+{
+  "type": "node",
   "id": 9327602001,
   "lat": 29.5736127,
   "lon": -95.5715743,
@@ -1904,6 +2265,23 @@
 },
 {
   "type": "node",
+  "id": 9822792164,
+  "lat": 29.6376033,
+  "lon": -95.5881934,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 281-240-0635",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/stafford/12692-fountain-lake-circle"
+  }
+},
+{
+  "type": "node",
   "id": 9826764393,
   "lat": 29.6026242,
   "lon": -95.2640210,
@@ -1961,6 +2339,29 @@
 },
 {
   "type": "node",
+  "id": 9847142033,
+  "lat": 29.6024836,
+  "lon": -95.2649678,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "8501",
+    "addr:postcode": "77075",
+    "addr:state": "TX",
+    "addr:street": "South Sam Houston East Parkway",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2022-06-25",
+    "name": "Burlington",
+    "opening_hours": "Mo-Th 09:00-23:00; Fr-Sa 09:00-23:30; Su 09:00-23:00",
+    "phone": "+1 346-396-3641",
+    "ref": "1218",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/1218"
+  }
+},
+{
+  "type": "node",
   "id": 9847142034,
   "lat": 29.6024059,
   "lon": -95.2652491,
@@ -1995,6 +2396,17 @@
     "ref": "0340015609",
     "shop": "supermarket",
     "website": "https://www.kroger.com/stores/grocery/tx/houston/telephone-road/034/00156"
+  }
+},
+{
+  "type": "node",
+  "id": 9875500336,
+  "lat": 29.8194146,
+  "lon": -95.0583254,
+  "tags": {
+    "check_date": "2022-07-08",
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
@@ -2058,6 +2470,49 @@
 },
 {
   "type": "node",
+  "id": 9888827652,
+  "lat": 29.9159829,
+  "lon": -95.4154162,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "10311",
+    "addr:postcode": "77037",
+    "addr:state": "TX",
+    "addr:street": "Highway 45 North",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2024-05-11",
+    "name": "Burlington",
+    "opening_hours": "Mo-Fr 08:00-19:00; Sa 10:00-19:00; Su 11:00-18:00; PH off",
+    "payment:american_express": "yes",
+    "payment:cash": "yes",
+    "payment:discover_card": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "phone": "+1 281-447-7800",
+    "ref": "663",
+    "shop": "department_store",
+    "website": "https://www.officedepot.com/storelocator/tx/houston/office-depot-663"
+  }
+},
+{
+  "type": "node",
+  "id": 9901351765,
+  "lat": 29.7790121,
+  "lon": -95.1259129,
+  "tags": {
+    "addr:city": "Channelview",
+    "addr:housenumber": "435",
+    "addr:state": "TX",
+    "addr:street": "Sheldon Road",
+    "check_date": "2023-11-26",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 9921713892,
   "lat": 29.7332570,
   "lon": -95.6252846,
@@ -2074,6 +2529,77 @@
 },
 {
   "type": "node",
+  "id": 9921713898,
+  "lat": 29.7343437,
+  "lon": -95.6271274,
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2022-07-30",
+    "name": "Burlington",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "node",
+  "id": 9950054765,
+  "lat": 30.0887654,
+  "lon": -95.5190889,
+  "tags": {
+    "addr:city": "Spring",
+    "addr:housenumber": "6545",
+    "addr:postcode": "77389",
+    "addr:state": "TX",
+    "addr:street": "North Grand Parkway West",
+    "addr:unit": "108",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 09:00-24:00; Su 09:00-23:00",
+    "phone": "+1 832-717-0672",
+    "ref": "1021",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/spring/1021"
+  }
+},
+{
+  "type": "node",
+  "id": 9953098301,
+  "lat": 29.8669271,
+  "lon": -95.4858994,
+  "tags": {
+    "check_date": "2026-07-25",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 9966693007,
+  "lat": 30.0858917,
+  "lon": -95.5215462,
+  "tags": {
+    "addr:city": "Spring",
+    "addr:housenumber": "6600",
+    "addr:postcode": "77389",
+    "addr:state": "TX",
+    "addr:street": "Spring Stuebner Road",
+    "addr:unit": "156",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1-832-717-0218",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/spring/6600-spring-stuebner-rd"
+  }
+},
+{
+  "type": "node",
   "id": 10309429389,
   "lat": 29.6147605,
   "lon": -95.2200611,
@@ -2086,6 +2612,27 @@
     "opening_hours": "Mo-Sa 09:00-21:00; Su 09:00-20:00",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/houston/8691/"
+  }
+},
+{
+  "type": "node",
+  "id": 10312341884,
+  "lat": 29.5526205,
+  "lon": -95.3847649,
+  "tags": {
+    "addr:city": "Pearland",
+    "addr:housenumber": "3113",
+    "addr:state": "TX",
+    "addr:street": "Silverlake Village Drive",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 281-317-2144",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/pearland/3113-silverlake-village-dr"
   }
 },
 {
@@ -2163,6 +2710,17 @@
 },
 {
   "type": "node",
+  "id": 11098145430,
+  "lat": 29.9028579,
+  "lon": -95.3318180,
+  "tags": {
+    "check_date": "2025-10-03",
+    "name": "Aldine Express",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
   "id": 11228181143,
   "lat": 29.9822779,
   "lon": -95.4395381,
@@ -2224,6 +2782,16 @@
 },
 {
   "type": "node",
+  "id": 11471996894,
+  "lat": 29.6611012,
+  "lon": -95.2110583,
+  "tags": {
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 11569527874,
   "lat": 29.8260470,
   "lon": -95.3606727,
@@ -2249,6 +2817,30 @@
     "opening_hours": "Mo-Sa 09:00-22:00; Su 10:00-20:00",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/houston/4771/"
+  }
+},
+{
+  "type": "node",
+  "id": 11728363576,
+  "lat": 29.5427118,
+  "lon": -95.7485511,
+  "tags": {
+    "addr:city": "Rosenberg",
+    "addr:country": "US",
+    "addr:housenumber": "24101",
+    "addr:postcode": "77471",
+    "addr:state": "TX",
+    "addr:street": "Brazos Town Crossing",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "contact:foursquare": "https://foursquare.com/v/59b5a958f96b2c7bd77cee28",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-20:00; Su 11:00-18:00; PH closed",
+    "operator": "Five Below",
+    "phone": "+1 281-232-7146",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/rosenberg/24101-brazos-town-crossing"
   }
 },
 {
@@ -2393,6 +2985,29 @@
     "ref": "20791",
     "shop": "variety_store",
     "website": "https://www.dollargeneral.com/store-directory/tx/houston/20791"
+  }
+},
+{
+  "type": "node",
+  "id": 11786725820,
+  "lat": 29.9139426,
+  "lon": -95.4165303,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "10261",
+    "addr:postcode": "77037",
+    "addr:state": "TX",
+    "addr:street": "North Freeway",
+    "addr:unit": "103",
+    "branch": "West Road Plaza",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-20:00; Su 11:00-18:00",
+    "phone": "+1 346-385-5853",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/10261-north-freeway"
   }
 },
 {
@@ -2587,6 +3202,28 @@
     "ref": "27769",
     "shop": "variety_store",
     "website": "https://www.familydollar.com/locations/tx/houston/27769/"
+  }
+},
+{
+  "type": "node",
+  "id": 11786725834,
+  "lat": 30.0211537,
+  "lon": -95.4365714,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "380",
+    "addr:postcode": "77090",
+    "addr:state": "TX",
+    "addr:street": "fm 1960 West",
+    "branch": "Cypress Pointe",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-20:00; Su 11:00-18:00",
+    "phone": "+1 281-985-5531",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/380-fm-1960-w"
   }
 },
 {
@@ -2817,6 +3454,18 @@
 },
 {
   "type": "node",
+  "id": 12000139577,
+  "lat": 29.9541890,
+  "lon": -95.5457643,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "name": "Five Below",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
   "id": 12040685915,
   "lat": 30.0219576,
   "lon": -95.4195732,
@@ -2865,6 +3514,27 @@
     "name": "Dollar Tree",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/kingwood/7035/"
+  }
+},
+{
+  "type": "node",
+  "id": 12065612935,
+  "lat": 30.0506234,
+  "lon": -95.2359833,
+  "tags": {
+    "addr:city": "Kingwood",
+    "addr:housenumber": "1365",
+    "addr:postcode": "77339",
+    "addr:state": "TX",
+    "addr:street": "Kingwood Drive",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 09:30-21:30; Su 10:00-20:00",
+    "phone": "+1-346-447-3950",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/1365-kingwood-drive"
   }
 },
 {
@@ -2947,6 +3617,19 @@
     "phone": "+1-713-265-6840",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/TX/houston/578/"
+  }
+},
+{
+  "type": "node",
+  "id": 12459731688,
+  "lat": 29.7726102,
+  "lon": -95.1876665,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "check_date": "2024-12-28",
+    "name": "Five Below",
+    "shop": "variety_store"
   }
 },
 {
@@ -3042,6 +3725,24 @@
 },
 {
   "type": "node",
+  "id": 12604446201,
+  "lat": 29.8107861,
+  "lon": -95.1667879,
+  "tags": {
+    "addr:housenumber": "5955",
+    "addr:postcode": "77049",
+    "addr:street": "East Sam Houston Parkway North",
+    "contact:facebook": "RossDressForLess",
+    "contact:instagram": "RossDressForLess",
+    "name": "Ross Dress for Less",
+    "opening_hours": "Mo-Su 09:00-23:00",
+    "phone": "+1-281-458-7251",
+    "shop": "department_store",
+    "website": "https://www.rossstores.com/"
+  }
+},
+{
+  "type": "node",
   "id": 12665341001,
   "lat": 29.7897180,
   "lon": -95.1621332,
@@ -3100,6 +3801,27 @@
 },
 {
   "type": "node",
+  "id": 12730036358,
+  "lat": 29.5839192,
+  "lon": -95.6465445,
+  "tags": {
+    "addr:housenumber": "13521",
+    "addr:postcode": "77479",
+    "addr:street": "University Boulevard",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "check_date": "2025-04-04",
+    "contact:phone": "+1 281-778-9733",
+    "contact:website": "https://stores.burlington.com/tx/sugarland/1013/",
+    "level": "0",
+    "name": "Burlington",
+    "opening_hours": "Mo-Th 09:00-24:00; Fr-Su 09:00-23:00",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "node",
   "id": 12879493432,
   "lat": 30.0431373,
   "lon": -95.3827637,
@@ -3142,6 +3864,40 @@
     "brand:wikidata": "Q483551",
     "name": "Walmart Supercenter",
     "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 13160905412,
+  "lat": 29.6957347,
+  "lon": -95.8424885,
+  "tags": {
+    "addr:city": "Katy",
+    "addr:housenumber": "26814",
+    "addr:postcode": "77494",
+    "addr:state": "TX",
+    "addr:street": "FM 1093",
+    "name": "Walmart",
+    "operator": "Walmart",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13160942592,
+  "lat": 29.6966640,
+  "lon": -95.8435630,
+  "tags": {
+    "addr:city": "Katy",
+    "addr:housenumber": "26914",
+    "addr:postcode": "77494",
+    "addr:state": "TX",
+    "addr:street": "FM 1093",
+    "addr:unit": "100",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "name": "Five Below",
+    "shop": "variety_store"
   }
 },
 {
@@ -3251,6 +4007,36 @@
 },
 {
   "type": "node",
+  "id": 13331570044,
+  "lat": 29.9134124,
+  "lon": -95.4850743,
+  "tags": {
+    "name": "Walmart",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13345688348,
+  "lat": 29.9324141,
+  "lon": -95.4024249,
+  "tags": {
+    "name": "Aldine Food Store",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13376553250,
+  "lat": 29.9030359,
+  "lon": -95.3259607,
+  "tags": {
+    "name": "1 Aldine Food Store",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
   "id": 13391170569,
   "lat": 29.9018454,
   "lon": -95.3541708,
@@ -3320,6 +4106,41 @@
 },
 {
   "type": "node",
+  "id": 13502690190,
+  "lat": 29.9029676,
+  "lon": -95.3106624,
+  "tags": {
+    "name": "Aldine Food Mart",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13520218579,
+  "lat": 29.9854274,
+  "lon": -95.4996625,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "name": "Five Below",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 13520246432,
+  "lat": 29.9853075,
+  "lon": -95.4998901,
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "node",
   "id": 13520290313,
   "lat": 29.9872608,
   "lon": -95.4961772,
@@ -3380,6 +4201,24 @@
 },
 {
   "type": "node",
+  "id": 13805124014,
+  "lat": 29.7314560,
+  "lon": -95.4626883,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "5125",
+    "addr:postcode": "77056",
+    "addr:state": "TX",
+    "addr:street": "Richmond Avenue",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "node",
   "id": 13809301601,
   "lat": 29.8501808,
   "lon": -95.7181867,
@@ -3387,6 +4226,44 @@
     "name": "Dollar Tree",
     "shop": "variety_store",
     "website": "https://dollartree.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13833293303,
+  "lat": 30.0026748,
+  "lon": -95.1520767,
+  "tags": {
+    "brand": "Dollar General",
+    "brand:wikidata": "Q145168",
+    "name": "Dollar General Market",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 13833381701,
+  "lat": 29.9995007,
+  "lon": -95.1741376,
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "mapillary": "1261379602741649",
+    "name": "Five Below",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 13893156702,
+  "lat": 29.9478061,
+  "lon": -95.4195819,
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "shop": "department_store"
   }
 },
 {
@@ -3399,6 +4276,26 @@
     "brand:wikidata": "Q830621",
     "name": "H-E-B",
     "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 13984515887,
+  "lat": 30.0143124,
+  "lon": -95.4522663,
+  "tags": {
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 13991367102,
+  "lat": 29.9794767,
+  "lon": -95.5142552,
+  "tags": {
+    "name": "Dollar Tree",
+    "shop": "department_store"
   }
 },
 {
@@ -3911,6 +4808,29 @@
 },
 {
   "type": "way",
+  "id": 129727607,
+  "center": {
+    "lat": 29.7377398,
+    "lon": -95.5701087
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "11041",
+    "addr:postcode": "77042",
+    "addr:state": "TX",
+    "addr:street": "Westheimer Road",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "yes",
+    "check_date": "2026-02-07",
+    "name": "Burlington",
+    "ref": "1247",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "way",
   "id": 129728992,
   "center": {
     "lat": 29.7482627,
@@ -3970,6 +4890,59 @@
     "sensory_friendly:conditional": "yes @ 08:00-10:00",
     "shop": "supermarket",
     "website": "https://www.walmart.com/store/2257-houston-tx"
+  }
+},
+{
+  "type": "way",
+  "id": 130655740,
+  "center": {
+    "lat": 29.8488027,
+    "lon": -95.5011685
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "13238",
+    "addr:postcode": "77040",
+    "addr:state": "TX",
+    "addr:street": "Northwest Freeway",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "retail",
+    "building:levels": "1",
+    "check_date": "2026-01-02",
+    "name": "Burlington",
+    "opening_hours": "Mo-Su 09:00-23:00",
+    "phone": "+1 346-509-8821",
+    "ref": "1424",
+    "roof:shape": "flat",
+    "shop": "department_store",
+    "toilets": "yes",
+    "website": "https://stores.burlington.com/tx/houston/1424/"
+  }
+},
+{
+  "type": "way",
+  "id": 130655777,
+  "center": {
+    "lat": 29.8548696,
+    "lon": -95.5120881
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "13762",
+    "addr:state": "TX",
+    "addr:street": "Northwest Freeway",
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "building": "yes",
+    "check_date": "2025-07-17",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 713-895-9326",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/13762-northwest-freeway"
   }
 },
 {
@@ -4645,6 +5618,27 @@
 },
 {
   "type": "way",
+  "id": 232721501,
+  "center": {
+    "lat": 29.7814547,
+    "lon": -95.3592264
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "1020",
+    "addr:postcode": "77009",
+    "addr:state": "TX",
+    "addr:street": "Quitman Street",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "building": "retail",
+    "name": "Fiesta",
+    "opening_hours": "Mo-Su 07:00-22:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 235359833,
   "center": {
     "lat": 29.9759193,
@@ -4842,6 +5836,21 @@
     "sensory_friendly:conditional": "yes @ 08:00-10:00",
     "shop": "supermarket",
     "website": "https://www.walmart.com/store/5045-tomball-tx"
+  }
+},
+{
+  "type": "way",
+  "id": 254845949,
+  "center": {
+    "lat": 29.9648099,
+    "lon": -95.5457165
+  },
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "building": "commercial",
+    "name": "Five Below",
+    "shop": "variety_store"
   }
 },
 {
@@ -5878,6 +6887,25 @@
 },
 {
   "type": "way",
+  "id": 315695620,
+  "center": {
+    "lat": 29.8694121,
+    "lon": -95.3834035
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "7426",
+    "addr:postcode": "77076",
+    "addr:state": "TX",
+    "addr:street": "Airline Drive",
+    "building": "retail",
+    "check_date": "2024-01-31",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 316352286,
   "center": {
     "lat": 29.8484499,
@@ -5893,6 +6921,38 @@
     "check_date": "2024-01-06",
     "name": "Family Dollar",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "way",
+  "id": 317134767,
+  "center": {
+    "lat": 29.8366770,
+    "lon": -95.3852639
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "4711",
+    "addr:postcode": "77022",
+    "addr:state": "TX",
+    "addr:street": "Airline Drive",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "building": "retail",
+    "building:levels": "1",
+    "check_date": "2026-06-21",
+    "diet:kosher": "yes",
+    "name": "Fiesta",
+    "opening_hours": "Mo-Su 07:00-23:00",
+    "payment:american_express": "yes",
+    "payment:coins": "yes",
+    "payment:discover_card": "yes",
+    "payment:mastercard": "yes",
+    "payment:notes": "yes",
+    "payment:visa": "yes",
+    "roof:shape": "flat",
+    "shop": "supermarket",
+    "wheelchair": "yes"
   }
 },
 {
@@ -5929,6 +6989,52 @@
     "name": "Dollar Tree",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/spring/923/"
+  }
+},
+{
+  "type": "way",
+  "id": 318320633,
+  "center": {
+    "lat": 29.9404297,
+    "lon": -95.4612947
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "2770",
+    "addr:postcode": "77038",
+    "addr:state": "TX",
+    "addr:street": "North Sam Houston Parkway West",
+    "building": "retail",
+    "check_date": "2024-01-28",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 319367084,
+  "center": {
+    "lat": 29.9557059,
+    "lon": -95.5514994
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "8415",
+    "addr:postcode": "77070",
+    "addr:state": "TX",
+    "addr:street": "FM 1960 West",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "retail",
+    "building:levels": "1",
+    "check_date": "2024-05-22",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 09:00-23:00; Su 09:00-22:00",
+    "phone": "+1 281-890-5562",
+    "ref": "232",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/232"
   }
 },
 {
@@ -6755,6 +7861,29 @@
 },
 {
   "type": "way",
+  "id": 465940836,
+  "center": {
+    "lat": 29.7032127,
+    "lon": -95.6388604
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "14315",
+    "addr:postcode": "77083",
+    "addr:state": "TX",
+    "addr:street": "Bellaire Boulevard",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "building": "yes",
+    "name": "Fiesta",
+    "opening_hours": "07:00-23:00",
+    "phone": "+1-281-568-4149",
+    "shop": "supermarket",
+    "website": "https://www.fiestamart.com/"
+  }
+},
+{
+  "type": "way",
   "id": 478539111,
   "center": {
     "lat": 29.8964608,
@@ -6766,6 +7895,25 @@
     "building": "yes",
     "name": "Family Dollar",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "way",
+  "id": 481893670,
+  "center": {
+    "lat": 29.8634697,
+    "lon": -95.3346687
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "10401",
+    "addr:state": "TX",
+    "addr:street": "Jensen Drive",
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "building": "yes",
+    "name": "Fiesta",
+    "shop": "supermarket"
   }
 },
 {
@@ -6806,6 +7954,19 @@
     "building": "yes",
     "name": "Family Dollar",
     "shop": "variety_store"
+  }
+},
+{
+  "type": "way",
+  "id": 503233636,
+  "center": {
+    "lat": 29.7604029,
+    "lon": -94.9654961
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
@@ -7135,6 +8296,31 @@
 },
 {
   "type": "way",
+  "id": 525232735,
+  "center": {
+    "lat": 29.9276702,
+    "lon": -95.2055242
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "14353",
+    "addr:postcode": "77044",
+    "addr:state": "TX",
+    "addr:street": "East Sam Houston Parkway North",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "retail",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 09:00-24:00; Su 09:00-23:00",
+    "phone": "+1 281-454-2053",
+    "ref": "1004",
+    "shop": "department_store",
+    "website": "https://stores.burlington.com/tx/houston/1004"
+  }
+},
+{
+  "type": "way",
   "id": 528128676,
   "center": {
     "lat": 29.6742591,
@@ -7157,6 +8343,31 @@
     "ref": "2094",
     "shop": "variety_store",
     "website": "https://www.dollartree.com/locations/tx/houston/2094/"
+  }
+},
+{
+  "type": "way",
+  "id": 528128677,
+  "center": {
+    "lat": 29.6746279,
+    "lon": -95.4568583
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "9751",
+    "addr:postcode": "77096",
+    "addr:state": "TX",
+    "addr:street": "South Post Oak Road",
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "yes",
+    "name": "Burlington",
+    "opening_hours": "Mo-Sa 08:00-23:00; Su 08:00-22:00",
+    "phone": "+1 713-283-1024",
+    "ref": "966",
+    "shop": "department_store",
+    "website": "https://www.burlington.com/store-details/houston-tx-966/"
   }
 },
 {
@@ -7490,6 +8701,23 @@
     "ref": "1459",
     "shop": "department_store",
     "website": "https://www.target.com/sl/pearland/1459"
+  }
+},
+{
+  "type": "way",
+  "id": 581070312,
+  "center": {
+    "lat": 29.5611176,
+    "lon": -95.3301271
+  },
+  "tags": {
+    "addr:city": "Pearland",
+    "addr:housenumber": "7121",
+    "addr:state": "TX",
+    "addr:street": "West Broadway Street",
+    "building": "yes",
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
@@ -7938,6 +9166,29 @@
     "phone": "+1-832-595-5337",
     "shop": "supermarket",
     "website": "https://www.heb.com"
+  }
+},
+{
+  "type": "way",
+  "id": 659950218,
+  "center": {
+    "lat": 29.7716273,
+    "lon": -94.9969832
+  },
+  "tags": {
+    "addr:city": "Baytown",
+    "addr:country": "US",
+    "addr:housenumber": "3002",
+    "addr:postcode": "77521",
+    "addr:state": "TX",
+    "addr:street": "West Baker Road",
+    "building": "supermarket",
+    "name": "Food Town",
+    "opening_hours": "Mo-Su 06:00-23:00",
+    "operator": "Food Town",
+    "phone": "+1-281-424-2592",
+    "shop": "supermarket",
+    "website": "https://www.foodtownshopper.com/"
   }
 },
 {
@@ -9031,6 +10282,21 @@
 },
 {
   "type": "way",
+  "id": 900177238,
+  "center": {
+    "lat": 29.6933241,
+    "lon": -95.3285768
+  },
+  "tags": {
+    "brand": "Fiesta Mart",
+    "brand:wikidata": "Q5447326",
+    "building": "yes",
+    "name": "Fiesta",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 905271711,
   "center": {
     "lat": 29.8026244,
@@ -9436,6 +10702,22 @@
 },
 {
   "type": "way",
+  "id": 1002036038,
+  "center": {
+    "lat": 29.6219945,
+    "lon": -95.2268997
+  },
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "yes",
+    "name": "Burlington",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "way",
   "id": 1013864525,
   "center": {
     "lat": 29.6159264,
@@ -9472,6 +10754,86 @@
     "ref": "03400179",
     "shop": "supermarket",
     "website": "https://www.kroger.com/stores/grocery/tx/cypress/fairfield/034/00179"
+  }
+},
+{
+  "type": "way",
+  "id": 1022129962,
+  "center": {
+    "lat": 29.9284755,
+    "lon": -95.2062826
+  },
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "building": "retail",
+    "check_date": "2024-09-23",
+    "check_date:opening_hours": "2024-09-23",
+    "name": "Five Below",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 10:00-20:00",
+    "phone": "+1 281-436-1869",
+    "shop": "variety_store",
+    "website": "https://locations.fivebelow.com/tx/houston/14365-e-sam-houston-pkwy-n"
+  }
+},
+{
+  "type": "way",
+  "id": 1037843900,
+  "center": {
+    "lat": 30.0330907,
+    "lon": -95.5545743
+  },
+  "tags": {
+    "building": "yes",
+    "check_date": "2026-03-13",
+    "name": "Kroger",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 1056825555,
+  "center": {
+    "lat": 29.6738228,
+    "lon": -95.5077078
+  },
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "9725",
+    "addr:state": "TX",
+    "addr:street": "Fondren Road",
+    "building": "yes",
+    "name": "Food Town",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 1058439601,
+  "center": {
+    "lat": 29.5217295,
+    "lon": -95.1612335
+  },
+  "tags": {
+    "addr:housenumber": "3161",
+    "addr:state": "TX",
+    "addr:street": "FM 528",
+    "building": "yes",
+    "name": "Kroger",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 1071346845,
+  "center": {
+    "lat": 29.5847489,
+    "lon": -95.2119018
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
@@ -9633,6 +10995,22 @@
     "phone": "+1 281-505-3382",
     "shop": "department_store",
     "website": "https://www.target.com/sl/katy-elyson/2882"
+  }
+},
+{
+  "type": "way",
+  "id": 1126104979,
+  "center": {
+    "lat": 29.8726676,
+    "lon": -95.7604649
+  },
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "building": "yes",
+    "name": "Burlington",
+    "shop": "department_store"
   }
 },
 {
@@ -9834,6 +11212,22 @@
 },
 {
   "type": "way",
+  "id": 1255919220,
+  "center": {
+    "lat": 29.9032570,
+    "lon": -95.5538577
+  },
+  "tags": {
+    "brand": "Kroger",
+    "brand:wikidata": "Q153417",
+    "building": "retail",
+    "check_date": "2024-02-28",
+    "name": "Kroger",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
   "id": 1259173759,
   "center": {
     "lat": 29.8189252,
@@ -9973,6 +11367,35 @@
 },
 {
   "type": "way",
+  "id": 1320817989,
+  "center": {
+    "lat": 29.6544422,
+    "lon": -95.7084907
+  },
+  "tags": {
+    "alt_name": "Burlington Coat Factory",
+    "brand": "Burlington",
+    "brand:wikidata": "Q4999220",
+    "name": "Burlington",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "way",
+  "id": 1320817990,
+  "center": {
+    "lat": 29.6547408,
+    "lon": -95.7086365
+  },
+  "tags": {
+    "brand": "Five Below",
+    "brand:wikidata": "Q5455836",
+    "name": "Five Below",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "way",
   "id": 1326137800,
   "center": {
     "lat": 29.6569244,
@@ -10022,6 +11445,24 @@
     "name": "Family Dollar",
     "shop": "variety_store",
     "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1352939371,
+  "center": {
+    "lat": 29.6376645,
+    "lon": -95.6173510
+  },
+  "tags": {
+    "addr:city": "Sugar Land",
+    "addr:housenumber": "1130",
+    "addr:postcode": "77478",
+    "addr:state": "TX",
+    "addr:street": "Eldridge Road",
+    "building": "retail",
+    "name": "Food Town",
+    "shop": "supermarket"
   }
 },
 {
