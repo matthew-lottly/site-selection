@@ -1,8 +1,24 @@
 """Step 2: Pull real, current store locations from OpenStreetMap (Overpass API)
-across the FULL City of Houston footprint -- the direct dollar-store
-competitive set, off-price/general-merchandise chains, and grocery anchors
-that drive co-tenancy traffic and factor into the Huff gravity model
-(script 15).
+across the FULL City of Houston footprint, categorized the way a Family
+Dollar site selector actually thinks about them -- not just "dollar store
+vs. not":
+
+  - family_dollar   existing Family Dollar locations. NOT a competitor --
+                     this is the company's own network. Relevant for
+                     cannibalization risk, not competitive threat (script 24).
+  - arch_rival      Dollar General, Five Below: same target demographic,
+                     footprint, and inventory mix. The real competitive threat.
+  - sister_banner   Dollar Tree: owned by the same parent company (Dollar
+                     Tree, Inc.) as Family Dollar. Different price-point
+                     model, but worth tracking for combo-store potential /
+                     parent-company footprint monitoring.
+  - value_grocery    Extreme-value grocers Houston's low-income households
+                     split their budget with, incl. two Houston-specific
+                     banners: H-E-B's Joe V's Smart Shop and Fiesta's Mi
+                     Tienda, alongside Aldi, Save A Lot, Fiesta Mart, Food
+                     Town, Kroger, and H-E-B.
+  - big_box_anchor   Walmart, Target, Burlington, Ross: general-merchandise
+                     price anchors and regional traffic generators.
 
 Output: data/processed/competitors.csv
 """
@@ -23,7 +39,8 @@ BBOX = (29.49, -95.97, 30.13, -94.90)
 NAME_PATTERN = (
     "Dollar General|Family Dollar|Dollar Tree|99 Cents Only|Fred's|Variety Wholesalers|"
     "Walmart|Target|Big Lots|Five Below|Ross Dress for Less|Ross Stores|Burlington|"
-    "Kroger|H-E-B|HEB|Fiesta Mart|Aldi|Food Town|Save A Lot|Save-A-Lot"
+    "Kroger|H-E-B|HEB|Fiesta Mart|Aldi|Food Town|Save A Lot|Save-A-Lot|"
+    "Joe V's|Joe Vs|Mi Tienda"
 )
 
 QUERY = f"""
@@ -37,43 +54,55 @@ out center tags;
 
 # Real, published typical prototype square footage by banner (company fact
 # sheets / commercial real estate literature). Used only as a size/attraction
-# proxy for the Huff gravity model in script 15 -- NOT a per-store measurement,
+# proxy for the Huff gravity model in script 19 -- NOT a per-store measurement,
 # since HCAD/OSM don't publish individual competitor floor-plate sizes.
 BANNER_SQFT = {
     "Family Dollar": 8_500,
     "Dollar General": 7_400,
-    "Dollar Tree": 9_000,
-    "99 Cents Only": 25_000,
-    "Fred's": 15_000,
-    "Variety Wholesalers": 15_000,
-    "Walmart": 100_000,  # blended Supercenter/Neighborhood Market typical
-    "Target": 125_000,
-    "Big Lots": 30_000,
     "Five Below": 8_500,
-    "Ross Dress for Less": 28_000,
-    "Burlington": 65_000,
+    "Dollar Tree": 9_000,
+    "Aldi": 17_000,
+    "Save A Lot": 16_000,
+    "Joe V's Smart Shop": 30_000,
+    "Mi Tienda": 40_000,
+    "Fiesta Mart": 50_000,
+    "Food Town": 40_000,
     "Kroger": 55_000,
     "H-E-B": 90_000,
-    "Fiesta Mart": 50_000,
-    "Aldi": 17_000,
-    "Food Town": 40_000,
-    "Save A Lot": 16_000,
+    "Walmart": 100_000,  # blended Supercenter/Neighborhood Market typical
+    "Target": 125_000,
+    "Burlington": 65_000,
+    "Ross Dress for Less": 28_000,
 }
 
-DOLLAR_BRANDS = {"Dollar General", "Family Dollar", "Dollar Tree", "99 Cents Only", "Fred's", "Variety Wholesalers"}
-OFFPRICE_BRANDS = {"Big Lots", "Five Below", "Ross Dress for Less", "Burlington", "Target"}
-# Walmart is both a direct discount-retail competitor AND a grocery/general-merch anchor;
-# category "anchor" for map grouping, but included in the Huff competitor set either way.
+BRAND_CATEGORY = {
+    "Family Dollar": "family_dollar",
+    "Dollar General": "arch_rival",
+    "Five Below": "arch_rival",
+    "Dollar Tree": "sister_banner",
+    "Aldi": "value_grocery",
+    "Save A Lot": "value_grocery",
+    "Joe V's Smart Shop": "value_grocery",
+    "Mi Tienda": "value_grocery",
+    "Fiesta Mart": "value_grocery",
+    "Food Town": "value_grocery",
+    "Kroger": "value_grocery",
+    "H-E-B": "value_grocery",
+    "Walmart": "big_box_anchor",
+    "Target": "big_box_anchor",
+    "Burlington": "big_box_anchor",
+    "Ross Dress for Less": "big_box_anchor",
+}
 
 
 def classify(tags: dict) -> str:
     name = (tags.get("name") or tags.get("brand") or "").lower()
     checks = [
         ("dollar general", "Dollar General"), ("family dollar", "Family Dollar"), ("dollar tree", "Dollar Tree"),
-        ("99 cents only", "99 Cents Only"), ("fred's", "Fred's"), ("variety wholesalers", "Variety Wholesalers"),
-        ("walmart", "Walmart"), ("target", "Target"), ("big lots", "Big Lots"), ("five below", "Five Below"),
+        ("walmart", "Walmart"), ("target", "Target"), ("five below", "Five Below"),
         ("ross dress for less", "Ross Dress for Less"), ("ross stores", "Ross Dress for Less"),
         ("burlington", "Burlington"), ("kroger", "Kroger"), ("h-e-b", "H-E-B"), ("heb", "H-E-B"),
+        ("joe v", "Joe V's Smart Shop"), ("mi tienda", "Mi Tienda"),
         ("fiesta mart", "Fiesta Mart"), ("aldi", "Aldi"), ("food town", "Food Town"),
         ("save a lot", "Save A Lot"), ("save-a-lot", "Save A Lot"),
     ]
@@ -81,14 +110,6 @@ def classify(tags: dict) -> str:
         if needle in name:
             return brand
     return tags.get("name") or tags.get("brand") or "Unknown"
-
-
-def category_for(brand: str) -> str:
-    if brand in DOLLAR_BRANDS:
-        return "dollar_store"
-    if brand in OFFPRICE_BRANDS:
-        return "offprice"
-    return "grocery_anchor"
 
 
 def main() -> None:
@@ -137,13 +158,12 @@ def main() -> None:
         if key in seen:
             continue
         seen.add(key)
-        category = category_for(brand)
         rows.append(
             {
                 "osm_id": f"{el['type']}/{el['id']}",
                 "name": tags.get("name") or brand,
                 "brand": brand,
-                "category": category,
+                "category": BRAND_CATEGORY[brand],
                 "typical_sqft": BANNER_SQFT[brand],
                 "lat": lat,
                 "lon": lon,
@@ -165,7 +185,9 @@ def main() -> None:
     from collections import Counter
 
     counts = Counter(r["brand"] for r in rows)
+    cat_counts = Counter(r["category"] for r in rows)
     print(f"Wrote {len(rows)} stores to {out_path}", file=sys.stderr)
+    print(f"By category: {dict(cat_counts)}", file=sys.stderr)
     for brand, n in counts.most_common():
         print(f"  {brand}: {n}", file=sys.stderr)
 

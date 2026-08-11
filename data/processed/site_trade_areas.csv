@@ -1,21 +1,21 @@
 site_label,hcad_num,pop_5min_drive,pop_10min_drive,trade_area_median_income,huff_capture_pct,n_competitors_in_range
-Site 01 (Alief) - ALIEF CLODINE RD,0582970000612,32879,224098,61815,12.3,10
-Site 02 (Alief) - EMERALD LN,0410560010009,29903,223473,44443,9.7,19
-Site 03 (Westchase) - 9651 GLENFIELD CT,1041420000005,52492,263763,79538,6.0,15
-Site 04 (Westchase) - SAM HOUSTON PKY,1243410010006,35001,235298,57530,10.0,19
-Site 05 (Sunnyside) - 6600 STILLWELL ST,0410300000175,44339,228331,55390,10.5,13
-Site 06 (Sunnyside) - LA PORTE RD,0402370000053,37664,167502,50251,11.0,14
-Site 07 (Gulfton) - POST OAK RD,1142750010016,12770,162242,124423,6.5,16
-Site 08 (Gulfton) - 7818 HILLCROFT ST,0882600000014,64978,300614,60942,5.9,17
-Site 09 (Braeswood) - 1023 NIAGARA ST,0650090010007,35427,225296,39363,16.5,14
-Site 10 (Braeswood) - LOOP,0430390000003,43688,258423,39529,16.6,14
-Site 11 (Denver Harbor) - 8200 SIGNET ST,0292450680001,10062,95209,51781,8.3,17
-Site 12 (Denver Harbor) - CURRENCY ST,1152170000007,1781,77540,60703,8.0,20
-Site 13 (East Houston) - 7608 LOCKWOOD DR,0570050020012,25365,143106,46851,4.8,34
-Site 14 (East Houston) - 5429 CAVALCADE ST,0651240420709,24693,172045,44598,6.6,32
-Site 15 (Braeburn) - AIRPORT BLVD,1148490000001,38942,169985,59428,5.8,16
-Site 16 (Braeburn) - 12309 FONDREN RD,0461710000003,38544,162264,55845,5.4,16
-Site 17 (Acres Homes) - NORTHWEST FWY,1295900010005,37299,218579,55455,3.9,35
-Site 18 (Acres Homes) - SH 249,0420760000039,1416,74143,41172,1.9,60
-Site 19 (Central Southwest Houston) - 2138 VAN CLEVE ST,0451860000445,11489,76005,79057,12.7,10
-Site 20 (Central Southwest Houston) - 4620 FUQUA ST,0411010000105,20317,80264,52684,9.1,15
+Site 01 (Parkridge) - Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),0582970000612,32879,224098,61815,54.6,3
+Site 02 (Westwood) - South Sam Houston Parkway West & Southwest Freeway Frontage Road (unaddressed vacant tract),0410560010009,29903,223473,44443,39.4,4
+Site 03 (Braeburn) - 9651 GLENFIELD CT,1041420000005,52492,263763,79538,45.3,3
+Site 04 (Westwood) - South Sam Houston Parkway West & West Bellfort Street (unaddressed vacant tract),1243410010006,35001,235298,57530,41.5,4
+Site 05 (Pecan Park) - 6600 STILLWELL ST,0410300000175,44339,228331,55390,44.8,3
+Site 06 (Pecan Park) - Broadway Street & La Porte Freeway (unaddressed vacant tract),0402370000053,37664,167502,50251,50.8,3
+Site 07 (Houston) - South Post Oak Road & South Post Oak Road Frontage Road (unaddressed vacant tract),1142750010016,12770,162242,124423,48.2,3
+Site 08 (Braeburn) - 7818 HILLCROFT ST,0882600000014,64978,300614,60942,39.8,3
+Site 09 (Sunnyside) - 1023 NIAGARA ST,0650090010007,35427,225296,39363,53.0,2
+Site 10 (Sunnyside) - Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),0430390000003,43688,258423,39529,49.0,3
+Site 11 (Pleasantville) - 8200 SIGNET ST,0292450680001,10062,95209,51781,36.4,3
+Site 12 (El Dorado) - Crosby Freeway Frontage Road & East Freeway Frontage Road (unaddressed vacant tract),1152170000007,1781,77540,60703,32.2,3
+Site 13 (North Shadydale) - 7608 LOCKWOOD DR,0570050020012,25365,143106,46851,19.5,9
+Site 14 (Kashmere Gardens) - 5429 CAVALCADE ST,0651240420709,24693,172045,44598,23.0,7
+Site 15 (Fondren Gardens) - Fondren Road & West Airport Boulevard (unaddressed vacant tract),1148490000001,38942,169985,59428,49.4,4
+Site 16 (Fondren Gardens) - 12309 FONDREN RD,0461710000003,38544,162264,55845,48.5,4
+Site 17 (Langwood) - Bingle Road & Northwest Freeway Frontage Road (unaddressed vacant tract),1295900010005,37299,218579,55455,12.0,10
+Site 18 (Inwood) - Tomball Parkway & West Montgomery Road (unaddressed vacant tract),0420760000039,1416,74143,41172,9.4,19
+Site 19 (Minnetex) - 2138 VAN CLEVE ST,0451860000445,11489,76005,79057,35.3,3
+Site 20 (Central Southwest Houston) - 4620 FUQUA ST,0411010000105,20317,80264,52684,50.3,4

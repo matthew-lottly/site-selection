@@ -10,10 +10,13 @@ Demand side (ACS 5-year, Census Reporter):
 
 Supply side (OpenStreetMap, current):
   - straight-line distance from the tract centroid to the nearest existing
-    Family Dollar / Dollar General / Dollar Tree
+    small-box dollar-format store of ANY banner (Family Dollar, Dollar
+    General, Dollar Tree) -- for this macro screen we care about overall
+    dollar-format retail saturation, not yet which banner. The Family
+    Dollar-specific cannibalization question is handled separately and more
+    precisely at the site level in script 24.
 
 Output: data/processed/tract_scores.csv (sorted, highest opportunity first)
-        data/processed/submarket_summary.txt (top clusters for review)
 """
 from __future__ import annotations
 
@@ -21,6 +24,8 @@ import csv
 import sys
 
 from lib import PROCESSED, haversine_miles
+
+DOLLAR_FORMAT_CATEGORIES = {"family_dollar", "arch_rival", "sister_banner"}
 
 
 def income_fit(mhi: float | None) -> float:
@@ -41,8 +46,7 @@ def main() -> None:
 
     with open(PROCESSED / "competitors.csv", encoding="utf-8") as fh:
         stores = list(csv.DictReader(fh))
-    dollar_stores = [s for s in stores if s["category"] == "dollar_store"]
-    anchors = [s for s in stores if s["category"] == "anchor"]
+    dollar_stores = [s for s in stores if s["category"] in DOLLAR_FORMAT_CATEGORIES]
 
     rows = []
     for t in tracts:
@@ -55,10 +59,6 @@ def main() -> None:
             nearest_dollar_mi = 99.0
         else:
             nearest_dollar_mi = min(haversine_miles(lat, lon, float(s["lat"]), float(s["lon"])) for s in dollar_stores)
-        if not anchors:
-            nearest_anchor_mi = 99.0
-        else:
-            nearest_anchor_mi = min(haversine_miles(lat, lon, float(s["lat"]), float(s["lon"])) for s in anchors)
 
         demand_index = pop * income_fit(mhi) * (1 + poverty_rate)
         competitive_gap_index = min(nearest_dollar_mi, 3.0) / 3.0
@@ -71,7 +71,6 @@ def main() -> None:
                 "median_hh_income": mhi,
                 "poverty_rate": poverty_rate,
                 "nearest_dollar_store_mi": round(nearest_dollar_mi, 2),
-                "nearest_anchor_mi": round(nearest_anchor_mi, 2),
                 "demand_index": round(demand_index, 1),
                 "competitive_gap_index": round(competitive_gap_index, 3),
                 "gap_score": round(gap_score, 1),
@@ -83,7 +82,7 @@ def main() -> None:
     out_path = PROCESSED / "tract_scores.csv"
     fieldnames = [
         "geoid", "name", "lat", "lon", "aland_sqmi", "population", "median_hh_income",
-        "poverty_rate", "nearest_dollar_store_mi", "nearest_anchor_mi",
+        "poverty_rate", "nearest_dollar_store_mi",
         "demand_index", "competitive_gap_index", "gap_score",
     ]
     with open(out_path, "w", newline="", encoding="utf-8") as fh:

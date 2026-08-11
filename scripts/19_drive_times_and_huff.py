@@ -6,19 +6,23 @@ adds a real Huff gravity market-capture model):
    population centroid. Sums ACS population reachable within 5 and 10 minutes.
 
 2. Huff gravity market-capture probability: for each block group in a site's
-   trade area, compare the candidate site's pull against real nearby DIRECT
-   dollar-store-format competitors (Family Dollar, Dollar General, Dollar
-   Tree, etc. -- script 02's "dollar_store" category). Full grocery/big-box
-   anchors (Walmart, H-E-B, Kroger, Target) are deliberately excluded from
-   the gravity competitor set: they serve a different shopping mission (a
-   weekly grocery trip vs. a quick value/convenience trip), and their much
-   larger square footage would mathematically swamp every candidate site's
-   share to a near-zero, non-discriminating number regardless of where the
-   dollar store actually sits. This mirrors standard practice in real dollar-
-   store site selection, which models cannibalization against same-format
-   competitors. Each banner's published typical prototype square footage
-   (script 02) is the size/attraction term, with a distance-decay exponent
-   of beta=2.0 (the standard value used in retail gravity-model literature).
+   trade area, compare the candidate site's pull against real nearby ARCH-
+   RIVAL competitors (Dollar General, Five Below -- script 02's "arch_rival"
+   category: same target demographic, footprint, and inventory mix as Family
+   Dollar). Dollar Tree is excluded from this competitive set even though
+   it's a same-format small-box store, because it is Family Dollar's own
+   *sister banner* (both owned by Dollar Tree, Inc.) -- modeling it as a
+   competitive threat would misstate the real business relationship; its
+   proximity is tracked separately as a combo-store/parent-footprint signal.
+   Full grocery/big-box anchors (Walmart, H-E-B, Kroger, Target) are also
+   excluded: they serve a different shopping mission (a weekly grocery trip
+   vs. a quick value/convenience trip), and their much larger square footage
+   would mathematically swamp every candidate site's share to a near-zero,
+   non-discriminating number regardless of where the dollar store actually
+   sits (tested and confirmed before this design choice was made). Each
+   banner's published typical prototype square footage (script 02) is the
+   size/attraction term, with a distance-decay exponent of beta=2.0 (the
+   standard value used in retail gravity-model literature).
    Candidate-site travel time uses real OSRM network minutes; competitor
    travel time is approximated from straight-line distance at a 25 mph
    average urban-arterial speed -- a documented simplification made to keep
@@ -117,7 +121,7 @@ def main() -> None:
 
         nearby_competitors = [
             c for c in competitors
-            if c["category"] == "dollar_store"
+            if c["category"] == "arch_rival"
             and haversine_miles(lat, lon, float(c["lat"]), float(c["lon"])) <= COMPETITOR_SEARCH_RADIUS_MI
         ]
 

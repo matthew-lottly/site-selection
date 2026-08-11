@@ -66,6 +66,21 @@ SEQUENTIAL_ORANGE = [  # magnitude ramp, light->dark: alternate choropleth hue (
 STATUS_RAMP = [  # ordered good->critical: for "best to worst ranked" site symbology
     "#0ca30c", "#fab219", "#ec835a", "#d03b3b",
 ]
+# Competitor-tier colors: deliberately all cool hues (blue/violet/magenta/aqua),
+# never green/yellow/orange/red, so they never get confused with the warm
+# STATUS_RAMP (candidate-site rank) or SEQUENTIAL_ORANGE (choropleth) markers
+# sharing the same map. Validated distinct via the dataviz skill's
+# validate_palette.js (light mode, all-pairs): PASS on lightness/chroma/normal-
+# vision floors, WARN (not FAIL) on CVD separation -- acceptable per the skill's
+# own rule because every one of these colors also carries a text legend/tooltip
+# label (the required secondary encoding for a 6-8 ΔE pair).
+COMPETITOR_COLORS = {
+    "family_dollar": "#2a78d6",    # blue -- own network, not a competitor
+    "arch_rival": "#e87ba4",       # magenta -- the real competitive threat
+    "sister_banner": "#4a3aa7",    # violet -- same parent company, different format
+    "value_grocery": "#1baf7a",    # aqua -- extreme-value grocery competition
+    "big_box_anchor": "#57534e",   # muted stone -- lowest priority, context only
+}
 
 
 def _hex_to_rgb(h: str) -> tuple[int, int, int]:

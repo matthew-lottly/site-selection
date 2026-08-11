@@ -2,8 +2,10 @@
 FEMA flood zone, nearest real TxDOT AADT count (with its station coordinate
 reverse-geocoded to a real street name for verification -- TxDOT records
 roads by route number, not local name, so this is how we confirm each match
-is real rather than guessed), and distance to the nearest competitor in each
-tier (direct dollar-store, off-price/general-merchandise, grocery anchor).
+is real rather than guessed), and distance to the nearest store in each
+competitive tier. Existing Family Dollar locations are tracked SEPARATELY
+from true competitors -- they are the company's own network, relevant to
+cannibalization risk (script 24), not competitive threat.
 
 Output: data/processed/sites_enriched.csv
 """
@@ -97,9 +99,12 @@ def main() -> None:
         aadt = list(csv.DictReader(fh))
     with open(PROCESSED / "competitors.csv", encoding="utf-8") as fh:
         stores = list(csv.DictReader(fh))
-    dollar_stores = [s for s in stores if s["category"] == "dollar_store"]
-    offprice = [s for s in stores if s["category"] == "offprice"]
-    anchors = [s for s in stores if s["category"] == "grocery_anchor"]
+    family_dollar = [s for s in stores if s["category"] == "family_dollar"]
+    # true competitive threat = arch-rivals (Dollar General, Five Below) + sister
+    # banner (Dollar Tree); Family Dollar's own locations are handled separately
+    true_competitors = [s for s in stores if s["category"] in ("arch_rival", "sister_banner")]
+    value_grocery = [s for s in stores if s["category"] == "value_grocery"]
+    big_box = [s for s in stores if s["category"] == "big_box_anchor"]
 
     rows = []
     for i, s in enumerate(sites, start=1):
@@ -132,14 +137,17 @@ def main() -> None:
             aadt_on_freeway = True
         aadt_dist = haversine_miles(lat, lon, float(nearest_aadt["lat"]), float(nearest_aadt["lon"]))
 
-        nearest_dollar = min(dollar_stores, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"])))
+        nearest_dollar = min(true_competitors, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"])))
         nearest_dollar_mi = haversine_miles(lat, lon, float(nearest_dollar["lat"]), float(nearest_dollar["lon"]))
 
-        nearest_offprice = min(offprice, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"]))) if offprice else None
-        nearest_offprice_mi = haversine_miles(lat, lon, float(nearest_offprice["lat"]), float(nearest_offprice["lon"])) if nearest_offprice else None
+        nearest_fd = min(family_dollar, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"])))
+        nearest_fd_mi = haversine_miles(lat, lon, float(nearest_fd["lat"]), float(nearest_fd["lon"]))
 
-        nearest_anchor = min(anchors, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"])))
-        nearest_anchor_mi = haversine_miles(lat, lon, float(nearest_anchor["lat"]), float(nearest_anchor["lon"]))
+        nearest_grocery = min(value_grocery, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"]))) if value_grocery else None
+        nearest_grocery_mi = haversine_miles(lat, lon, float(nearest_grocery["lat"]), float(nearest_grocery["lon"])) if nearest_grocery else None
+
+        nearest_bigbox = min(big_box, key=lambda x: haversine_miles(lat, lon, float(x["lat"]), float(x["lon"])))
+        nearest_bigbox_mi = haversine_miles(lat, lon, float(nearest_bigbox["lat"]), float(nearest_bigbox["lon"]))
 
         rows.append(
             {
@@ -166,16 +174,18 @@ def main() -> None:
                 "nearest_dollar_store": nearest_dollar["name"],
                 "nearest_dollar_store_brand": nearest_dollar["brand"],
                 "nearest_dollar_store_mi": round(nearest_dollar_mi, 2),
-                "nearest_offprice": nearest_offprice["name"] if nearest_offprice else "none found",
-                "nearest_offprice_mi": round(nearest_offprice_mi, 2) if nearest_offprice_mi else None,
-                "nearest_anchor": nearest_anchor["name"],
-                "nearest_anchor_mi": round(nearest_anchor_mi, 2),
+                "nearest_family_dollar": nearest_fd["name"],
+                "nearest_family_dollar_mi": round(nearest_fd_mi, 2),
+                "nearest_value_grocery": nearest_grocery["name"] if nearest_grocery else "none found",
+                "nearest_value_grocery_mi": round(nearest_grocery_mi, 2) if nearest_grocery_mi else None,
+                "nearest_bigbox": nearest_bigbox["name"],
+                "nearest_bigbox_mi": round(nearest_bigbox_mi, 2),
             }
         )
         flag = " [FREEWAY-ONLY, no arterial station nearby]" if aadt_on_freeway else ""
         print(
             f"{site_label}: zone={zone} AADT={nearest_aadt['aadt']} on {aadt_road_name}{flag} "
-            f"({aadt_dist:.2f}mi) | nearest dollar store {nearest_dollar_mi:.2f}mi",
+            f"({aadt_dist:.2f}mi) | nearest rival {nearest_dollar_mi:.2f}mi | nearest FD (own brand) {nearest_fd_mi:.2f}mi",
             file=sys.stderr,
         )
 

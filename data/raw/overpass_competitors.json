@@ -2,7 +2,7 @@
   "version": 0.6,
   "generator": "Overpass API 0.7.62.11 87bfad18",
   "osm3s": {
-    "timestamp_osm_base": "2026-08-11T00:49:17Z",
+    "timestamp_osm_base": "2026-08-11T02:30:47Z",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
   },
   "elements": [
@@ -791,6 +791,21 @@
     "ref": "1772",
     "shop": "supermarket",
     "website": "https://stores.aldi.us/tx/missouri-city/6016-sienna-ranch-road"
+  }
+},
+{
+  "type": "node",
+  "id": 4251878623,
+  "lat": 29.6078877,
+  "lon": -95.4775703,
+  "tags": {
+    "addr:city": "Houston",
+    "addr:housenumber": "6100",
+    "addr:postcode": "77085",
+    "addr:state": "TX",
+    "addr:street": "West Fuqua Street",
+    "name": "Joe V's Smart Shop",
+    "shop": "supermarket"
   }
 },
 {
@@ -1632,6 +1647,17 @@
 },
 {
   "type": "node",
+  "id": 7330326431,
+  "lat": 29.8316216,
+  "lon": -95.4848820,
+  "tags": {
+    "check_date": "2023-05-04",
+    "name": "Joe V's",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 7708784356,
   "lat": 29.9313432,
   "lon": -95.4012529,
@@ -2120,6 +2146,17 @@
     "phone": "+1 833-478-1059",
     "shop": "supermarket",
     "website": "https://stores.aldi.us/tx/houston/9870-louetta-rd"
+  }
+},
+{
+  "type": "node",
+  "id": 8678193945,
+  "lat": 29.8699592,
+  "lon": -95.3325185,
+  "tags": {
+    "check_date": "2025-03-18",
+    "name": "Mi Tienda",
+    "shop": "supermarket"
   }
 },
 {
@@ -2782,12 +2819,52 @@
 },
 {
   "type": "node",
+  "id": 11449844145,
+  "lat": 29.6803187,
+  "lon": -95.1470516,
+  "tags": {
+    "addr:city": "Pasadena",
+    "addr:housenumber": "4203",
+    "addr:postcode": "77501",
+    "addr:state": "TX",
+    "addr:street": "Red Bluff Road",
+    "check_date": "2024-12-29",
+    "name": "Joe V's Smart Shop",
+    "opening_hours": "Mo-Su 07:00-22:00",
+    "payment:cash": "yes",
+    "payment:coins": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "phone": "+1-281-478-8400",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
   "id": 11471996894,
   "lat": 29.6611012,
   "lon": -95.2110583,
   "tags": {
     "name": "Food Town",
     "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 11471996898,
+  "lat": 29.6632548,
+  "lon": -95.2087999,
+  "tags": {
+    "addr:housenumber": "1630",
+    "addr:postcode": "77587",
+    "addr:street": "Spencer Highway",
+    "name": "Mi Tienda",
+    "opening_hours": "Mo-Su 06:00-23:00",
+    "phone": "+1-713-941-7550",
+    "shop": "supermarket",
+    "website": "https://mitiendatx.com/"
   }
 },
 {
@@ -3942,6 +4019,17 @@
     "name": "Dollar Tree",
     "opening_hours": "Mo-Sa 08:00-22:00; Su 09:00-21:00",
     "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13203307151,
+  "lat": 30.0223376,
+  "lon": -95.3827082,
+  "tags": {
+    "name": "Joe Vs Smart Shop",
+    "opening_hours": "Mo-Su 07:00-22:00",
+    "shop": "supermarket"
   }
 },
 {
@@ -5461,6 +5549,22 @@
     "loc_name": "Buffalo Market H-E-B On Buffalo Speedway",
     "name": "H-E-B",
     "phone": "+1-713-218-1800",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 222581336,
+  "center": {
+    "lat": 29.9115990,
+    "lon": -95.4138908
+  },
+  "tags": {
+    "addr:housenumber": "10241",
+    "addr:postcode": "77037",
+    "addr:street": "North Freeway",
+    "building": "retail",
+    "name": "Joe Vs Smart Shop",
     "shop": "supermarket"
   }
 },
@@ -7971,6 +8075,23 @@
 },
 {
   "type": "way",
+  "id": 503233638,
+  "center": {
+    "lat": 29.7604446,
+    "lon": -94.9751629
+  },
+  "tags": {
+    "addr:city": "Baytown",
+    "addr:housenumber": "3500",
+    "addr:state": "TX",
+    "addr:street": "Garth Road",
+    "building": "yes",
+    "name": "Joe V's",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 503510975,
   "center": {
     "lat": 29.6599821,
@@ -8372,6 +8493,23 @@
 },
 {
   "type": "way",
+  "id": 539699148,
+  "center": {
+    "lat": 29.6551861,
+    "lon": -95.5131769
+  },
+  "tags": {
+    "addr:housenumber": "7755",
+    "addr:street": "West Bellfort Street",
+    "building": "yes",
+    "name": "Joe V's",
+    "not:brand:wikidata": "Q830621",
+    "operator": "HEB",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 540033295,
   "center": {
     "lat": 29.5518191,
@@ -8641,6 +8779,20 @@
     "sensory_friendly:conditional": "yes @ 08:00-10:00",
     "shop": "supermarket",
     "website": "https://www.walmart.com/store/4416-houston-tx"
+  }
+},
+{
+  "type": "way",
+  "id": 579735059,
+  "center": {
+    "lat": 29.8724708,
+    "lon": -95.4133730
+  },
+  "tags": {
+    "building": "retail",
+    "check_date": "2024-10-05",
+    "name": "Joe V's Smart Shop",
+    "shop": "supermarket"
   }
 },
 {
@@ -11258,6 +11410,26 @@
 },
 {
   "type": "way",
+  "id": 1296435845,
+  "center": {
+    "lat": 29.8325641,
+    "lon": -95.7225254
+  },
+  "tags": {
+    "addr:city": "Katy",
+    "addr:housenumber": "4107",
+    "addr:postcode": "77449",
+    "addr:state": "TX",
+    "addr:street": "North Fry Road",
+    "building": "yes",
+    "name": "Joe V's Smart Shop",
+    "opening_hours": "Mo-Su 07:00-22:00",
+    "phone": "+1-281-456-4250",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
   "id": 1306102062,
   "center": {
     "lat": 29.6792427,
@@ -11426,6 +11598,20 @@
     "building": "yes",
     "name": "Family Dollar",
     "shop": "variety_store",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1326187051,
+  "center": {
+    "lat": 29.6554254,
+    "lon": -95.5000341
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Mi Tienda Meat Market",
+    "shop": "supermarket",
     "source": "microsoft/BuildingFootprints"
   }
 },

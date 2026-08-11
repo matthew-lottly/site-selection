@@ -1,0 +1,21 @@
+site_label,hcad_num,nearest_family_dollar,nearest_family_dollar_mi,hard_buffer_flag,pop_5min_drive,overlap_pop_within_1_5mi_of_fd,overlap_pct,net_new_population_reach,cannibalization_risk
+Site 01 (Parkridge) - Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),0582970000612,Family Dollar,1.48,"Soft buffer, check overlap",32879,23200,70.6,9679,High (trade-area overlap)
+Site 02 (Westwood) - South Sam Houston Parkway West & Southwest Freeway Frontage Road (unaddressed vacant tract),0410560010009,Family Dollar,1.98,"Soft buffer, check overlap",29903,5543,18.5,24360,Moderate
+Site 03 (Braeburn) - 9651 GLENFIELD CT,1041420000005,Family Dollar,1.75,"Soft buffer, check overlap",52492,17469,33.3,35023,High (trade-area overlap)
+Site 04 (Westwood) - South Sam Houston Parkway West & West Bellfort Street (unaddressed vacant tract),1243410010006,Family Dollar,1.88,"Soft buffer, check overlap",35001,7480,21.4,27521,Moderate
+Site 05 (Pecan Park) - 6600 STILLWELL ST,0410300000175,Family Dollar,1.01,High risk (<1.2mi),44339,21201,47.8,23138,High (hard buffer: existing FD < 1.2 mi)
+Site 06 (Pecan Park) - Broadway Street & La Porte Freeway (unaddressed vacant tract),0402370000053,Family Dollar,1.18,High risk (<1.2mi),37664,24755,65.7,12909,High (hard buffer: existing FD < 1.2 mi)
+Site 07 (Houston) - South Post Oak Road & South Post Oak Road Frontage Road (unaddressed vacant tract),1142750010016,Family Dollar,2.22,"Soft buffer, check overlap",12770,0,0.0,12770,Low
+Site 08 (Braeburn) - 7818 HILLCROFT ST,0882600000014,Family Dollar,0.68,High risk (<1.2mi),64978,50137,77.2,14841,High (hard buffer: existing FD < 1.2 mi)
+Site 09 (Sunnyside) - 1023 NIAGARA ST,0650090010007,Family Dollar,4.16,Clear (>2.5mi),35427,0,0.0,35427,Low
+Site 10 (Sunnyside) - Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),0430390000003,Family Dollar,4.07,Clear (>2.5mi),43688,0,0.0,43688,Low
+Site 11 (Pleasantville) - 8200 SIGNET ST,0292450680001,Family Dollar,2.57,Clear (>2.5mi),10062,0,0.0,10062,Low
+Site 12 (El Dorado) - Crosby Freeway Frontage Road & East Freeway Frontage Road (unaddressed vacant tract),1152170000007,Family Dollar,4.62,Clear (>2.5mi),1781,0,0.0,1781,Low
+Site 13 (North Shadydale) - 7608 LOCKWOOD DR,0570050020012,Family Dollar,1.64,"Soft buffer, check overlap",25365,13225,52.1,12140,High (trade-area overlap)
+Site 14 (Kashmere Gardens) - 5429 CAVALCADE ST,0651240420709,Family Dollar,1.44,"Soft buffer, check overlap",24693,14762,59.8,9931,High (trade-area overlap)
+Site 15 (Fondren Gardens) - Fondren Road & West Airport Boulevard (unaddressed vacant tract),1148490000001,Family Dollar,0.21,High risk (<1.2mi),38942,31015,79.6,7927,High (hard buffer: existing FD < 1.2 mi)
+Site 16 (Fondren Gardens) - 12309 FONDREN RD,0461710000003,Family Dollar,0.17,High risk (<1.2mi),38544,32380,84.0,6164,High (hard buffer: existing FD < 1.2 mi)
+Site 17 (Langwood) - Bingle Road & Northwest Freeway Frontage Road (unaddressed vacant tract),1295900010005,Family Dollar,0.92,High risk (<1.2mi),37299,20900,56.0,16399,High (hard buffer: existing FD < 1.2 mi)
+Site 18 (Inwood) - Tomball Parkway & West Montgomery Road (unaddressed vacant tract),0420760000039,Family Dollar,0.08,High risk (<1.2mi),1416,0,0.0,1416,High (hard buffer: existing FD < 1.2 mi)
+Site 19 (Minnetex) - 2138 VAN CLEVE ST,0451860000445,Family Dollar,1.87,"Soft buffer, check overlap",11489,10349,90.1,1140,High (trade-area overlap)
+Site 20 (Central Southwest Houston) - 4620 FUQUA ST,0411010000105,Family Dollar,1.49,"Soft buffer, check overlap",20317,8803,43.3,11514,High (trade-area overlap)

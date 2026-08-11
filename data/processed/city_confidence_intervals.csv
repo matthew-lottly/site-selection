@@ -1,0 +1,7 @@
+statistic,estimate,moe_90pct,ci_90pct_low,ci_90pct_high,source
+Population,"2,328,253",±196,"2,328,057","2,328,449",ACS 2024 5-yr B01003
+Median household income,"$64,813",±$822,"$63,991","$65,635",ACS 2024 5-yr B19013
+Poverty rate,19.9%,±0.4pp,19.5%,20.3%,ACS 2024 5-yr B17001 (ratio MOE propagated)
+Foreign-born share,29.3%,±0.4pp,29.0%,29.7%,ACS 2024 5-yr B05002 (ratio MOE propagated)
+Spanish spoken at home,37.2%,±0.4pp,36.8%,37.6%,"ACS 2024 5-yr C16001, population 5+ (ratio MOE propagated)"
+Average household size,2.46,±0.01,2.45,2.47,ACS 2024 5-yr B25010

@@ -119,6 +119,7 @@ def main() -> None:
                 "aadt_road_verified": sites[h]["aadt_road_verified"],
                 "aadt_on_freeway": sites[h]["aadt_on_freeway"],
                 "meets_8000_aadt_benchmark": traffic_raw[i] >= AADT_BENCHMARK,
+                "raw_traffic_aadt_used_for_gate": round(traffic_raw[i]),
                 "nearest_dollar_store_mi": sites[h]["nearest_dollar_store_mi"],
                 "nearest_dollar_store": sites[h]["nearest_dollar_store"],
                 "pop_5min_drive": trade[h]["pop_5min_drive"],
@@ -136,6 +137,26 @@ def main() -> None:
         )
 
     rows.sort(key=lambda r: -r["total_score"])
+    for i, r in enumerate(rows, start=1):
+        r["raw_score_rank"] = i
+
+    # The weighted score treats traffic as one factor among six (15%), but a
+    # site that fails the industry-standard 8,000 AADT minimum viable-traffic
+    # benchmark is not a real candidate regardless of how well it scores on
+    # everything else -- a discount retailer depends on drive-by visibility a
+    # low-traffic frontage road cannot provide. Rather than silently let the
+    # weighted average paper over that, the PRIMARY recommendation is the
+    # highest scoring site that also clears the benchmark; any higher-raw-score
+    # site that fails it is kept in the table (for transparency) but explicitly
+    # is not eligible to be "the" recommendation.
+    qualified = [r for r in rows if r["meets_8000_aadt_benchmark"]]
+    primary = qualified[0] if qualified else rows[0]
+    for r in rows:
+        r["primary_recommendation"] = r["hcad_num"] == primary["hcad_num"]
+    # move the primary recommendation to the front of the file so downstream
+    # scripts (isochrone, map) that read row 0 as "the winner" pick it up
+    # correctly, while raw_score_rank preserves the pure-score ordering
+    rows.sort(key=lambda r: (not r["primary_recommendation"], -r["total_score"]))
 
     out_path = PROCESSED / "scorecard.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as fh:
@@ -143,12 +164,19 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"{'Rank':<5}{'Neighborhood':<14}{'Site':<40}{'Demand':>7}{'Huff':>6}{'Comp':>6}{'Traf':>6}{'Cost':>6}{'Flood':>6}{'TOTAL':>7}  AADT>=8k?", file=sys.stderr)
+    print(f"{'#':<5}{'ScoreRk':<8}{'Neighborhood':<14}{'Site':<40}{'Demand':>7}{'Huff':>6}{'Comp':>6}{'Traf':>6}{'Cost':>6}{'Flood':>6}{'TOTAL':>7}  AADT>=8k?", file=sys.stderr)
     for i, r in enumerate(rows, 1):
+        tag = " <- PRIMARY RECOMMENDATION" if r["primary_recommendation"] else ""
         print(
-            f"{i:<5}{r['neighborhood']:<14}{r['address'][:39]:<40}{r['demand_score']:>7}{r['huff_score']:>6}"
+            f"{i:<5}{r['raw_score_rank']:<8}{r['neighborhood']:<14}{r['address'][:39]:<40}{r['demand_score']:>7}{r['huff_score']:>6}"
             f"{r['competition_score']:>6}{r['traffic_score']:>6}{r['cost_feasibility_score']:>6}{r['flood_score']:>6}{r['total_score']:>7}  "
-            f"{'yes' if r['meets_8000_aadt_benchmark'] else 'NO'}",
+            f"{'yes' if r['meets_8000_aadt_benchmark'] else 'NO'}{tag}",
+            file=sys.stderr,
+        )
+    if rows[0]["raw_score_rank"] != 1:
+        print(
+            f"\nNote: raw score rank #1 ({[r for r in rows if r['raw_score_rank']==1][0]['address']}) "
+            f"fails the 8,000 AADT benchmark and was NOT selected as the primary recommendation.",
             file=sys.stderr,
         )
     print(f"\nRECOMMENDED SITE: {rows[0]['site_label']} ({rows[0]['address']}, {rows[0]['neighborhood']})", file=sys.stderr)
