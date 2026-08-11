@@ -11,8 +11,9 @@ pipeline works, and [`docs/data_validation.md`](docs/data_validation.md) for the
 catalog, every audit check performed, and real 90% confidence intervals.
 
 **Interactive map:** [`index.html`](index.html) — open locally or view on GitHub Pages once
-published. Includes a bottom-drawer **Analysis Dashboard** with the full scorecard, cannibalization
-math, site-level operational detail, and confidence intervals.
+published. App-shell layout: a header bar up top and a right-side **Analysis Dashboard** panel
+(toggle button in the header) with the full scorecard, cannibalization math, site-level operational
+detail, and confidence intervals — the map stays visible and interactive alongside it.
 
 ## Data sources (all free, no API keys)
 

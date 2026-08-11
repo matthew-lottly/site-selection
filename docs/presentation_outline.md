@@ -76,10 +76,10 @@
   sharing the map: **Family Dollar's own network** (always visible — the cannibalization check),
   **direct arch-rivals** (visible by default — the real competitive threat), then sister banner,
   value grocery, and big-box anchors as off-by-default context layers.
-- A **bottom-drawer Analysis Dashboard** (toggle button, bottom of screen) gives the VP four tabs
-  without leaving the map: the full **Scorecard**, the **Cannibalization** table, **Site Details**
-  (speed limits, co-tenants, lot dimensions), and **Confidence Intervals** plus a condensed data
-  validation summary.
+- A **right-side Analysis Dashboard panel** (toggle button in the top header bar) gives the VP five
+  tabs without leaving the map: the full **Scorecard**, the **Cannibalization** table, **Site
+  Details** (speed limits, co-tenants, lot dimensions), **Confidence Intervals**, and **Sources &amp;
+  Validation**. The map stays visible and interactive alongside the open panel.
 - Basemap switcher offers light/dark/streets/satellite/terrain. Popup and legend text is set in dark,
   bold type for readability at a glance in a room.
 

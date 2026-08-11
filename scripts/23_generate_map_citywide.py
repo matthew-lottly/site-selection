@@ -9,7 +9,7 @@ Symbology:
     value grocery / big-box), all cool hues, validated distinct from each
     other and from the warm rank-ramp/choropleth colors sharing the map
   - choropleth: amber->deep-red sequential ramp, opacity scaled to score
-  - a bottom-drawer dashboard: Scorecard / Cannibalization / Confidence
+  - a right-side sliding dashboard panel: Scorecard / Cannibalization / Confidence
     Intervals / Data Sources & Validation tabs
 """
 from __future__ import annotations
@@ -43,7 +43,7 @@ def load_json(name: str) -> dict:
     return json.loads((PROCESSED / name).read_text(encoding="utf-8"))
 
 
-POPUP_CSS = """
+PAGE_CHROME_CSS = """
 <style>
   .exec-card { font-family: 'Segoe UI', Arial, sans-serif; width: 300px; padding: 6px 8px; }
   .exec-title { font-size: 14px; font-weight: 700; color: #1E3A8A; border-bottom: 2px solid #D97706; padding-bottom: 4px; margin-bottom: 6px; }
@@ -55,16 +55,73 @@ POPUP_CSS = """
   .src-note { font-size: 10px; color: #64748B; margin-top: 6px; border-top: 1px solid #E2E8F0; padding-top: 4px; font-weight: 400; }
   .warn-note { font-size: 11px; color: #92400E; background: #FEF3C7; padding: 4px 6px; border-radius: 4px; margin-top: 4px; font-weight: 600; }
   .good-note { font-size: 11px; color: #14532D; background: #DCFCE7; padding: 4px 6px; border-radius: 4px; margin-top: 4px; font-weight: 600; }
+
+  /* App-shell layout: a real top header bar, the map fills the rest, a right
+     panel slides over it. Chrome IDs below are targeted by print CSS too. */
+  html, body { overflow: hidden; }
+  /* The map renders full-bleed under the fixed header (that's fine -- the header
+     just overlays it). The generated Leaflet map div's id is a random per-build
+     hash though, so instead of trying to resize the map container itself (which
+     silently no-ops if the id guess is wrong), push Leaflet's own control-anchor
+     classes down below the header -- this is what actually determines where the
+     zoom/layer-control panel renders, regardless of the map div's real id. */
+  .leaflet-top { top: 70px !important; }
+  #app-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 9999; background: white;
+                box-shadow: 0 2px 10px rgba(0,0,0,.18); font-family: 'Segoe UI', Arial, sans-serif;
+                display: flex; align-items: center; justify-content: space-between; padding: 0 18px; box-sizing: border-box; }
+  #app-header .title-block { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; min-width: 0; }
+  #app-header .title-main { font-size: 16px; font-weight: 700; color: #1E3A8A; white-space: nowrap; }
+  #app-header .title-sub { font-size: 12px; color: #475569; white-space: nowrap; }
+  #app-header .title-rec { font-size: 12px; color: #0D9488; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #dash-toggle { flex-shrink: 0; background: #1E3A8A; color: white; border: none; padding: 10px 18px; border-radius: 8px;
+                 font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  #dash-toggle:hover { background: #1E40AF; }
+
+  /* Prevent the browser's default focus-outline rectangle from appearing
+     around clicked map shapes (looked like a stray "boundary box" artifact) */
+  .leaflet-interactive:focus, path:focus, svg:focus { outline: none !important; }
+
+  #dash-drawer { position: fixed; top: 60px; right: -460px; bottom: 0; width: 440px; max-width: 92vw;
+                 background: white; z-index: 10000; box-shadow: -6px 0 24px rgba(0,0,0,.3);
+                 transition: right .32s ease; display: flex; flex-direction: column;
+                 border-left: 3px solid #1E3A8A; font-family: 'Segoe UI', Arial, sans-serif; }
+  #dash-drawer.open { right: 0; }
+  #dash-header-row { display: flex; align-items: center; justify-content: space-between;
+                      padding: 10px 12px 0; background: #F8FAFC; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; }
+  #dash-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+  .dash-tab-btn { padding: 7px 10px; border: none; background: transparent; font-size: 11.5px; font-weight: 700;
+                  color: #64748B; cursor: pointer; border-radius: 6px 6px 0 0; }
+  .dash-tab-btn.active { background: white; color: #1E3A8A; border: 1px solid #E5E7EB; border-bottom: 1px solid white; margin-bottom: -1px; }
+  #dash-close { background: none; border: none; font-size: 18px; color: #64748B; cursor: pointer; padding: 2px 6px; flex-shrink: 0; }
+  .dash-body { overflow-y: auto; padding: 16px 18px; flex: 1; }
+  .dash-tab-content { display: none; }
+  .dash-tab-content.active { display: block; }
+
+  @media print {
+    @page { size: landscape; margin: 10mm; }
+    html, body { overflow: visible !important; height: auto !important; }
+    .folium-map { position: relative !important; height: 700px !important; }
+    .leaflet-top { top: 10px !important; }
+    #app-header { position: relative !important; }
+    #dash-toggle, .leaflet-control-zoom, .leaflet-control-fullscreen { display: none !important; }
+    #dash-drawer:not(.open) { display: none !important; }
+    #dash-drawer.open { position: relative !important; top: 0 !important; right: auto !important;
+                         width: 100% !important; max-width: 100% !important; height: auto !important;
+                         box-shadow: none !important; border-left: none !important; border-top: 3px solid #1E3A8A !important;
+                         margin-top: 16px; page-break-before: always; }
+    .dash-body { max-height: none !important; overflow: visible !important; }
+  }
 </style>
 """
 
-TITLE_HTML = """
-<div style="position: fixed; top: 12px; left: 60px; z-index: 9999; background: white;
-            padding: 10px 16px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.25);
-            font-family: 'Segoe UI', Arial, sans-serif; max-width: 400px;">
-  <div style="font-size: 15px; font-weight: 700; color: #1E3A8A;">Family Dollar &mdash; Houston Site Selection</div>
-  <div style="font-size: 12px; color: #475569; margin-top: 2px;">Citywide screen &middot; 10 neighborhoods &middot; 20 real candidate sites</div>
-  <div style="font-size: 12px; color: #0D9488; margin-top: 2px; font-weight: 600;">Recommended: Cullen Blvd &amp; Brookhaven St, Sunnyside</div>
+HEADER_HTML = """
+<div id="app-header">
+  <div class="title-block">
+    <span class="title-main">Family Dollar &mdash; Houston Site Selection</span>
+    <span class="title-sub">Citywide screen &middot; 10 neighborhoods &middot; 20 real candidate sites</span>
+    <span class="title-rec">Recommended: Cullen Blvd &amp; Brookhaven St, Sunnyside</span>
+  </div>
+  <button id="dash-toggle" onclick="fdToggleDash()">&#128202; Analysis Dashboard</button>
 </div>
 """
 
@@ -123,7 +180,7 @@ def build_legend_html(rank_ramp_css: str) -> str:
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="color:#6B7280; font-size:10.5px;">Full scorecard, cannibalization math, confidence
-  intervals, and data-source audit trail: open the <b>Analysis Dashboard</b> drawer (bottom of screen).</div>
+  intervals, and data-source audit trail: open the <b>Analysis Dashboard</b> panel (top-right button).</div>
 </div>
 """
 
@@ -374,32 +431,16 @@ def build_validation_html() -> str:
 
 def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_rows: list[dict], microsite: list[dict]) -> str:
     return f"""
-<style>
-  #dash-toggle {{ position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10001;
-                  background: #1E3A8A; color: white; border: none; padding: 10px 22px; border-radius: 10px 10px 0 0;
-                  font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
-                  box-shadow: 0 -2px 10px rgba(0,0,0,.3); }}
-  #dash-toggle:hover {{ background: #1E40AF; }}
-  #dash-drawer {{ position: fixed; left: 0; right: 0; bottom: -68vh; height: 68vh; background: white; z-index: 10000;
-                  box-shadow: 0 -6px 24px rgba(0,0,0,.35); transition: bottom .32s ease; display: flex; flex-direction: column;
-                  font-family: 'Segoe UI', Arial, sans-serif; border-top: 3px solid #1E3A8A; }}
-  #dash-drawer.open {{ bottom: 0; }}
-  #dash-tabs {{ display: flex; gap: 4px; padding: 10px 14px 0; background: #F8FAFC; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; }}
-  .dash-tab-btn {{ padding: 8px 16px; border: none; background: transparent; font-size: 12.5px; font-weight: 700;
-                    color: #64748B; cursor: pointer; border-radius: 6px 6px 0 0; }}
-  .dash-tab-btn.active {{ background: white; color: #1E3A8A; border: 1px solid #E5E7EB; border-bottom: 1px solid white; margin-bottom: -1px; }}
-  .dash-body {{ overflow-y: auto; padding: 16px 20px; flex: 1; }}
-  .dash-tab-content {{ display: none; }}
-  .dash-tab-content.active {{ display: block; }}
-</style>
-<button id="dash-toggle" onclick="fdToggleDash()">&#128202; Analysis Dashboard &#9650;</button>
 <div id="dash-drawer">
-  <div id="dash-tabs">
-    <button class="dash-tab-btn active" id="tabbtn-scorecard" onclick="fdShowTab('scorecard')">Scorecard (20 sites)</button>
-    <button class="dash-tab-btn" id="tabbtn-cannibalization" onclick="fdShowTab('cannibalization')">Cannibalization</button>
-    <button class="dash-tab-btn" id="tabbtn-microsite" onclick="fdShowTab('microsite')">Site Details</button>
-    <button class="dash-tab-btn" id="tabbtn-ci" onclick="fdShowTab('ci')">Confidence Intervals</button>
-    <button class="dash-tab-btn" id="tabbtn-validation" onclick="fdShowTab('validation')">Data Sources &amp; Validation</button>
+  <div id="dash-header-row">
+    <div id="dash-tabs">
+      <button class="dash-tab-btn active" id="tabbtn-scorecard" onclick="fdShowTab('scorecard')">Scorecard</button>
+      <button class="dash-tab-btn" id="tabbtn-cannibalization" onclick="fdShowTab('cannibalization')">Cannibalization</button>
+      <button class="dash-tab-btn" id="tabbtn-microsite" onclick="fdShowTab('microsite')">Site Details</button>
+      <button class="dash-tab-btn" id="tabbtn-ci" onclick="fdShowTab('ci')">Confidence Intervals</button>
+      <button class="dash-tab-btn" id="tabbtn-validation" onclick="fdShowTab('validation')">Sources &amp; Validation</button>
+    </div>
+    <button id="dash-close" onclick="fdToggleDash()" title="Close">&#10005;</button>
   </div>
   <div class="dash-body">
     <div class="dash-tab-content active" id="tab-scorecard">{build_scorecard_table(scorecard)}</div>
@@ -411,10 +452,7 @@ def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_
 </div>
 <script>
   function fdToggleDash() {{
-    var d = document.getElementById('dash-drawer');
-    var btn = document.getElementById('dash-toggle');
-    var open = d.classList.toggle('open');
-    btn.innerHTML = open ? '&#128202; Analysis Dashboard &#9660;' : '&#128202; Analysis Dashboard &#9650;';
+    document.getElementById('dash-drawer').classList.toggle('open');
   }}
   function fdShowTab(name) {{
     document.querySelectorAll('.dash-tab-content').forEach(function(el) {{ el.classList.remove('active'); }});
@@ -464,8 +502,8 @@ def build_map() -> Path:
         show=False,
     ).add_to(m)
 
-    m.get_root().header.add_child(folium.Element(POPUP_CSS))
-    m.get_root().html.add_child(folium.Element(TITLE_HTML))
+    m.get_root().header.add_child(folium.Element(PAGE_CHROME_CSS))
+    m.get_root().html.add_child(folium.Element(HEADER_HTML))
 
     # --- Layer: Houston city limits (real boundary, for scale/context) ----------
     boundary_layer = folium.FeatureGroup(name="Houston city limits", show=True)

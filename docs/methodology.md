@@ -249,7 +249,7 @@ opportunity areas searched; and the real drive-time trade area for the recommend
 switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every marker popup
 cites its data source, set in dark, bold text for at-a-glance legibility.
 
-A **bottom-drawer Analysis Dashboard** (toggle button, bottom of screen) surfaces four tabs built
+A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces four tabs built
 live from the same CSVs referenced throughout this document: the full 20-site **Scorecard**, the
 **Cannibalization** table, **Site Details** (micro-site operational data), and **Confidence
 Intervals** plus a condensed version of the audit trail in `data_validation.md`.
