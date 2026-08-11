@@ -75,7 +75,7 @@ python 26_microsite_details.py              # real speed limits, co-tenants, tra
 python 27_vehicle_tenure_demographics.py    # zero-vehicle household share + renter-occupied share + CIs
 python 28_sensitivity_analysis.py           # 5-scenario re-weighting robustness check on the scorecard
 python 29_statistical_rigor.py              # Moran's I residual test + spatial block cross-validation metrics
-python 23_generate_map_citywide.py          # builds ../index.html + Analysis Dashboard
+python 23_generate_map_citywide.py          # builds ../index.html + Analysis Dashboard (FEMA polygons load live in-map via NFHL API)
 ```
 
 Each script caches its API responses under `data/raw/`, so re-running the pipeline after the first

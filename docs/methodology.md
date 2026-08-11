@@ -273,7 +273,9 @@ cool-hue set (blue/violet/magenta/aqua) that remains visually distinct from the 
 ramp; all 20 candidate sites as clean numbered rank badges (white ring, small footprint) on a
 validated best→worst color ramp, with the recommendation as a distinct gold-ringed star; the 10
 opportunity areas searched; and the real drive-time trade area for the recommended site. A FEMA
-NFHL flood-polygon layer is included as a toggleable off-by-default overlay for risk review. A
+NFHL flood-polygon layer is included as a toggleable off-by-default overlay for risk review and is
+fetched live client-side from the FEMA API (instead of being stored as a large static repo artifact).
+A
 basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
 marker popup cites its data source, set in dark, bold text for at-a-glance legibility.
 
