@@ -55,7 +55,7 @@ recommendation.
    though the specific parcel - subdivision "East Sunnyside Court" - is really in Sunnyside. Fixed by
    re-geocoding every site individually.
 4. **HCAD data-quality filter.** Several parcels that queried as "vacant commercial land" (state
-   class C1/C2) appraised at $900–$5,000 total for 0.4–2+ acres - economically impossible for real
+   class C1/C2) appraised at $900-$5,000 total for 0.4-2+ acres - economically impossible for real
    commercial land (that's a few cents per square foot). Inspection showed these were HOA common
    areas, drainage/detention easements, and right-of-way remnants miscoded in HCAD, not real
    buildable sites. Filtered out with a $15,000/acre floor.
@@ -144,14 +144,14 @@ sum of tracts, which is the statistically correct way to get a valid city-wide m
 
 | Statistic | Estimate | 90% MOE | 90% CI range | Source |
 |---|---|---|---|---|
-| Population | 2,328,253 | ±196 | 2,328,057 – 2,328,449 | ACS 2024 5-yr B01003 |
-| Median household income | $64,813 | ±$822 | $63,991 – $65,635 | ACS 2024 5-yr B19013 |
-| Poverty rate | 19.9% | ±0.4pp | 19.5% – 20.3% | ACS 2024 5-yr B17001 (ratio MOE propagated) |
-| Foreign-born share | 29.3% | ±0.4pp | 29.0% – 29.7% | ACS 2024 5-yr B05002 (ratio MOE propagated) |
-| Spanish spoken at home | 37.2% | ±0.4pp | 36.8% – 37.6% | ACS 2024 5-yr C16001, population 5+ (ratio MOE propagated) |
-| Average household size | 2.46 | ±0.01 | 2.45 – 2.47 | ACS 2024 5-yr B25010 |
-| Zero-vehicle household share | 10.1% | ±0.3pp | 9.7% – 10.4% | ACS 2024 5-yr B25044 (ratio MOE propagated) |
-| Renter-occupied housing share | 57.9% | ±0.5pp | 57.4% – 58.4% | ACS 2024 5-yr B25003 (ratio MOE propagated) |
+| Population | 2,328,253 | ±196 | 2,328,057-2,328,449 | ACS 2024 5-yr B01003 |
+| Median household income | $64,813 | ±$822 | $63,991-$65,635 | ACS 2024 5-yr B19013 |
+| Poverty rate | 19.9% | ±0.4pp | 19.5%-20.3% | ACS 2024 5-yr B17001 (ratio MOE propagated) |
+| Foreign-born share | 29.3% | ±0.4pp | 29.0%-29.7% | ACS 2024 5-yr B05002 (ratio MOE propagated) |
+| Spanish spoken at home | 37.2% | ±0.4pp | 36.8%-37.6% | ACS 2024 5-yr C16001, population 5+ (ratio MOE propagated) |
+| Average household size | 2.46 | ±0.01 | 2.45-2.47 | ACS 2024 5-yr B25010 |
+| Zero-vehicle household share | 10.1% | ±0.3pp | 9.7%-10.4% | ACS 2024 5-yr B25044 (ratio MOE propagated) |
+| Renter-occupied housing share | 57.9% | ±0.5pp | 57.4%-58.4% | ACS 2024 5-yr B25003 (ratio MOE propagated) |
 
 For the three derived rates (poverty, foreign-born, Spanish-at-home), the MOE is **not** simply the
 inputs' MOEs - it is propagated using the Census Bureau's own published formula for a proportion
@@ -197,7 +197,7 @@ margin of error.
   development/parking code. Practically: a site can be developed faster than in a zoned city, but a
   neighboring parcel's future use isn't zoning-guaranteed to stay compatible - worth a site visit,
   not something any public dataset can fully screen for. Houston's general off-street parking ratio
-  (city code, roughly 1 space per 200–300 sq ft of retail - about 35–45 spaces for Family Dollar's
+  (city code, roughly 1 space per 200-300 sq ft of retail - about 35-45 spaces for Family Dollar's
   ~8,500 sq ft prototype) is cited as informational context in the dashboard, not computed as a
   parcel-specific verified figure - a permitting check would confirm current code.
 - **Flood risk.** Harris County's severe flood history (including Hurricane Harvey) is why every one

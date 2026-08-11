@@ -60,7 +60,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
 
   `income_fit()` peaks (weight = 1.0) for tracts with median household income between $20k and $55k
   - the band that indexes most strongly to discount/value retail - tapering to zero outside roughly
-  $0–$80k, so very low-income (unstable trade area) and affluent (better served by Target/Walmart)
+  $0-$80k, so very low-income (unstable trade area) and affluent (better served by Target/Walmart)
   tracts are both discounted.
 
 ### Stage 2 - Citywide submarket scoping (the fix)
@@ -87,7 +87,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
   intersections between them via spatial grid-bucketing - **100 real intersections across the city.**
 - Queried **real HCAD parcels within ~350m of every intersection**, filtered to realistic new-store
   sites (vacant commercial land, or under-improved commercial land where the building is worth less
-  than 60% of the land - a teardown/redevelopment opportunity), sized 0.4–4.0 acres.
+  than 60% of the land - a teardown/redevelopment opportunity), sized 0.4-4.0 acres.
 - Screened out parcels appraising under $15,000/acre - these turned out to be HOA common areas,
   drainage reserves, and right-of-way slivers miscoded as vacant commercial land in HCAD, not real
   buildable sites (a data-quality check, not a business filter).
@@ -114,7 +114,7 @@ For each of the 20 finalists:
   distance to the nearest **existing Family Dollar**, which feeds the cannibalization analysis
   (Stage 5b) rather than the competitive-gap score, since it isn't competition.
 - **Micro-site operational detail** (`scripts/26_microsite_details.py`): posted speed limit on the
-  frontage road (OSM `maxspeed` tag, where mapped - the 35–45 mph range is the sweet spot for
+  frontage road (OSM `maxspeed` tag, where mapped - the 35-45 mph range is the sweet spot for
   discount-retail impulse-stop visibility); real nearby co-tenant traffic generators (gas stations,
   laundromats, schools, post offices, pharmacies) within 0.3 mi; real nearest public-transit stop
   (OSM bus stops and transit platforms, within 1 mile); and approximate parcel bounding dimensions
@@ -176,7 +176,7 @@ adapted to only use real, computable inputs:
    format); over 2.5 mi auto-clears to Low risk; in between, the overlap calculation decides.
 2. **Trade-area overlap %**: of the population inside the candidate's real 5-minute OSRM drive-time
    trade area, what share also sits within 1.5 miles (straight-line) of the nearest existing FD.
-   Under 15% is Low risk, 15–30% is Moderate, over 30% is High. (This mixes a network-based candidate
+   Under 15% is Low risk, 15-30% is Moderate, over 30% is High. (This mixes a network-based candidate
    trade area with a straight-line existing-store trade area - a documented, disclosed asymmetry, not
    a hidden one: full network routing from all 1,603 block groups to every existing FD store would
    have multiplied the OSRM call count roughly 60x for a secondary metric.)
@@ -190,12 +190,12 @@ adapted to only use real, computable inputs:
 ### Stage 6 - Weighted scorecard
 `scripts/20_score_sites_citywide.py`
 
-Each metric was min-max normalized across the 20 finalists (0–100) and combined with documented
+Each metric was min-max normalized across the 20 finalists (0-100) and combined with documented
 weights:
 
 | Factor | Weight | Rationale |
 |---|---|---|
-| Trade-area demand (5-min drive population × income fit) | 25% | Rooftops within an easy drive, weighted toward the $20k–$55k core customer band |
+| Trade-area demand (5-min drive population × income fit) | 25% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band |
 | Huff market-capture % | 20% | Comprehensive, distance- and size-weighted competitive pull against direct arch-rivals |
 | Competitive white space (distance to nearest arch-rival) | 15% | Simple, exec-legible cross-check on the Huff score |
 | Traffic & visibility (verified AADT) | 15% | Passive visibility drives real discount-retail traffic; freeway mainlane counts excluded |
@@ -249,7 +249,7 @@ Two things a first pass at this analysis was missing:
   specifically: a zero-vehicle household depends more on walkable/visible neighborhood retail, and a
   renter-heavy tract skews toward exactly the household-budget profile Family Dollar's core
   categories serve. Surfaced in the map's tract popups and Confidence Intervals dashboard tab.
-- **Multi-scenario sensitivity analysis**: re-aggregates the same already-normalized 0–100 per-factor
+- **Multi-scenario sensitivity analysis**: re-aggregates the same already-normalized 0-100 per-factor
   subscores from Stage 6 under 5 different, defensible weighting schemes (Traffic-Heavy, Cost-Heavy,
   Competition-Heavy, Demand-Heavy, plus the documented Base split), re-applying the same AADT gate to
   each. No new data is fetched - this is a pure re-aggregation check on whether the recommendation is
@@ -288,7 +288,7 @@ Details** (micro-site operational data including transit distance), **Confidence
 
 ## 3. Known limitations
 
-- ACS 5-year estimates (2020–2024) carry real margins of error - see `docs/data_validation.md` §4 for
+- ACS 5-year estimates (2020-2024) carry real margins of error - see `docs/data_validation.md` §4 for
   the actual 90% confidence intervals on every headline statistic, computed with the Census Bureau's
   own methodology, rather than treating point estimates as exact.
 - The Huff model's and cannibalization analysis's competitor-side travel time are straight-line/

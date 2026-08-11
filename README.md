@@ -40,7 +40,7 @@ dataset for Houston - documented as a real limitation rather than estimated. See
 ## Repository structure
 
 - `scripts/` - the pipeline, run in numeric order; `lib.py` holds shared HTTP/geometry/color
-  helpers. Numbering has a gap (03 → 13): scripts 04–12 were an earlier single-neighborhood draft,
+  helpers. Numbering has a gap (03 → 13): scripts 04-12 were an earlier single-neighborhood draft,
   superseded by the citywide versions and removed rather than left to confuse a rerun.
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
 - `data/processed/` - clean CSV/GeoJSON outputs consumed by later stages and the map

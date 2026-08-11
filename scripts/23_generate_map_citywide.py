@@ -147,7 +147,7 @@ def build_header_html(winner_address: str, winner_neighborhood: str) -> str:
     return f"""
 <div id="app-header">
   <div class="title-block">
-    <span class="title-main">Family Dollar &mdash; Houston Site Selection</span>
+    <span class="title-main">Family Dollar - Houston Site Selection</span>
     <span class="title-sub">Citywide screen &middot; 10 neighborhoods &middot; 20 real candidate sites</span>
     <span class="title-rec">Recommended: {winner_address}, {winner_neighborhood}</span>
   </div>
@@ -787,7 +787,7 @@ def build_ci_table(ci_rows: list[dict]) -> str:
           <td style="padding:7px 8px; font-weight:700;">{r['statistic']}</td>
           <td style="padding:7px 8px; text-align:right;">{r['estimate']}</td>
           <td style="padding:7px 8px; text-align:right;">{r['moe_90pct']}</td>
-          <td style="padding:7px 8px; text-align:right;">{r['ci_90pct_low']} &ndash; {r['ci_90pct_high']}</td>
+          <td style="padding:7px 8px; text-align:right;">{r['ci_90pct_low']}-{r['ci_90pct_high']}</td>
           <td style="padding:7px 8px; color:#6B7280; font-size:11px;">{r['source']}</td>
         </tr>""" for r in ci_rows)
     return f"""

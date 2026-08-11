@@ -20,7 +20,10 @@ from __future__ import annotations
 import csv
 import json
 import sys
+import time
 from collections import defaultdict
+
+import requests
 
 from lib import PROCESSED, RAW, haversine_miles, point_in_rings_fast, ring_bbox, simplify_ring
 
@@ -30,6 +33,36 @@ N_CLUSTERS = 10
 MIN_CLUSTER_SEPARATION_MI = 2.75
 GRID_CELL_DEG = 0.035
 MIN_TRACT_DENSITY_PER_SQMI = 1200  # exclude sparse/non-neighborhood tracts (parks, industrial, airports)
+
+
+def reverse_geocode_neighborhood(lat: float, lon: float) -> str:
+    """Real Nominatim reverse geocode of a cluster centroid to a Houston
+    neighborhood name (script 18 does the same, more precise, per-site lookup
+    later; this cluster-level label is only used for search-area bboxes and
+    console/CSV labeling, never for the final per-site neighborhood claim)."""
+    cache_path = RAW / f"nominatim_cluster_15_{round(lat, 5)}_{round(lon, 5)}.json"
+    if cache_path.exists():
+        d = json.loads(cache_path.read_text(encoding="utf-8"))
+    else:
+        resp = requests.get(
+            "https://nominatim.openstreetmap.org/reverse",
+            params={"lat": lat, "lon": lon, "format": "json", "zoom": 15},
+            headers={"User-Agent": "houston-site-selection-study/1.0"},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        d = resp.json()
+        cache_path.write_text(json.dumps(d), encoding="utf-8")
+        time.sleep(1.05)  # respect Nominatim's 1 req/sec usage policy
+
+    addr = d.get("address", {})
+    return (
+        addr.get("suburb")
+        or addr.get("neighbourhood")
+        or addr.get("city_district")
+        or addr.get("quarter")
+        or "Houston"
+    )
 
 
 def main() -> None:
@@ -109,6 +142,7 @@ def main() -> None:
         lats = [float(m["lat"]) for m in c["members"]]
         lons = [float(m["lon"]) for m in c["members"]]
         pad = 0.045
+        neighborhood = reverse_geocode_neighborhood(c["lat"], c["lon"])
         rows.append(
             {
                 "cluster_id": f"C{i}",
@@ -121,6 +155,7 @@ def main() -> None:
                 "bbox_min_lon": round(min(lons) - pad, 5),
                 "bbox_max_lon": round(max(lons) + pad, 5),
                 "sample_tracts": "; ".join(m["name"] for m in c["members"][:4]),
+                "neighborhood": neighborhood,
             }
         )
 

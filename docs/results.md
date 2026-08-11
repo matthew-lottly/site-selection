@@ -31,7 +31,7 @@ County Census tracts, scoped to the 643 tracts actually inside Houston city limi
    all, rather than the Sunnyside site below).
 3. **It has the strongest trade-area demand of any finalist that also clears the traffic gate.**
    44,339 people within a real 5-minute OSRM drive, 228,331 within 10 minutes, at a $55,390 trade-area
-   median income - squarely inside the $20k–$55k core discount-retail demand band.
+   median income - squarely inside the $20k-$55k core discount-retail demand band.
 4. **Real Huff market-capture is strong.** 44.8% modeled capture against nearby direct arch-rivals
    (Dollar General, Five Below), with the nearest arch-rival (Dollar General) 3.03 miles away.
 5. **It is shovel-ready and low flood-risk.** Vacant commercial land (no demolition), FEMA Zone X
@@ -130,7 +130,7 @@ VP's judgment in `limitations_and_diligence.md`.
 - **528 real store locations** pulled from OpenStreetMap across 15 banners (see categorization
   above).
 - **2,328,253 people** live inside the real Houston city boundary per the Census Bureau's own
-  place-level 2024 ACS 5-year estimate (90% CI: 2,328,057–2,328,449) - independently close to the
+  place-level 2024 ACS 5-year estimate (90% CI: 2,328,057-2,328,449) - independently close to the
   2,312,201 figure obtained by summing block-group populations inside the same boundary polygon, a
   useful cross-check that the city-limits filtering worked correctly. Full confidence-interval table
   for population, income, poverty, foreign-born share, Spanish-at-home share, household size,

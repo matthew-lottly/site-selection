@@ -96,7 +96,7 @@ judgment call is exactly what this document exists to make possible, not obscure
    traffic exposure for a retail pad at this exact parcel.
 4. **Utility availability and permitting check** with the City of Houston - water/sewer/electric
    service confirmation and a parking-code review (Houston's general off-street ratio is roughly 1
-   space per 200–300 sq ft of retail, cited as informational context, not a parcel-verified figure).
+   space per 200-300 sq ft of retail, cited as informational context, not a parcel-verified figure).
 5. **Cannibalization judgment call.** Weigh the recommended site's High cannibalization risk against
    its stronger raw score and traffic reading versus the #2 site's Low-risk, higher-net-new-reach
    profile (see above) - a real strategic trade-off for the VP to make explicitly, not one this
