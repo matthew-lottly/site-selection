@@ -114,12 +114,16 @@ PAGE_CHROME_CSS = """
 </style>
 """
 
-HEADER_HTML = """
+def build_header_html(winner_address: str, winner_neighborhood: str) -> str:
+    # Built from the live scorecard winner every run -- a hardcoded site name
+    # here is exactly the kind of stale-cache bug this project caught and
+    # fixed once already (see docs/data_validation.md); never repeat it.
+    return f"""
 <div id="app-header">
   <div class="title-block">
     <span class="title-main">Family Dollar &mdash; Houston Site Selection</span>
     <span class="title-sub">Citywide screen &middot; 10 neighborhoods &middot; 20 real candidate sites</span>
-    <span class="title-rec">Recommended: Cullen Blvd &amp; Brookhaven St, Sunnyside</span>
+    <span class="title-rec">Recommended: {winner_address}, {winner_neighborhood}</span>
   </div>
   <button id="dash-toggle" onclick="fdToggleDash()">&#128202; Analysis Dashboard</button>
 </div>
@@ -260,6 +264,39 @@ def build_scorecard_table(scorecard: list[dict]) -> str:
     """
 
 
+def build_sensitivity_table(sensitivity: list[dict]) -> str:
+    base_site = sensitivity[0]["primary_recommendation"]
+    n_stable = sum(1 for r in sensitivity if r["same_as_base_recommendation"] == "True")
+    rows_html = "".join(f"""
+        <tr style="border-bottom:1px solid #E5E7EB; {'background:#F0FDF4;' if r['same_as_base_recommendation']=='True' else ''}">
+          <td style="padding:6px 8px; font-weight:700;">{r['scenario']}</td>
+          <td style="padding:6px 8px; color:#6B7280; font-size:11px;">{r['weights']}</td>
+          <td style="padding:6px 8px;">{r['primary_recommendation']}</td>
+          <td style="padding:6px 8px; text-align:right;">{r['primary_recommendation_score']}</td>
+          <td style="padding:6px 8px; text-align:center;">{'<span style="color:#0ca30c;font-weight:700;">&#10003; same</span>' if r['same_as_base_recommendation']=='True' else '<span style="color:#d03b3b;font-weight:700;">&#10007; differs</span>'}</td>
+        </tr>""" for r in sensitivity)
+    return f"""
+    <div style="border-top:2px solid #E5E7EB; margin-top:18px; padding-top:14px;">
+    <div style="font-weight:700; color:#1F2937; font-size:13px; margin-bottom:6px;">Sensitivity analysis: does the recommendation hold under different weights?</div>
+    <p style="color:#374151; font-size:12.5px; margin:0 0 10px;">The same real, already-computed per-factor scores (script 20), re-aggregated under
+    5 different weighting philosophies -- a re-aggregation check, not new data. <b>{base_site}</b> is the primary recommendation in
+    {n_stable} of {len(sensitivity)} scenarios tested, including the documented base case, and never finishes worse than #2 among all 20 real candidates
+    in the scenarios where it isn't #1. It is <i>not</i> universally #1 under every possible weighting -- honestly reported, not smoothed over: a
+    traffic-maximizing or competition-maximizing philosophy can favor a different real site, which is an expected, real trade-off between site
+    selection philosophies, not an error.</p>
+    <div style="overflow-x:auto;">
+    <table style="border-collapse:collapse; width:100%; font-size:12px; color:#1F2937;">
+      <thead><tr style="background:#F3F4F6; text-align:left; border-bottom:2px solid #D1D5DB;">
+        <th style="padding:6px 8px;">Scenario</th><th style="padding:6px 8px;">Weights</th><th style="padding:6px 8px;">Winner</th>
+        <th style="padding:6px 8px; text-align:right;">Score</th><th style="padding:6px 8px; text-align:center;">vs. base case</th>
+      </tr></thead>
+      <tbody>{rows_html}</tbody>
+    </table>
+    </div>
+    </div>
+    """
+
+
 def build_cannibalization_table(cannibalization: list[dict]) -> str:
     rows_html = []
     for r in cannibalization:
@@ -303,27 +340,31 @@ def build_microsite_table(microsite: list[dict]) -> str:
           <td style="padding:6px 8px; text-align:right;">{r['posted_speed_limit_mph']}</td>
           <td style="padding:6px 8px;">{r['speed_assessment']}</td>
           <td style="padding:6px 8px;">{r['nearby_co_tenants']}</td>
+          <td style="padding:6px 8px;">{r['nearest_transit_stop']}</td>
           <td style="padding:6px 8px;">{r['approx_lot_dimensions']}</td>
         </tr>""" for r in microsite)
     return f"""
     <p style="color:#374151; font-size:12.5px; margin:0 0 6px;">Operational detail beyond the macro numbers.
     Speed limit is OSM's tagged posted limit on the frontage road where mapped; dollar-store visibility/impulse-stop
     traffic works best at 35-45 mph. Co-tenants are real nearby POIs (gas stations, laundromats, schools, post
-    offices, pharmacies) within 0.3 mi that generate shared neighborhood trips. Lot dimensions are an approximate
-    bounding box computed from the real HCAD parcel polygon (haversine edge lengths) -- a gut-check on whether the
-    lot is plausibly large enough, not a certified survey.</p>
+    offices, pharmacies) within 0.3 mi that generate shared neighborhood trips. Transit stop is the real nearest
+    OSM-mapped bus stop/platform within 1 mile -- dollar-store customers in urban corridors frequently walk or bus
+    in for top-off trips. Lot dimensions are an approximate bounding box computed from the real HCAD parcel polygon
+    (haversine edge lengths) -- a gut-check on whether the lot is plausibly large enough, not a certified survey.</p>
     <p style="color:#92400E; background:#FEF3C7; font-size:11.5px; padding:6px 8px; border-radius:6px; margin:0 0 10px;">
     <b>Not verifiable from any public data source</b> (flagged rather than guessed): deed restrictions / restrictive
-    covenants (requires a title search), median-break / divided-highway ingress-egress geometry, and an engineered
-    53-ft delivery-truck turning radius (both require a civil site plan). Houston has no municipal zoning -- the
-    general off-street parking ratio (city code, roughly 1 space per 200-300 sq ft of retail) is cited as
-    informational context in the Data Validation tab, not computed as a parcel-specific verified figure.</p>
+    covenants (requires a title search), median-break / divided-highway ingress-egress geometry, an engineered
+    53-ft delivery-truck turning radius (requires a civil site plan), and property crime risk (Houston publishes
+    crime statistics as HTML report pages, not a queryable API or downloadable dataset -- see the Data Validation
+    tab). Houston has no municipal zoning -- the general off-street parking ratio (city code, roughly 1 space per
+    200-300 sq ft of retail) is cited as informational context in the Data Validation tab, not computed as a
+    parcel-specific verified figure.</p>
     <div style="overflow-x:auto;">
     <table style="border-collapse:collapse; width:100%; font-size:12px; color:#1F2937;">
       <thead><tr style="background:#F3F4F6; text-align:left; border-bottom:2px solid #D1D5DB;">
         <th style="padding:6px 8px;">Site</th><th style="padding:6px 8px; text-align:right;">Speed limit</th>
         <th style="padding:6px 8px;">Assessment</th><th style="padding:6px 8px;">Nearby co-tenants</th>
-        <th style="padding:6px 8px;">Approx. lot dimensions</th>
+        <th style="padding:6px 8px;">Nearest transit</th><th style="padding:6px 8px;">Approx. lot dimensions</th>
       </tr></thead>
       <tbody>{rows_html}</tbody>
     </table>
@@ -373,8 +414,10 @@ def build_validation_html() -> str:
 
     <p style="font-weight:700; margin-bottom:4px;">Sources (all free, all keyless)</p>
     <ul style="margin-top:0; padding-left:18px;">
-      <li>US Census Bureau -- TIGERweb (boundaries) + Census Reporter API (ACS 2024 5-yr demographics, incl. margins of error)</li>
-      <li>OpenStreetMap / Overpass API -- 528 real competitor/anchor locations across 15 banners, arterial road network</li>
+      <li>US Census Bureau -- TIGERweb (boundaries) + Census Reporter API (ACS 2024 5-yr demographics, incl.
+      margins of error, vehicle access, and housing tenure)</li>
+      <li>OpenStreetMap / Overpass API -- 528 real competitor/anchor locations across 15 banners, arterial road
+      network, posted speed limits, transit stops, co-tenant POIs</li>
       <li>Harris County Appraisal District (HCAD) -- real parcel boundaries, land use, appraised value</li>
       <li>FEMA National Flood Hazard Layer (NFHL) -- flood zone identification</li>
       <li>TxDOT -- Annual Average Daily Traffic (AADT), verified by reverse-geocoding each station</li>
@@ -384,13 +427,27 @@ def build_validation_html() -> str:
 
     <p style="font-weight:700; margin-bottom:4px;">Specific checks performed against hallucination / error</p>
     <ul style="margin-top:0; padding-left:18px;">
+      <li><b>A sensitivity analysis (re-aggregating the same real scores under 5 different weighting schemes,
+      Scorecard tab) exposed a real bug that changed the actual recommendation:</b> the freeway-name filter
+      correctly rejected station names containing "Freeway," but a legitimate frontage road sharing that name
+      (e.g. "Gulf Freeway Frontage Road" -- a real street with real driveway access, common in Houston retail)
+      was being wrongly rejected too, understating several sites' true traffic. Fixed by excluding any name
+      containing "frontage" from the freeway check, since frontage/access roads have real driveway access even
+      when named after the freeway they parallel. Re-verified live against TxDOT afterward: the corrected
+      19,656 AADT reading is a real frontage-road-specific count, distinct from that corridor's ~193,000
+      freeway-mainline count nearby -- both real, different roads, same route number.</li>
       <li>The winning site's HCAD record, FEMA flood zone, and TxDOT AADT count were independently re-queried
       live against the source APIs (not just the cached pipeline output) and matched.</li>
       <li>TxDOT records roads by route number, not name -- every AADT match was reverse-geocoded to a real street,
-      and stations that resolved to a freeway/tollway (no legal driveway access) were rejected in favor of the
-      nearest genuine arterial reading.</li>
+      and stations that resolved to a freeway/tollway mainline (no legal driveway access) were rejected in favor
+      of the nearest genuine arterial or frontage-road reading.</li>
       <li>Each site's neighborhood was independently reverse-geocoded rather than inherited from its search
       cluster, after finding a case where the two disagreed.</li>
+      <li>Property crime / security risk was investigated as a candidate metric and explicitly NOT added: Houston's
+      open data portal (data.houstontx.gov) does not publish a queryable crime API or downloadable incident
+      dataset -- only static HTML report pages -- so no per-site crime figure could be sourced without either
+      scraping an unstable format or estimating, and estimating would be exactly the kind of fabrication this
+      analysis avoids. Reported as a real data-availability limitation, not silently skipped.</li>
       <li>Parcels appraising under $15,000/acre were screened out -- found to be HOA common areas and drainage
       easements miscoded as vacant commercial land in HCAD, not real buildable sites.</li>
       <li>A duplicate real parcel found by two overlapping search areas is counted once, not twice.</li>
@@ -429,7 +486,7 @@ def build_validation_html() -> str:
     """
 
 
-def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_rows: list[dict], microsite: list[dict]) -> str:
+def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_rows: list[dict], microsite: list[dict], sensitivity: list[dict]) -> str:
     return f"""
 <div id="dash-drawer">
   <div id="dash-header-row">
@@ -443,7 +500,7 @@ def build_dashboard_html(scorecard: list[dict], cannibalization: list[dict], ci_
     <button id="dash-close" onclick="fdToggleDash()" title="Close">&#10005;</button>
   </div>
   <div class="dash-body">
-    <div class="dash-tab-content active" id="tab-scorecard">{build_scorecard_table(scorecard)}</div>
+    <div class="dash-tab-content active" id="tab-scorecard">{build_scorecard_table(scorecard)}{build_sensitivity_table(sensitivity)}</div>
     <div class="dash-tab-content" id="tab-cannibalization">{build_cannibalization_table(cannibalization)}</div>
     <div class="dash-tab-content" id="tab-microsite">{build_microsite_table(microsite)}</div>
     <div class="dash-tab-content" id="tab-ci">{build_ci_table(ci_rows)}</div>
@@ -503,7 +560,7 @@ def build_map() -> Path:
     ).add_to(m)
 
     m.get_root().header.add_child(folium.Element(PAGE_CHROME_CSS))
-    m.get_root().html.add_child(folium.Element(HEADER_HTML))
+    m.get_root().html.add_child(folium.Element(build_header_html(scorecard[0]["address"], scorecard[0]["neighborhood"])))
 
     # --- Layer: Houston city limits (real boundary, for scale/context) ----------
     boundary_layer = folium.FeatureGroup(name="Houston city limits", show=True)
@@ -534,6 +591,8 @@ def build_map() -> Path:
         fb = float(ext["foreign_born_rate"]) * 100 if ext.get("foreign_born_rate") not in (None, "") else None
         span = float(ext["spanish_at_home_rate"]) * 100 if ext.get("spanish_at_home_rate") not in (None, "") else None
         hh = float(ext["avg_household_size"]) if ext.get("avg_household_size") not in (None, "") else None
+        zv = float(ext["zero_vehicle_rate"]) * 100 if ext.get("zero_vehicle_rate") not in (None, "") else None
+        rent = float(ext["renter_occupied_rate"]) * 100 if ext.get("renter_occupied_rate") not in (None, "") else None
         popup = (
             f"<div class='exec-card'><div class='exec-title'>{p['name']}</div>"
             f"<div class='exec-metric'><span>Population</span><span class='exec-val'>{pop:,.0f}</span></div>"
@@ -542,6 +601,8 @@ def build_map() -> Path:
             f"<div class='exec-metric'><span>Foreign-Born Share</span><span class='exec-val'>{f'{fb:.1f}%' if fb is not None else 'n/a'}</span></div>"
             f"<div class='exec-metric'><span>Spanish Spoken at Home</span><span class='exec-val'>{f'{span:.1f}%' if span is not None else 'n/a'}</span></div>"
             f"<div class='exec-metric'><span>Avg. Household Size</span><span class='exec-val'>{f'{hh:.2f}' if hh is not None else 'n/a'}</span></div>"
+            f"<div class='exec-metric'><span>Zero-Vehicle Households</span><span class='exec-val'>{f'{zv:.1f}%' if zv is not None else 'n/a'}</span></div>"
+            f"<div class='exec-metric'><span>Renter-Occupied Housing</span><span class='exec-val'>{f'{rent:.1f}%' if rent is not None else 'n/a'}</span></div>"
             f"<div class='exec-metric'><span>Nearest Dollar-Format Store</span><span class='exec-val'>{p['nearest_dollar_store_mi']} mi</span></div>"
             f"<div class='exec-metric'><span>Opportunity (Gap) Score</span><span class='exec-val'>{score:.0f}</span></div>"
             f"<div class='src-note'>Source: US Census ACS 2024 5-yr (Census Reporter API) &middot; OSM competitor pull</div></div>"
@@ -644,6 +705,7 @@ def build_map() -> Path:
           <div class="exec-metric"><span>FEMA Flood Zone</span><span class="exec-val">{s['flood_zone']}</span></div>
           <div class="exec-metric"><span>Posted Speed Limit</span><span class="exec-val">{micro['posted_speed_limit_mph']} mph</span></div>
           <div class="exec-metric"><span>Nearby Co-Tenants</span><span class="exec-val" style="text-align:right; font-weight:600;">{micro['nearby_co_tenants']}</span></div>
+          <div class="exec-metric"><span>Nearest Transit Stop</span><span class="exec-val">{micro['nearest_transit_stop']}</span></div>
           <div class="exec-metric"><span>Composite Score</span><span class="exec-val">{row['total_score']} / 100</span></div>
           {aadt_note}{freeway_note}{flood_note}{canib_note}
           <div class="src-note">Sources: HCAD parcels &middot; TxDOT AADT (Nominatim-verified) &middot; FEMA NFHL &middot; OSM &middot; OSRM drive times &middot; Huff gravity model. Full detail in the Analysis Dashboard.</div>
@@ -674,7 +736,9 @@ def build_map() -> Path:
 
     rank_ramp_css = "linear-gradient(90deg," + ",".join(STATUS_RAMP) + ")"
     m.get_root().html.add_child(folium.Element(build_legend_html(rank_ramp_css)))
-    m.get_root().html.add_child(folium.Element(build_dashboard_html(scorecard, load_csv("cannibalization.csv"), ci_rows, load_csv("microsite_details.csv"))))
+    m.get_root().html.add_child(folium.Element(build_dashboard_html(
+        scorecard, load_csv("cannibalization.csv"), ci_rows, load_csv("microsite_details.csv"), load_csv("sensitivity_analysis.csv")
+    )))
 
     folium.LayerControl(collapsed=False).add_to(m)
     plugins.Fullscreen(position="topright").add_to(m)

@@ -5,11 +5,13 @@ things up?** It catalogs every data source, every number's provenance, every aud
 performed, the real confidence intervals behind the headline statistics, and — just as important —
 what the analysis explicitly does *not* claim, because no public data supports it.
 
-Companion documents: [`methodology.md`](methodology.md) (how the pipeline works, stage by stage) and
-[`results.md`](results.md) (the recommendation and scorecard). The interactive map's **Analysis
-Dashboard** drawer (bottom of `index.html`) surfaces the same scorecard, cannibalization table,
-confidence intervals, and this validation summary live, sourced from the same CSV files referenced
-here.
+Companion documents: [`methodology.md`](methodology.md) (how the pipeline works, stage by stage),
+[`results.md`](results.md) (the recommendation and scorecard), and
+[`limitations_and_diligence.md`](limitations_and_diligence.md) (what a desk analysis can't verify,
+and the concrete next steps that close that gap). The interactive map's **Analysis Dashboard** panel
+(right side of `index.html`, opened from the header) surfaces the same scorecard, cannibalization
+table, confidence intervals, sensitivity analysis, and this validation summary live, sourced from the
+same CSV files referenced here.
 
 ## 1. Full source catalog
 
@@ -23,14 +25,17 @@ here.
 | TxDOT | Annual Average Daily Traffic (AADT), 2025 counts | ArcGIS Online Feature Service | Free, no key |
 | OSRM (Open Source Routing Machine) | Real drive times over the OpenStreetMap road network | Public routing API | Free, no key |
 | Nominatim (OpenStreetMap) | Reverse geocoding — road identity, neighborhood identity | REST API | Free, no key, rate-limited to 1 req/sec (respected throughout) |
+| OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist | Overpass QL | Free, no key |
+| Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API | Free, no key |
 
 No Census API key, Google Maps key, or paid GIS/mobility-data license (SafeGraph, Placer.ai, Esri)
 was used or is required to reproduce this analysis.
 
 ## 2. Specific hallucination/error checks actually performed
 
-These are not generic assurances — each one is a concrete thing that was checked, and in three
-cases, a real problem that was found and fixed.
+These are not generic assurances — each one is a concrete thing that was checked, and in several
+cases, a real problem that was found and fixed — including one, #10 below, that changed the actual
+recommendation.
 
 1. **Live re-verification of the winning site.** After the pipeline produced its recommendation,
    the HCAD parcel record, FEMA flood zone, and TxDOT AADT count for that exact site were
@@ -45,9 +50,9 @@ cases, a real problem that was found and fixed.
    citywide-minimum estimate, never the inflated freeway figure).
 3. **Independent per-site neighborhood verification.** Each finalist's neighborhood name was
    reverse-geocoded from its own coordinates rather than inherited from the macro search cluster
-   that found it. This mattered: one site (now the recommended one) was initially mislabeled
-   "Braeswood" because its search cluster's centroid sat in Braeswood, even though the specific
-   parcel — on Cullen Blvd, subdivision "East Sunnyside Court" — is really in Sunnyside. Fixed by
+   that found it. This mattered: one site (the current #2 finalist, Brookhaven St & Cullen Blvd) was
+   initially mislabeled "Braeswood" because its search cluster's centroid sat in Braeswood, even
+   though the specific parcel — subdivision "East Sunnyside Court" — is really in Sunnyside. Fixed by
    re-geocoding every site individually.
 4. **HCAD data-quality filter.** Several parcels that queried as "vacant commercial land" (state
    class C1/C2) appraised at $900–$5,000 total for 0.4–2+ acres — economically impossible for real
@@ -81,6 +86,33 @@ cases, a real problem that was found and fixed.
    fabricated number wearing a precise mask. Both analyses stop at real, computed, relative metrics
    instead (market-capture percentage; net-new population reach) that answer the same underlying
    business question without inventing a number.
+10. **Freeway/frontage-road classification bug, found and fixed via the sensitivity analysis — the
+    single most consequential check performed in this project.** Building the multi-scenario
+    sensitivity analysis (`scripts/28_sensitivity_analysis.py`) exposed an implausibly dominant score
+    for one candidate under a Traffic-Heavy weighting, which traced back to a real bug: the
+    freeway-name filter (`FREEWAY_PATTERN` in `scripts/18_enrich_sites_citywide.py`) correctly
+    rejected AADT stations whose reverse-geocoded name contained "Freeway," but it also needed to
+    catch names like "East Loop North" (I-610's real east-side name), which slipped past the
+    original pattern because it required "loop" plus a digit, not "loop" plus a direction word.
+    Broadening the pattern to catch that case then over-corrected: it started also rejecting
+    legitimate **frontage roads** literally named after the freeway they parallel (e.g. "Gulf Freeway
+    Frontage Road" — a real street with real driveway access, common in Houston), silently replacing
+    several sites' correct AADT readings with lower fallback values. Fixed with an explicit
+    `is_true_freeway()` override that treats any name containing "frontage" as not a freeway,
+    checked before the freeway-keyword pattern. **This fix changed the actual recommendation** — the
+    corrected AADT for 6600 Stillwell St jumped from 2,980 to 19,656 (a real Gulf Freeway Frontage
+    Road count, independently re-verified against TxDOT afterward as genuinely distinct from that
+    corridor's ~193,000 freeway-mainline count nearby), moving it from a traffic-benchmark failure to
+    the new top-scoring, benchmark-clearing site. Documented here rather than quietly folded into the
+    final numbers because a validation process is only credible if it's shown catching something
+    real, not just asserted.
+11. **Property crime — investigated, confirmed unavailable, not estimated.** Checked
+    `data.houstontx.gov`'s CKAN catalog directly (`package_search`, `package_show`) for a queryable
+    crime dataset. Found none: Houston publishes crime data only as static HTML report pages, and a
+    `police-transparency-hub` package exists with zero attached resources. Rather than scrape an
+    unstable HTML format or estimate a risk score, this was dropped as a candidate metric entirely and
+    documented as a real data-availability gap (see `limitations_and_diligence.md`) — the same
+    standard applied to every other unverifiable claim in this analysis.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
@@ -118,6 +150,8 @@ sum of tracts, which is the statistically correct way to get a valid city-wide m
 | Foreign-born share | 29.3% | ±0.4pp | 29.0% – 29.7% | ACS 2024 5-yr B05002 (ratio MOE propagated) |
 | Spanish spoken at home | 37.2% | ±0.4pp | 36.8% – 37.6% | ACS 2024 5-yr C16001, population 5+ (ratio MOE propagated) |
 | Average household size | 2.46 | ±0.01 | 2.45 – 2.47 | ACS 2024 5-yr B25010 |
+| Zero-vehicle household share | 10.1% | ±0.3pp | 9.7% – 10.4% | ACS 2024 5-yr B25044 (ratio MOE propagated) |
+| Renter-occupied housing share | 57.9% | ±0.5pp | 57.4% – 58.4% | ACS 2024 5-yr B25003 (ratio MOE propagated) |
 
 For the three derived rates (poverty, foreign-born, Spanish-at-home), the MOE is **not** simply the
 inputs' MOEs — it is propagated using the Census Bureau's own published formula for a proportion
@@ -127,7 +161,15 @@ inputs' MOEs — it is propagated using the Census Bureau's own published formul
 MOE_p = (1/Y) × sqrt(MOE_X² − p² × MOE_Y²)        [if the radicand is negative, use the + form instead]
 ```
 
-Reproducible in `scripts/25_extended_demographics_and_ci.py`.
+Reproducible in `scripts/25_extended_demographics_and_ci.py` (the first six rows) and
+`scripts/27_vehicle_tenure_demographics.py` (zero-vehicle and renter-occupied shares).
+
+**A related, non-formal robustness check:** the 5-scenario sensitivity analysis
+(`scripts/28_sensitivity_analysis.py`) is a different kind of check than a statistical confidence
+interval — it re-aggregates real per-factor scores under alternative, defensible weight vectors
+rather than testing sampling uncertainty. The recommendation holds in 3 of 5 scenarios and is never
+worse than a close #2 in the other two; full results in `docs/results.md` and the map's Scorecard
+tab.
 
 **Sanity cross-check:** the citywide ACS place-level population (2,328,253) is independently close to
 (within ~0.7%) the sum of ACS block-group populations whose centroid falls inside the same real city
@@ -167,12 +209,18 @@ margin of error.
   households — a real, data-grounded demand driver for Family Dollar's core categories (dry grocery,
   baby products, household essentials) that median-income screening alone would miss. See the map's
   tract popups for block-level detail and the table above for the citywide figures.
+- **Vehicle access and housing tenure.** Real ACS zero-vehicle household share and renter-occupied
+  housing share were pulled for the same reason — a discount-retail format depends more on
+  walkable/visible neighborhood presence in car-light tracts, and renter-heavy tracts skew toward the
+  household-budget profile Family Dollar's core categories serve.
 
 ## 6. What this analysis explicitly does not claim
 
 Being clear about the boundary of what public data can support is itself part of not hallucinating:
 
 - **No predicted revenue dollar figure**, anywhere (see §2, point 9).
+- **No property/violent crime metric.** Investigated directly against Houston's open data portal and
+  confirmed unavailable as a queryable dataset — see §2, point 11. Not scraped, not estimated.
 - **No verified deed-restriction / restrictive-covenant status** for any parcel — this requires a
   title search, which no public API provides. Flagged per-site in the Site Details dashboard tab
   rather than assumed clear.
@@ -187,4 +235,6 @@ Being clear about the boundary of what public data can support is itself part of
   with an estimate.
 - **This is a desk-based screening exercise.** A final go/no-go still requires a site visit, a
   title/zoning check, and formal traffic-engineering sign-off — this analysis is built to make that
-  final diligence faster and better-targeted, not to replace it.
+  final diligence faster and better-targeted, not to replace it. Full roadmap, organized by whether
+  each gap is a data-availability constraint or a structural boundary (title search, engineering
+  sign-off, site visit): [`limitations_and_diligence.md`](limitations_and_diligence.md).

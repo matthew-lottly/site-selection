@@ -1,0 +1,6 @@
+scenario,weights,primary_recommendation,primary_recommendation_neighborhood,primary_recommendation_score,raw_top_score_site,raw_top_score_value,same_as_base_recommendation
+Base (documented),"demand=25%, huff=20%, competition=15%, traffic=15%, cost=15%, flood=10%",6600 STILLWELL ST,Pecan Park,79.4,6600 STILLWELL ST,79.4,True
+Traffic-Heavy,"demand=15%, huff=15%, competition=10%, traffic=35%, cost=15%, flood=10%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,84.5,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),84.5,False
+Cost-Heavy,"demand=20%, huff=15%, competition=10%, traffic=10%, cost=35%, flood=10%",6600 STILLWELL ST,Pecan Park,85.2,6600 STILLWELL ST,85.2,True
+Competition-Heavy,"demand=15%, huff=30%, competition=30%, traffic=10%, cost=10%, flood=5%",Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),Sunnyside,83.4,Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),83.4,False
+Demand-Heavy,"demand=45%, huff=15%, competition=10%, traffic=10%, cost=10%, flood=10%",6600 STILLWELL ST,Pecan Park,79.8,6600 STILLWELL ST,79.8,True

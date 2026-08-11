@@ -25,9 +25,23 @@ from lib import FEMA_FLOOD, PROCESSED, RAW, haversine_miles
 # of these and prefer the nearest station on an actual frontage/arterial street.
 FREEWAY_PATTERN = re.compile(
     r"\b(freeway|tollway|beltway|interstate|expressway|fwy)\b"
-    r"|\bloop \d+\b|\bi-\d+\b|\bus[- ]\d+\b|\bsh[- ]\d+\b|\bsam houston (parkway|tollway)\b",
+    r"|\bloop \d+\b|\b(north|south|east|west) loop\b|\bloop (north|south|east|west)\b"
+    r"|\bi-\d+\b|\bus[- ]\d+\b|\bsh[- ]\d+\b|\bsam houston (parkway|tollway)\b",
     re.IGNORECASE,
 )
+
+
+def is_true_freeway(name: str) -> bool:
+    """A frontage/access road parallel to a freeway has real driveway access
+    even when its name references the freeway or loop it runs alongside
+    (e.g. "South Loop East Frontage Road", "Southwest Freeway Frontage
+    Road") -- only the limited-access mainline itself has no legal
+    driveway. Checked as an explicit override rather than folding "frontage"
+    into FREEWAY_PATTERN as a negative-lookaround, to keep the freeway
+    keyword list and the frontage-road exception independently readable."""
+    if "frontage" in name.lower():
+        return False
+    return bool(FREEWAY_PATTERN.search(name))
 
 
 def fema_flood_zone(lat: float, lon: float) -> tuple[str, str]:
@@ -128,7 +142,7 @@ def main() -> None:
         aadt_on_freeway = False
         for candidate in ranked_aadt:
             name = reverse_geocode_road(float(candidate["lat"]), float(candidate["lon"]))
-            if not FREEWAY_PATTERN.search(name):
+            if not is_true_freeway(name):
                 nearest_aadt, aadt_road_name = candidate, name
                 break
         if nearest_aadt is None:  # every nearby station is on a freeway; fall back to nearest, flagged

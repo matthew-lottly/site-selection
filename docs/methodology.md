@@ -30,6 +30,8 @@ just the first promising area found. This version fixes that — see Stage 2 bel
 | 6 | TxDOT | Annual Average Daily Traffic (AADT) counts, current (2025) | ArcGIS Online Feature Service |
 | 7 | OSRM (Open Source Routing Machine) | Real drive times over the OpenStreetMap road network | Public routing API |
 | 8 | Nominatim (OpenStreetMap) | Reverse geocoding — confirms each site's real neighborhood and verifies what road each traffic count and each parcel actually sits on | REST API |
+| 9 | OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist, for the micro-site operational detail | Overpass QL |
+| 10 | Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API |
 
 No Census API key, Google Maps key, or paid GIS license was used or required.
 
@@ -114,12 +116,14 @@ For each of the 20 finalists:
 - **Micro-site operational detail** (`scripts/26_microsite_details.py`): posted speed limit on the
   frontage road (OSM `maxspeed` tag, where mapped — the 35–45 mph range is the sweet spot for
   discount-retail impulse-stop visibility); real nearby co-tenant traffic generators (gas stations,
-  laundromats, schools, post offices, pharmacies) within 0.3 mi; and approximate parcel bounding
-  dimensions computed from the real HCAD parcel polygon (haversine edge lengths — a gut-check on lot
-  size, not a certified survey). Explicitly **not** claimed, because no public API covers it and
-  asserting a confirmation would be fabrication: deed restrictions/restrictive covenants (requires a
-  title search), median-break/divided-highway ingress-egress geometry, and an engineered 53-ft
-  delivery-truck turning radius (both require a civil site plan).
+  laundromats, schools, post offices, pharmacies) within 0.3 mi; real nearest public-transit stop
+  (OSM bus stops and transit platforms, within 1 mile); and approximate parcel bounding dimensions
+  computed from the real HCAD parcel polygon (haversine edge lengths — a gut-check on lot size, not a
+  certified survey). Explicitly **not** claimed, because no public API covers it and asserting a
+  confirmation would be fabrication: deed restrictions/restrictive covenants (requires a title
+  search), median-break/divided-highway ingress-egress geometry, and an engineered 53-ft
+  delivery-truck turning radius (both require a civil site plan). Full detail on these gaps and the
+  concrete diligence steps that close them: `docs/limitations_and_diligence.md`.
 - **Real drive-time trade area**: queried OSRM (actual road-network routing, not a circle buffer)
   from each site to every one of Houston's **1,603 Census block groups (2,312,201 people — matches
   Houston's real published population)** within a 10-mile prefilter, and summed ACS population
@@ -199,13 +203,17 @@ weights:
 | Flood risk (FEMA zone) | 10% | Any mapped Special Flood Hazard Area is heavily penalized |
 
 **The 8,000 AADT industry rule-of-thumb minimum viable-traffic benchmark is enforced as a hard gate
-on the primary recommendation, not just a soft-weighted factor.** Early in this revision, the
-highest *raw weighted score* belonged to a site with only 1,547 vehicles/day — a real, low reading
-that a 15%-weighted traffic factor wasn't enough to reflect properly. Rather than let the average
-paper over a site that fails a real minimum-viability threshold, the scoring script now selects the
+on the primary recommendation, not just a soft-weighted factor.** The scoring script selects the
 **primary recommendation** as the highest-scoring site that *also* clears the benchmark; a
 higher-raw-score site that fails it stays visible in the scorecard (tagged) for transparency but is
-not selectable as "the" recommendation. See `docs/results.md` for how this played out concretely.
+not selectable as "the" recommendation. In the current run the top raw-scoring site also clears the
+benchmark on its own — the gate's practical effect is excluding a different, lower-ranked site
+(1023 Niagara St, 1,547 vpd, a real but low reading) from ever becoming the recommendation regardless
+of how well it scores on the other five factors — but earlier in this project's development the gate
+did override the raw #1, which is exactly why it's implemented as a hard rule rather than left to the
+weighted average. See `docs/results.md` for the current ranking, and
+`docs/data_validation.md` §2 for how a related classification bug (freeway vs. frontage road in the
+traffic-count matching) was found and fixed via the sensitivity analysis in Stage 8b below.
 
 ### Stage 7 — Trade-area visualization
 `scripts/21_fetch_houston_tract_geometry.py`, existing isochrone logic
@@ -232,6 +240,25 @@ Two things a first pass at this analysis was missing:
   derived rates. Full table and formula in `docs/data_validation.md` §4 and the map's Confidence
   Intervals dashboard tab.
 
+### Stage 8b — Vehicle access, housing tenure, and sensitivity analysis
+`scripts/27_vehicle_tenure_demographics.py`, `scripts/28_sensitivity_analysis.py`
+
+- **Zero-vehicle household share and renter-occupied housing share** (ACS B25044, B25003), pulled for
+  all 643 Houston tracts plus a real city-wide 90% confidence interval, using the same ratio-MOE
+  propagation formula as Stage 8. Both are real demand-relevant signals for a discount-retail format
+  specifically: a zero-vehicle household depends more on walkable/visible neighborhood retail, and a
+  renter-heavy tract skews toward exactly the household-budget profile Family Dollar's core
+  categories serve. Surfaced in the map's tract popups and Confidence Intervals dashboard tab.
+- **Multi-scenario sensitivity analysis**: re-aggregates the same already-normalized 0–100 per-factor
+  subscores from Stage 6 under 5 different, defensible weighting schemes (Traffic-Heavy, Cost-Heavy,
+  Competition-Heavy, Demand-Heavy, plus the documented Base split), re-applying the same AADT gate to
+  each. No new data is fetched — this is a pure re-aggregation check on whether the recommendation is
+  an artifact of the specific weights chosen, or holds up under alternative, equally defensible ones.
+  Building this check is what surfaced the freeway/frontage-road classification bug documented in
+  `docs/data_validation.md` §2 — an implausible score under one scenario traced back to a real error
+  in Stage 4's traffic-count matching, which was then fixed and changed the actual recommendation.
+  Results in `data/processed/sensitivity_analysis.csv` and the map's Scorecard tab.
+
 ### Stage 9 — Web map
 `scripts/22_isochrone_winner.py`, `scripts/23_generate_map_citywide.py`
 
@@ -249,10 +276,12 @@ opportunity areas searched; and the real drive-time trade area for the recommend
 switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every marker popup
 cites its data source, set in dark, bold text for at-a-glance legibility.
 
-A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces four tabs built
-live from the same CSVs referenced throughout this document: the full 20-site **Scorecard**, the
-**Cannibalization** table, **Site Details** (micro-site operational data), and **Confidence
-Intervals** plus a condensed version of the audit trail in `data_validation.md`.
+A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces five tabs built
+live from the same CSVs referenced throughout this document: the full 20-site **Scorecard** (with the
+sensitivity analysis beneath it), the **Cannibalization** table, **Site Details** (micro-site
+operational data including transit distance), **Confidence Intervals** (including the vehicle-access
+and housing-tenure rates from Stage 8b), and **Sources & Validation** — a condensed version of the
+audit trail in `data_validation.md`.
 
 ## 3. Known limitations
 
@@ -270,6 +299,9 @@ Intervals** plus a condensed version of the audit trail in `data_validation.md`.
   reported as-is rather than patched with an estimate.
 - No revenue forecast is produced anywhere (see Stages 5 and 5b) — no public store-level sales data
   exists to calibrate one.
+- No property/violent crime metric is produced. Houston's open data portal was checked directly (its
+  CKAN catalog API) and has no queryable crime dataset, only static HTML report pages — investigated
+  and explicitly dropped rather than scraped or estimated.
 - Deed restrictions, median-break/ingress-egress geometry, and engineered truck-turning-radius
   confirmation are not covered by any public data source used here and are explicitly flagged as
   unverified (Stage 4, Site Details dashboard tab) rather than guessed.
@@ -278,3 +310,6 @@ Intervals** plus a condensed version of the audit trail in `data_validation.md`.
 
 **Full audit trail:** every specific hallucination/error check actually performed on this analysis —
 including bugs found and fixed during the process — is cataloged in `docs/data_validation.md` §2.
+**Full diligence roadmap:** what a desk analysis can't verify and the concrete next steps that close
+each gap, organized by whether it's a data-availability constraint or a structural boundary (title
+search, engineering sign-off, site visit) — see `docs/limitations_and_diligence.md`.

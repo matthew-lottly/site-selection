@@ -9,6 +9,10 @@ from public data (never guessed):
   - Real co-tenant traffic generators within 0.3 mi (OSM POIs: gas/fuel
     stations, laundromats, schools, post offices, pharmacies) -- the
     complementary-anchor detail a site selector cites for shared-trip traffic.
+  - Real distance to the nearest public-transit stop (OSM `highway=bus_stop`
+    / `public_transport=platform`, incl. Houston METRO) within 1 mile --
+    dollar-store customers in urban corridors frequently walk or bus in for
+    top-off trips, so transit proximity is a real demand signal.
   - Approximate parcel bounding dimensions computed from the REAL HCAD
     parcel polygon already fetched in script 15 (haversine edge lengths,
     not a survey) -- a rough gut-check on whether the lot is even
@@ -54,6 +58,8 @@ def query_microsite(lat: float, lon: float) -> dict:
       way["highway"~"^(primary|secondary|tertiary)$"](around:200,{lat},{lon});
       node["amenity"~"^(fuel|school|post_office|pharmacy)$"](around:500,{lat},{lon});
       node["shop"="laundry"](around:500,{lat},{lon});
+      node["highway"="bus_stop"](around:1600,{lat},{lon});
+      node["public_transport"="platform"](around:1600,{lat},{lon});
     );
     out center tags;"""
     for attempt in range(4):
@@ -130,6 +136,18 @@ def main() -> None:
         pois.sort()
         co_tenants = "; ".join(f"{name} ({dist*5280:.0f} ft)" for dist, kind, name in pois[:3]) or "none found within 0.3 mi"
 
+        transit_dists = []
+        for el in data["elements"]:
+            t = el.get("tags", {})
+            if t.get("highway") != "bus_stop" and t.get("public_transport") != "platform":
+                continue
+            plat, plon = (el["lat"], el["lon"]) if el["type"] == "node" else (None, None)
+            if plat is None:
+                continue
+            transit_dists.append(haversine_miles(lat, lon, plat, plon))
+        nearest_transit_ft = round(min(transit_dists) * 5280) if transit_dists else None
+        transit_note = f"{nearest_transit_ft:,} ft" if nearest_transit_ft else "none within 1 mi"
+
         bbox = parcel_bounding_ft(s["hcad_num"])
         lot_dims = f"~{bbox[0]} ft x {bbox[1]} ft (bounding box, not a survey)" if bbox else "not available"
 
@@ -146,12 +164,13 @@ def main() -> None:
                 "posted_speed_limit_mph": maxspeed if maxspeed else "not tagged in OSM",
                 "speed_assessment": speed_note,
                 "nearby_co_tenants": co_tenants,
+                "nearest_transit_stop": transit_note,
                 "approx_lot_dimensions": lot_dims,
                 "deed_restrictions": "NOT VERIFIED -- requires a title search, no public API covers this",
                 "median_ingress_egress": "NOT VERIFIED -- requires a site plan / civil engineering review",
             }
         )
-        print(f"{s['site_label']}: speed={maxspeed or 'n/a'}mph ({speed_note}) | co-tenants: {co_tenants} | lot: {lot_dims}", file=sys.stderr)
+        print(f"{s['site_label']}: speed={maxspeed or 'n/a'}mph ({speed_note}) | co-tenants: {co_tenants} | transit: {transit_note} | lot: {lot_dims}", file=sys.stderr)
 
     out_path = PROCESSED / "microsite_details.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as fh:
