@@ -20,6 +20,32 @@ import requests
 
 from lib import FEMA_FLOOD, PROCESSED, RAW, haversine_miles
 
+
+def get_json_with_retry(
+    url: str,
+    *,
+    params: dict,
+    headers: dict | None = None,
+    timeout: int = 30,
+    attempts: int = 5,
+    backoff_sec: float = 1.0,
+) -> dict:
+    """Retry transient network/API failures with bounded exponential backoff."""
+    last_exc: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=timeout)
+            resp.raise_for_status()
+            return resp.json()
+        except (requests.RequestException, ValueError) as exc:
+            last_exc = exc
+            if attempt == attempts:
+                break
+            time.sleep(backoff_sec * (2 ** (attempt - 1)))
+    if last_exc is None:
+        raise RuntimeError("HTTP request failed without an exception")
+    raise last_exc
+
 # A retail pad can't have a driveway directly onto a limited-access freeway/tollway,
 # so for the "traffic exposure" metric we skip stations that reverse-geocode to one
 # of these and prefer the nearest station on an actual frontage/arterial street.
@@ -45,7 +71,7 @@ def is_true_freeway(name: str) -> bool:
 
 
 def fema_flood_zone(lat: float, lon: float) -> tuple[str, str]:
-    resp = requests.get(
+    data = get_json_with_retry(
         FEMA_FLOOD,
         params={
             "geometry": f"{lon},{lat}",
@@ -58,8 +84,6 @@ def fema_flood_zone(lat: float, lon: float) -> tuple[str, str]:
         },
         timeout=30,
     )
-    resp.raise_for_status()
-    data = resp.json()
     feats = data.get("features", [])
     if not feats:
         return "X (unmapped/outside detailed study area)", "F"
@@ -73,14 +97,14 @@ def reverse_geocode(lat: float, lon: float, zoom: int) -> dict:
         import json
 
         return json.loads(cache_path.read_text(encoding="utf-8"))
-    resp = requests.get(
+    d = get_json_with_retry(
         "https://nominatim.openstreetmap.org/reverse",
         params={"lat": lat, "lon": lon, "format": "json", "zoom": zoom},
         headers={"User-Agent": "houston-site-selection-study/1.0"},
         timeout=15,
+        attempts=4,
+        backoff_sec=1.25,
     )
-    resp.raise_for_status()
-    d = resp.json()
     import json
 
     cache_path.write_text(json.dumps(d), encoding="utf-8")

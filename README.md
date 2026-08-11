@@ -1,10 +1,10 @@
 # Houston Family Dollar Site Selection
 
 An end-to-end, reproducible, **citywide** GIS site-selection pipeline for a new Family Dollar
-location in Houston, TX — built entirely from free, public, key-free data sources. Prepared as a
+location in Houston, TX - built entirely from free, public, key-free data sources. Prepared as a
 Location Intelligence / GIS Analyst case study.
 
-**Recommendation:** 6600 Stillwell St, Pecan Park, Houston, TX — selected from 20 real candidate
+**Recommendation:** 6600 Stillwell St, Pecan Park, Houston, TX - selected from 20 real candidate
 sites spanning 10 Houston neighborhoods. See [`docs/results.md`](docs/results.md) for the full
 scorecard, reasoning, and the one real trade-off (cannibalization risk vs. the close #2 finalist),
 [`docs/methodology.md`](docs/methodology.md) for how the pipeline works,
@@ -14,40 +14,40 @@ real 90% confidence intervals, and
 [`docs/limitations_and_diligence.md`](docs/limitations_and_diligence.md) for what a desk analysis
 can't verify and the concrete next steps that close that gap.
 
-**Interactive map:** [`index.html`](index.html) — open locally or view on GitHub Pages once
+**Interactive map:** [`index.html`](index.html) - open locally or view on GitHub Pages once
 published. App-shell layout: a header bar up top and a right-side **Analysis Dashboard** panel
 (toggle button in the header) with the full scorecard, sensitivity analysis, cannibalization math,
-site-level operational detail, and confidence intervals — the map stays visible and interactive
+site-level operational detail, and confidence intervals - the map stays visible and interactive
 alongside it.
 
 ## Data sources (all free, no API keys)
 
-- US Census Bureau — TIGERweb (tract/block-group boundaries + the real City of Houston boundary) +
+- US Census Bureau - TIGERweb (tract/block-group boundaries + the real City of Houston boundary) +
   Census Reporter API (ACS 2024 5-yr demographics, incl. margins of error, vehicle access, and
   housing tenure)
-- OpenStreetMap / Overpass API — 528 competitor/anchor locations across 15 banners, arterial road
+- OpenStreetMap / Overpass API - 528 competitor/anchor locations across 15 banners, arterial road
   network, posted speed limits, transit stops, co-tenant POIs
-- Harris County Appraisal District (HCAD) — real parcel boundaries, land use, appraised value
-- FEMA National Flood Hazard Layer (NFHL) — flood zone identification
-- TxDOT — Annual Average Daily Traffic (AADT) counts, verified by reverse-geocoding each station
-- OSRM — real drive-time routing over the OpenStreetMap road network, a real Huff gravity
+- Harris County Appraisal District (HCAD) - real parcel boundaries, land use, appraised value
+- FEMA National Flood Hazard Layer (NFHL) - flood zone identification
+- TxDOT - Annual Average Daily Traffic (AADT) counts, verified by reverse-geocoding each station
+- OSRM - real drive-time routing over the OpenStreetMap road network, a real Huff gravity
   market-capture model, and a real cannibalization/trade-area-overlap analysis
 
 Property crime was investigated as a candidate metric and confirmed unavailable as a free, queryable
-dataset for Houston — documented as a real limitation rather than estimated. See
+dataset for Houston - documented as a real limitation rather than estimated. See
 `docs/limitations_and_diligence.md`.
 
 ## Repository structure
 
-- `scripts/` — the pipeline, run in numeric order; `lib.py` holds shared HTTP/geometry/color
+- `scripts/` - the pipeline, run in numeric order; `lib.py` holds shared HTTP/geometry/color
   helpers. Numbering has a gap (03 → 13): scripts 04–12 were an earlier single-neighborhood draft,
   superseded by the citywide versions and removed rather than left to confuse a rerun.
-- `data/raw/` — cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
-- `data/processed/` — clean CSV/GeoJSON outputs consumed by later stages and the map
-- `docs/` — methodology, results, data validation, limitations & diligence roadmap, and a
+- `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
+- `data/processed/` - clean CSV/GeoJSON outputs consumed by later stages and the map
+- `docs/` - methodology, results, data validation, limitations & diligence roadmap, and a
   presentation outline, plus PowerPoint build assets (`powerpoint_starter.md`,
   `powerpoint_slide_copy.md`, `powerpoint_speaker_notes.md`)
-- `index.html` — the generated interactive web map (repo root, for GitHub Pages)
+- `index.html` - the generated interactive web map (repo root, for GitHub Pages)
 
 ## Running the pipeline
 
