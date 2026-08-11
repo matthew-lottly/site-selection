@@ -1,3 +1,4 @@
 requests>=2.31.0
 folium>=0.20.0
 numpy>=1.26.0
+matplotlib>=3.8.0  # slide-deck chart export only (scripts/31_generate_slide_assets.py), not used by the analysis pipeline
