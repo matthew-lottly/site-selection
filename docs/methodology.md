@@ -21,7 +21,7 @@ just the first promising area found. This version fixes that - see Stage 2 below
 ## 1. Data sources (all free, all keyless)
 
 | # | Source | What it provides | Access method |
-|---|--------|-------------------|----------------|
+| --- | -------- | ------------------- | ---------------- |
 | 1 | US Census Bureau TIGERweb | Census tract & block group boundaries, and the real City of Houston incorporated-place boundary | ArcGIS REST (`tigerweb.geo.census.gov`) |
 | 2 | Census Reporter API | ACS 2024 5-year estimates and margins of error: population, median household income, poverty status, foreign-born share, language spoken at home, household size | REST API (wraps Census Bureau ACS) |
 | 3 | OpenStreetMap / Overpass API | Competitor & anchor retail locations (15 real banners found), arterial road network, posted speed limits, co-tenant POIs | Overpass QL |
@@ -38,6 +38,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
 ## 2. Pipeline stages
 
 ### Stage 1 - Macro market screen (all of Harris County)
+
 `scripts/01_fetch_tracts.py`, `02_fetch_competitors.py`, `03_gap_analysis.py`
 
 - Pulled **all 1,115 Census tracts in Harris County** with ACS 5-year population, median household
@@ -64,6 +65,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
   tracts are both discounted.
 
 ### Stage 2 - Citywide submarket scoping (the fix)
+
 `scripts/13_houston_scope_clusters.py`
 
 - Pulled the **real City of Houston boundary** (TIGERweb Incorporated Places, GEOID 4835000) - a
@@ -80,6 +82,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
   Homes, and Central Southwest Houston.**
 
 ### Stage 3 - Candidate site identification, all 10 areas
+
 `scripts/14_find_intersections_citywide.py`, `15_fetch_parcels_citywide.py`
 
 - For each of the 10 opportunity areas, auto-discovered that area's named primary/secondary
@@ -96,9 +99,11 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
   land) as the finalist shortlist - **20 real candidate sites spanning all 10 neighborhoods.**
 
 ### Stage 4 - Site enrichment
+
 `scripts/16_fetch_citywide_aadt.py`, `17_fetch_citywide_blockgroups.py`, `18_enrich_sites_citywide.py`
 
 For each of the 20 finalists:
+
 - **FEMA flood zone** at the exact parcel point (NFHL identify query).
 - **Verified traffic count**: nearest TxDOT AADT station. TxDOT records roads by route number (e.g.
   `FM0865`), not local name, and a station can sit directly on a limited-access freeway a store could
@@ -130,6 +135,7 @@ For each of the 20 finalists:
   reachable within a 5-minute and a 10-minute drive.
 
 ### Stage 5 - Huff gravity market-capture model
+
 `scripts/19_drive_times_and_huff.py`
 
 For each site, estimated a relative market-capture percentage using the classic **Huff gravity
@@ -145,6 +151,7 @@ P(choose site j | block group i) = (Sⱼ / Dᵢⱼ^β) / Σₖ (Sₖ / Dᵢₖ^�
 
 Two deliberate exclusions from the Huff competitive set, both tested and confirmed before the design
 choice was made:
+
 - **Dollar Tree** - same small-box format, but it is Family Dollar's *sister banner* (both owned by
   Dollar Tree, Inc.). Modeling it as a competitive threat would misstate the real business
   relationship; its proximity is tracked separately as a combo-store/parent-footprint signal instead.
@@ -165,6 +172,7 @@ one; a dollar forecast built without real sales data to ground it would itself b
 number, so this analysis deliberately stops at a defensible relative comparison instead.
 
 ### Stage 5b - Cannibalization analysis
+
 `scripts/24_cannibalization_analysis.py`
 
 Existing Family Dollar stores are the company's own network, not competitors - the real question is
@@ -188,13 +196,14 @@ adapted to only use real, computable inputs:
    computed proxy instead.
 
 ### Stage 6 - Weighted scorecard
+
 `scripts/20_score_sites_citywide.py`
 
 Each metric was min-max normalized across the 20 finalists (0-100) and combined with documented
 weights:
 
 | Factor | Weight | Rationale |
-|---|---|---|
+| --- | --- | --- |
 | Trade-area demand (5-min drive population × income fit) | 25% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band |
 | Huff market-capture % | 20% | Comprehensive, distance- and size-weighted competitive pull against direct arch-rivals |
 | Competitive white space (distance to nearest arch-rival) | 15% | Simple, exec-legible cross-check on the Huff score |
@@ -216,6 +225,7 @@ weighted average. See `docs/results.md` for the current ranking, and
 traffic-count matching) was found and fixed via the sensitivity analysis in Stage 8b below.
 
 ### Stage 7 - Trade-area visualization
+
 `scripts/21_fetch_houston_tract_geometry.py`, `scripts/22_isochrone_winner.py`
 
 Pulled tract polygon geometry for all 643 Houston-city tracts (simplified for file size with
@@ -226,6 +236,7 @@ at 8 candidate distances each, keeping the farthest point on each bearing still 
 threshold - the actual reachable shape given the real road network, not a generic circle.
 
 ### Stage 8 - Extended demographics & confidence intervals
+
 `scripts/25_extended_demographics_and_ci.py`
 
 Two things a first pass at this analysis was missing:
@@ -241,6 +252,7 @@ Two things a first pass at this analysis was missing:
   Intervals dashboard tab.
 
 ### Stage 8b - Vehicle access, housing tenure, and sensitivity analysis
+
 `scripts/27_vehicle_tenure_demographics.py`, `scripts/28_sensitivity_analysis.py`
 
 - **Zero-vehicle household share and renter-occupied housing share** (ACS B25044, B25003), pulled for
@@ -260,6 +272,7 @@ Two things a first pass at this analysis was missing:
   Results in `data/processed/sensitivity_analysis.csv` and the map's Scorecard tab.
 
 ### Stage 9 - Web map
+
 `scripts/22_isochrone_winner.py`, `scripts/23_generate_map_citywide.py`
 
 Built with Folium (Python) on top of Leaflet.js - 100% open source, no API key, deployable as a

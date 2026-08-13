@@ -16,7 +16,7 @@ same CSV files referenced here.
 ## 1. Full source catalog
 
 | Source | What it provides | Access | Cost / auth |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | US Census Bureau TIGERweb | Tract & block-group boundaries; the real City of Houston incorporated-place boundary | ArcGIS REST, `tigerweb.geo.census.gov` | Free, no key |
 | Census Reporter API | ACS 2024 5-year estimates **and margins of error** for population, income, poverty, foreign-born status, language spoken at home, household size | REST API wrapping the Census Bureau ACS | Free, no key |
 | OpenStreetMap / Overpass API | 528 real competitor/anchor locations across 15 banners; arterial road network; posted speed limits; co-tenant POIs (gas stations, laundromats, schools, post offices, pharmacies) | Overpass QL | Free, no key |
@@ -159,7 +159,7 @@ City-wide headline statistics (real Census place-level geography for Houston, GE
 sum of tracts, which is the statistically correct way to get a valid city-wide margin of error):
 
 | Statistic | Estimate | 90% MOE | 90% CI range | Source |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | Population | 2,328,253 | ±196 | 2,328,057-2,328,449 | ACS 2024 5-yr B01003 |
 | Median household income | $64,813 | ±$822 | $63,991-$65,635 | ACS 2024 5-yr B19013 |
 | Poverty rate | 19.9% | ±0.4pp | 19.5%-20.3% | ACS 2024 5-yr B17001 (ratio MOE propagated) |

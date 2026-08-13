@@ -23,7 +23,7 @@ numbers would no longer match.
 ## Deck outline
 
 | # | File | Title | Image |
-|---|------|-------|-------|
+| --- | ------ | ------- | ------- |
 | 1 | `01_recommendation.md` | Houston Family Dollar Site Recommendation | `site_map.png` |
 | 2 | `02_decision_summary.md` | Decision Summary | none |
 | 3 | `03_scope_and_pipeline.md` | How the Recommendation Was Built | `pipeline_funnel.png` |

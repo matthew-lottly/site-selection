@@ -194,7 +194,7 @@ def build_legend_html(opportunity_ramp_css: str) -> str:
   <div style="{section_head}">Candidate sites (by score)</div>
   <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
     <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 0 0 2px #F5B700, 0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
-    <span style="{row_text}">Recommended site (fixed color + gold ring -- always distinct, regardless of score rank)</span>
+    <span style="{row_text}">Recommended site</span>
   </div>
   <div style="margin-bottom:6px;">
     <span style="{row_text}">Other candidate sites, numbered by rank</span>
