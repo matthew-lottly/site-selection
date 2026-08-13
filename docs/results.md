@@ -58,7 +58,7 @@ unilaterally by the scoring model.
 ### Sensitivity check: does the recommendation hold up under different weightings?
 
 Re-aggregating the same real per-factor scores under 5 different, defensible weighting schemes
-(`scripts/28_sensitivity_analysis.py`, full table in the map's Scorecard tab) - the recommendation is
+(`pipeline/stages/s28_sensitivity_analysis.py`, full table in the map's Scorecard tab) - the recommendation is
 **stable in 3 of 5 scenarios** (Base, Cost-Heavy, Demand-Heavy) and never falls out of the top 2 in
 the other two:
 

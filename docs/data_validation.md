@@ -88,9 +88,9 @@ recommendation.
    business question without inventing a number.
 10. **Freeway/frontage-road classification bug, found and fixed via the sensitivity analysis - the
     single most consequential check performed in this project.** Building the multi-scenario
-    sensitivity analysis (`scripts/28_sensitivity_analysis.py`) exposed an implausibly dominant score
+    sensitivity analysis (`pipeline/stages/s28_sensitivity_analysis.py`) exposed an implausibly dominant score
     for one candidate under a Traffic-Heavy weighting, which traced back to a real bug: the
-    freeway-name filter (`FREEWAY_PATTERN` in `scripts/18_enrich_sites_citywide.py`) correctly
+    freeway-name filter (`FREEWAY_PATTERN` in `pipeline/stages/s18_enrich_sites_citywide.py`) correctly
     rejected AADT stations whose reverse-geocoded name contained "Freeway," but it also needed to
     catch names like "East Loop North" (I-610's real east-side name), which slipped past the
     original pattern because it required "loop" plus a digit, not "loop" plus a direction word.
@@ -114,7 +114,7 @@ recommendation.
     documented as a real data-availability gap (see `limitations_and_diligence.md`) - the same
     standard applied to every other unverifiable claim in this analysis.
 12. **FEMA flood-layer transfer-limit bug, found and fixed.** The map's FEMA NFHL overlay
-    (`scripts/23_generate_map_citywide.py`) originally queried the live FEMA API for whatever the
+    (`pipeline/stages/s23_generate_map_citywide.py`) originally queried the live FEMA API for whatever the
     current map viewport was. Tested directly against the live API at the map's citywide starting
     view: the first 2,000-feature page alone returned ~25MB and FEMA reported
     `exceededTransferLimit: true`, with an unknown number of pages still remaining - so the layer
@@ -124,7 +124,7 @@ recommendation.
 13. **Recommendation marker color was silently coupled to rank position, not the actual
     recommendation.** The winning site's marker color was computed from its raw score-rank position on
     the best-to-worst ramp, which only rendered green because the current #1 raw score happens to also
-    be the primary recommendation. Since the scoring gate (`scripts/20_score_sites_citywide.py`) can
+    be the primary recommendation. Since the scoring gate (`pipeline/stages/s20_score_sites_citywide.py`) can
     make the primary recommendation a site other than the raw #1 (see item 8 above), that coupling
     would have silently rendered the winner marker in whatever ramp color its rank happened to be
     the moment the raw #1 fails the AADT benchmark - contradicting the legend's fixed "gold-ringed
@@ -177,11 +177,11 @@ inputs' MOEs - it is propagated using the Census Bureau's own published formula 
 MOE_p = (1/Y) × sqrt(MOE_X² − p² × MOE_Y²)        [if the radicand is negative, use the + form instead]
 ```
 
-Reproducible in `scripts/25_extended_demographics_and_ci.py` (the first six rows) and
-`scripts/27_vehicle_tenure_demographics.py` (zero-vehicle and renter-occupied shares).
+Reproducible in `pipeline/stages/s25_extended_demographics_and_ci.py` (the first six rows) and
+`pipeline/stages/s27_vehicle_tenure_demographics.py` (zero-vehicle and renter-occupied shares).
 
 **A related, non-formal robustness check:** the 5-scenario sensitivity analysis
-(`scripts/28_sensitivity_analysis.py`) is a different kind of check than a statistical confidence
+(`pipeline/stages/s28_sensitivity_analysis.py`) is a different kind of check than a statistical confidence
 interval - it re-aggregates real per-factor scores under alternative, defensible weight vectors
 rather than testing sampling uncertainty. The recommendation holds in 3 of 5 scenarios and is never
 worse than a close #2 in the other two; full results in `docs/results.md` and the map's Scorecard
@@ -189,7 +189,7 @@ tab.
 
 **Sanity cross-check:** the citywide ACS place-level population (2,328,253) is independently close to
 (within ~0.7%) the sum of ACS block-group populations whose centroid falls inside the same real city
-boundary polygon (2,312,201, computed in `scripts/17_fetch_citywide_blockgroups.py`) - two different
+boundary polygon (2,312,201, computed in `pipeline/stages/s17_fetch_citywide_blockgroups.py`) - two different
 valid methods of estimating "Houston's population" landing within a fraction of a percent of each
 other is a meaningful cross-check, not a coincidence to paper over. The residual gap is expected
 (different geography vintage/methodology between a place boundary and summed block groups), not an

@@ -4,7 +4,7 @@ Twelve slides, one file each (`01_recommendation.md` through `12_decision_ask.md
 built to be assembled into Google Slides in about 15-20 minutes. Every number in
 every file was checked directly against `data/processed/*.csv` - if you change the
 underlying data and rerun the pipeline, regenerate the images
-(`python scripts/31_generate_slide_assets.py`) before reusing these files, since the
+(`python -m pipeline.stages.s31_generate_slide_assets`) before reusing these files, since the
 numbers would no longer match.
 
 ## How to build the deck
@@ -42,9 +42,9 @@ numbers would no longer match.
 All six PNGs in `images/` are generated directly from the same
 `data/processed/*.csv` and `houston_boundary.geojson` files the map and the
 written docs use - none are mockups. They're built by
-`scripts/31_generate_slide_assets.py` (run it after any pipeline rerun to
+`pipeline/stages/s31_generate_slide_assets.py` (run it after any pipeline rerun to
 refresh them) and colored from this project's own validated palette
-(`lib.py`'s `SEQUENTIAL_BLUE` / `STATUS_RAMP`), so they match the web map's
+(`pipeline/color.py`'s `ColorRamp.SEQUENTIAL_BLUE` / `ColorRamp.STATUS_RAMP`), so they match the web map's
 symbology exactly: green + gold ring = recommended site, blue sequential ramp
 = opportunity/magnitude, green-to-red = best-to-worst rank.
 

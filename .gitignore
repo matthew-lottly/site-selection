@@ -2,6 +2,3 @@ __pycache__/
 *.py[cod]
 .venv/
 .ipynb_checkpoints/
-
-# Generated heavyweight outputs (do not commit)
-index.html

@@ -39,11 +39,24 @@ dataset for Houston - documented as a real limitation rather than estimated. See
 
 ## Repository structure
 
-- `scripts/` - the pipeline, run in numeric order; `lib.py` holds shared HTTP/geometry/color
-  helpers. Numbering has gaps (03 → 13, 29 → 31): scripts 04-12 were an earlier single-neighborhood
-  draft, and script 30 fetched a static, citywide FEMA flood-polygon file - both superseded (by the
-  citywide versions, and by the live in-map FEMA fetch in script 23, respectively) and removed rather
-  than left to confuse a rerun.
+- `pipeline/` - the pipeline, as a class-based Python package:
+  - `pipeline/core/` - `PipelineStage` (the abstract base every stage subclasses: `run()` +
+    a default `validate()` that confirms declared outputs exist), `ApiClient` (shared GET/POST +
+    disk-cache behavior), `Pipeline` (the orchestrator that runs stages in order), and the
+    `ROOT`/`RAW`/`PROCESSED` path constants.
+  - `pipeline/clients/` - one `ApiClient` subclass per data source (`TigerWebClient`,
+    `CensusReporterClient`, `OverpassClient`, `HcadClient`, `FemaClient`, `TxDotClient`,
+    `OsrmClient`), each just enough to express that source's request shape and caching needs.
+  - `pipeline/geometry.py` / `pipeline/color.py` - `Geometry` and `ColorRamp`: stateless helper
+    classes for distance/point-in-polygon/hull math and the validated map color palettes.
+  - `pipeline/stages/` - one `PipelineStage` subclass per pipeline step (`s01_fetch_tracts.py`,
+    `s02_fetch_competitors.py`, ... `s31_generate_slide_assets.py`), each independently runnable.
+    Numbering has gaps (03 → 13, 29 → 31): stages 04-12 were an earlier single-neighborhood draft,
+    and stage 30 fetched a static, citywide FEMA flood-polygon file - both superseded (by the
+    citywide versions, and by the live in-map FEMA fetch in stage 23, respectively) and removed
+    rather than left to confuse a rerun.
+- `run_pipeline.py` - CLI entry point: runs every stage in order (`python run_pipeline.py`), a
+  subset (`--only 01 02`), or just lists them (`--list`).
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
 - `data/processed/` - clean CSV/GeoJSON outputs consumed by later stages and the map
 - `docs/` - methodology, results, data validation, limitations & diligence roadmap, and a
@@ -58,32 +71,49 @@ dataset for Houston - documented as a real limitation rather than estimated. See
 ```bash
 pip install -r requirements.txt
 
-cd scripts
-python 01_fetch_tracts.py                  # all 1,115 Harris County tracts + ACS demographics
-python 02_fetch_competitors.py              # 528 store locations across 15 banners, categorized (OSM)
-python 03_gap_analysis.py                   # county-wide opportunity scoring
-
-python 13_houston_scope_clusters.py         # real Houston boundary; 10 spread-out opportunity areas
-python 14_find_intersections_citywide.py    # real arterial intersections in all 10 areas (OSM)
-python 15_fetch_parcels_citywide.py         # real HCAD candidate parcels, 20-site citywide shortlist
-python 16_fetch_citywide_aadt.py            # every TxDOT AADT station in Houston (1,687)
-python 17_fetch_citywide_blockgroups.py     # every Census block group in Houston (1,603)
-python 18_enrich_sites_citywide.py          # FEMA flood, verified AADT, competitor distances
-python 19_drive_times_and_huff.py           # OSRM drive-time trade areas + Huff gravity model
-python 20_score_sites_citywide.py           # weighted scorecard + AADT-benchmark gate + citywide ranking
-python 21_fetch_houston_tract_geometry.py   # tract polygons for the citywide choropleth
-python 22_isochrone_winner.py               # real OSRM isochrone for the CURRENT #1 scorecard site
-python 24_cannibalization_analysis.py       # real trade-area overlap vs. existing Family Dollar stores
-python 25_extended_demographics_and_ci.py   # foreign-born/Spanish/household-size + 90% confidence intervals
-python 26_microsite_details.py              # real speed limits, co-tenants, transit distance, approx. lot dimensions
-python 27_vehicle_tenure_demographics.py    # zero-vehicle household share + renter-occupied share + CIs
-python 28_sensitivity_analysis.py           # 5-scenario re-weighting robustness check on the scorecard
-python 29_statistical_rigor.py              # Moran's I residual test + spatial block cross-validation metrics
-python 23_generate_map_citywide.py          # builds ../index.html + Analysis Dashboard (FEMA polygons load live in-map via NFHL API)
-
-python 31_generate_slide_assets.py          # optional: real chart images for docs/slides/ (leadership deck), not required for the map or analysis
+python run_pipeline.py --list   # see every stage, in run order, with a one-line description
+python run_pipeline.py          # run the whole pipeline end-to-end
 ```
 
-Each script caches its API responses under `data/raw/`, so re-running the pipeline after the first
+Or run (or re-run) a specific stage or subset, either through the CLI or as a standalone module -
+useful when only one step's inputs changed:
+
+```bash
+python run_pipeline.py --only 20 23      # re-score sites and regenerate the map
+python -m pipeline.stages.s01_fetch_tracts   # any stage is directly runnable on its own
+```
+
+Run order and what each stage does:
+
+```text
+01  fetch_tracts                   all 1,115 Harris County tracts + ACS demographics
+02  fetch_competitors              528 store locations across 15 banners, categorized (OSM)
+03  gap_analysis                   county-wide opportunity scoring
+
+13  houston_scope_clusters         real Houston boundary; 10 spread-out opportunity areas
+14  find_intersections_citywide    real arterial intersections in all 10 areas (OSM)
+15  fetch_parcels_citywide         real HCAD candidate parcels, 20-site citywide shortlist
+16  fetch_citywide_aadt            every TxDOT AADT station in Houston (1,687)
+17  fetch_citywide_blockgroups     every Census block group in Houston (1,603)
+18  enrich_sites_citywide          FEMA flood, verified AADT, competitor distances
+19  drive_times_and_huff           OSRM drive-time trade areas + Huff gravity model
+20  score_sites_citywide           weighted scorecard + AADT-benchmark gate + citywide ranking
+21  fetch_houston_tract_geometry   tract polygons for the citywide choropleth
+22  isochrone_winner               real OSRM isochrone for the CURRENT #1 scorecard site
+24  cannibalization_analysis       real trade-area overlap vs. existing Family Dollar stores
+25  extended_demographics_and_ci   foreign-born/Spanish/household-size + 90% confidence intervals
+26  microsite_details              real speed limits, co-tenants, transit distance, approx. lot dimensions
+27  vehicle_tenure_demographics    zero-vehicle household share + renter-occupied share + CIs
+28  sensitivity_analysis           5-scenario re-weighting robustness check on the scorecard
+29  statistical_rigor              Moran's I residual test + spatial block cross-validation metrics
+23  generate_map_citywide          builds ../index.html + Analysis Dashboard (FEMA polygons load live in-map via NFHL API)
+
+31  generate_slide_assets          optional: real chart images for docs/slides/ (leadership deck), not required for the map or analysis
+```
+
+(Stage 23 depends on stages 24-29's outputs, so `pipeline/stages/__init__.py` registers it near the
+end - it runs there rather than in numeric position; `run_pipeline.py` follows that same order.)
+
+Each stage caches its API responses under `data/raw/`, so re-running the pipeline after the first
 time is fast and doesn't re-hit the public APIs. Delete the relevant cache file(s) to force a
 refresh.
