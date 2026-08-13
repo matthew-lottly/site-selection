@@ -156,7 +156,7 @@ def build_header_html(winner_address: str, winner_neighborhood: str) -> str:
 """
 
 
-def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
+def build_legend_html(opportunity_ramp_css: str) -> str:
     section_head = "font-weight:700; color:#1F2937; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:7px;"
     row_text = "color:#374151; font-weight:600;"
 
@@ -172,6 +172,19 @@ def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
       dot(COMPETITOR_COLORS[k], v.split(" (")[0]) for k, v in COMPETITOR_LABELS.items() if k != "family_dollar"
     )
 
+    def ramp_dot(color: str) -> str:
+        return (
+            f'<span style="width:14px; height:14px; border-radius:50%; background:{color}; '
+            f'border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0;"></span>'
+        )
+
+    # Same color function the real rank-badge markers use (ramp_color over STATUS_RAMP) -- a row of
+    # points, not a solid bar, since candidate sites are points on the map, not a filled area.
+    RANK_RAMP_DOTS = 7
+    rank_dots = "".join(
+        ramp_dot(ramp_color(i / (RANK_RAMP_DOTS - 1), STATUS_RAMP)) for i in range(RANK_RAMP_DOTS)
+    )
+
     return f"""
 <div style="position: fixed; bottom: 20px; left: 12px; z-index: 9999; background: white;
             padding: 14px 16px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.28);
@@ -183,11 +196,12 @@ def build_legend_html(rank_ramp_css: str, opportunity_ramp_css: str) -> str:
     <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 0 0 2px #F5B700, 0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
     <span style="{row_text}">Recommended site (fixed color + gold ring -- always distinct, regardless of score rank)</span>
   </div>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-    <div style="width:18px; height:18px; border-radius:50%; background:#d03b3b; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); flex-shrink:0;"></div>
+  <div style="margin-bottom:6px;">
     <span style="{row_text}">Other candidate sites, numbered by rank</span>
   </div>
-  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{rank_ramp_css};"></div>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+    {rank_dots}
+  </div>
   <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; margin-bottom:12px; font-weight:600;">
     <span>Best</span><span>Worst</span>
   </div>
@@ -1244,9 +1258,8 @@ def build_map() -> Path:
     ).add_to(iso_layer)
     iso_layer.add_to(m)
 
-    rank_ramp_css = "linear-gradient(90deg," + ",".join(STATUS_RAMP) + ")"
     opportunity_ramp_css = "linear-gradient(90deg," + ",".join(SEQUENTIAL_BLUE) + ")"
-    m.get_root().html.add_child(folium.Element(build_legend_html(rank_ramp_css, opportunity_ramp_css)))
+    m.get_root().html.add_child(folium.Element(build_legend_html(opportunity_ramp_css)))
     m.get_root().html.add_child(folium.Element(build_dashboard_html(
       scorecard,
       load_csv("cannibalization.csv"),
