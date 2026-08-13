@@ -40,13 +40,17 @@ dataset for Houston - documented as a real limitation rather than estimated. See
 ## Repository structure
 
 - `scripts/` - the pipeline, run in numeric order; `lib.py` holds shared HTTP/geometry/color
-  helpers. Numbering has a gap (03 → 13): scripts 04-12 were an earlier single-neighborhood draft,
-  superseded by the citywide versions and removed rather than left to confuse a rerun.
+  helpers. Numbering has gaps (03 → 13, 29 → 31): scripts 04-12 were an earlier single-neighborhood
+  draft, and script 30 fetched a static, citywide FEMA flood-polygon file - both superseded (by the
+  citywide versions, and by the live in-map FEMA fetch in script 23, respectively) and removed rather
+  than left to confuse a rerun.
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
 - `data/processed/` - clean CSV/GeoJSON outputs consumed by later stages and the map
 - `docs/` - methodology, results, data validation, limitations & diligence roadmap, and a
   presentation outline, plus PowerPoint build assets (`powerpoint_starter.md`,
   `powerpoint_slide_copy.md`, `powerpoint_speaker_notes.md`)
+- `docs/slides/` - a paste-ready, 12-file leadership slide deck (one markdown file per slide, real
+  chart images included) - see `docs/slides/00_INDEX.md` for how to build it in Google Slides
 - `index.html` - the generated interactive web map (repo root, for GitHub Pages)
 
 ## Running the pipeline
@@ -76,6 +80,8 @@ python 27_vehicle_tenure_demographics.py    # zero-vehicle household share + ren
 python 28_sensitivity_analysis.py           # 5-scenario re-weighting robustness check on the scorecard
 python 29_statistical_rigor.py              # Moran's I residual test + spatial block cross-validation metrics
 python 23_generate_map_citywide.py          # builds ../index.html + Analysis Dashboard (FEMA polygons load live in-map via NFHL API)
+
+python 31_generate_slide_assets.py          # optional: real chart images for docs/slides/ (leadership deck), not required for the map or analysis
 ```
 
 Each script caches its API responses under `data/raw/`, so re-running the pipeline after the first

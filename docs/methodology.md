@@ -275,8 +275,11 @@ validated best→worst color ramp, with the recommendation as a distinct gold-ri
 opportunity areas searched; and the real drive-time trade area for the recommended site. A FEMA
 NFHL flood-polygon layer is included as a toggleable off-by-default overlay for risk review and is
 fetched live client-side from the FEMA API (instead of being stored as a large static repo artifact).
-A
-basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
+The live fetch is capped to a fixed area around the map center and gated behind a minimum zoom level
+(with an on-map "zoom in" hint below that) - a full-city query was tested directly against the live
+FEMA API and confirmed to exceed FEMA's own server-side transfer limit on the first page alone, so
+citywide loading was never a viable design, not just a performance nicety.
+A basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
 marker popup cites its data source, set in dark, bold text for at-a-glance legibility.
 
 A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces seven tabs built

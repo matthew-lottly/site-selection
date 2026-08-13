@@ -920,6 +920,16 @@ def build_validation_html() -> str:
       competitor-side travel time is straight-line/speed-estimated rather than fully OSRM-routed (network
       routing from every block group to every competitor would multiply API calls ~60x for a secondary input);
       the cannibalization overlap radius (1.5 mi straight-line) is a documented proxy for the same reason.</li>
+      <li>This FEMA overlay itself was a caught bug: an earlier version queried the live FEMA API for the
+      full current map view, which was tested directly against the API and confirmed to exceed FEMA's own
+      transfer limit on the first page alone (~25MB, more pages remaining) -- so the layer never finished
+      loading. Fixed by capping every request to a fixed area around the map center and requiring a minimum
+      zoom level, refetching as you pan.</li>
+      <li>The recommended site's marker color was originally computed from its raw score-rank position on the
+      best-to-worst ramp, which only rendered green because the current #1 raw score also happens to be the
+      primary recommendation -- a coincidence, not a guarantee, since the AADT gate can make the primary
+      recommendation a different site than the raw #1. Fixed so the winner's color and gold ring are fixed
+      constants, independent of rank.</li>
     </ul>
 
     <p style="font-weight:700; margin-bottom:4px;">Houston-specific factors accounted for</p>

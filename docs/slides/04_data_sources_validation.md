@@ -10,7 +10,7 @@ Why This Analysis Is Defensible
   Harris County Appraisal District, FEMA flood data, TxDOT traffic counts, and OSRM drive-time routing
 - 528 real competitor and anchor locations pulled and categorized the way a site selector actually thinks about them
 - Every number behind the recommended site was independently re-checked against the live source APIs, not just cached files
-- 11 specific validation checks documented, including 4 real bugs that were found and fixed during the build
+- 13 specific validation checks documented, including 6 real bugs that were found and fixed during the build
 - One bug fix, caught by a self-imposed sensitivity-analysis stress test, changed the actual recommendation
 
 ## SPEAKER NOTES

@@ -5,6 +5,3 @@ __pycache__/
 
 # Generated heavyweight outputs (do not commit)
 index.html
-fema_probe.json
-data/processed/houston_fema_flood.geojson
-data/raw/houston_fema_flood_layer28.json

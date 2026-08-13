@@ -113,6 +113,22 @@ recommendation.
     unstable HTML format or estimate a risk score, this was dropped as a candidate metric entirely and
     documented as a real data-availability gap (see `limitations_and_diligence.md`) - the same
     standard applied to every other unverifiable claim in this analysis.
+12. **FEMA flood-layer transfer-limit bug, found and fixed.** The map's FEMA NFHL overlay
+    (`scripts/23_generate_map_citywide.py`) originally queried the live FEMA API for whatever the
+    current map viewport was. Tested directly against the live API at the map's citywide starting
+    view: the first 2,000-feature page alone returned ~25MB and FEMA reported
+    `exceededTransferLimit: true`, with an unknown number of pages still remaining - so the layer
+    never finished loading and appeared empty. Fixed by capping every query to a fixed small area
+    around the map center (verified at ~5MB per request) and gating fetches behind a minimum zoom
+    level, with an on-map hint below that level and a refetch on pan/zoom.
+13. **Recommendation marker color was silently coupled to rank position, not the actual
+    recommendation.** The winning site's marker color was computed from its raw score-rank position on
+    the best-to-worst ramp, which only rendered green because the current #1 raw score happens to also
+    be the primary recommendation. Since the scoring gate (`scripts/20_score_sites_citywide.py`) can
+    make the primary recommendation a site other than the raw #1 (see item 8 above), that coupling
+    would have silently rendered the winner marker in whatever ramp color its rank happened to be
+    the moment the raw #1 fails the AADT benchmark - contradicting the legend's fixed "gold-ringed
+    star" promise. Fixed by making the winner's fill and ring color constants, independent of rank.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
