@@ -21,7 +21,7 @@ from ..core import PROCESSED, PipelineStage
 class SensitivityAnalysisStage(PipelineStage):
     id = "28"
     name = "sensitivity_analysis"
-    description = "Re-weighted scorecard sensitivity check across 5 alternative weighting scenarios"
+    description = "Re-weighted scorecard sensitivity check across 6 alternative weighting scenarios"
     outputs = (PROCESSED / "sensitivity_analysis.csv",)
 
     # Each scenario's weights sum to 100. "Base" is script 20's documented split.

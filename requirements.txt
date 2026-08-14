@@ -2,3 +2,5 @@ requests>=2.31.0
 folium>=0.20.0
 numpy>=1.26.0
 matplotlib>=3.8.0  # slide-deck chart export only (pipeline/stages/s31_generate_slide_assets.py), not used by the analysis pipeline
+overturemaps>=1.0.1  # Overture Maps Places cross-check (pipeline/stages/s35_overture_supplement.py)
+shapely>=2.1.0  # parses Overture's WKB point geometry

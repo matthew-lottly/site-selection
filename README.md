@@ -6,7 +6,8 @@ Location Intelligence / GIS Analyst case study.
 
 **Recommendation:** Eldridge Parkway & Westhollow Parkway, Parkridge, Houston, TX - selected from 20
 real candidate sites spanning 10 Houston neighborhoods. See [`docs/results.md`](docs/results.md) for the full
-scorecard, reasoning, and the one real trade-off (cannibalization risk vs. the close #2 finalist),
+scorecard, reasoning, and the real trade-offs (crime exposure and cannibalization risk vs. the closest
+finalists) - including a materially significant real correction a second free-data pass surfaced,
 [`docs/methodology.md`](docs/methodology.md) for how the pipeline works,
 [`docs/data_validation.md`](docs/data_validation.md) for the full source catalog, every audit check
 performed (including a bug the sensitivity analysis caught that changed the recommendation), and
@@ -34,11 +35,18 @@ alongside it.
   market-capture model, and a real cannibalization/trade-area-overlap analysis
 - Houston Police Department - real, point-level NIBRS Part I violent/property crime incidents,
   direct CSV export, for a real per-site crime-risk score
+- HUD LIHTC Database - real, geocoded affordable-housing properties (ArcGIS REST)
+- Census LEHD LODES - real block-level job counts, for a real daytime/workplace-population signal
+- USDA ERS Food Access Research Atlas (SRAM) - real per-tract food-access share
+- Overture Maps Foundation Places - free, open (CDLA Permissive 2.0) POI data, cross-checked against
+  the OSM-sourced competitor pull
 
 An earlier revision checked Houston's open-data CKAN catalog for crime data and found it genuinely
 unavailable there. That check missed a separate, real source: HPD's own site publishes point-level
 incident data as direct CSV downloads. See `docs/data_validation.md` §2 (item 14) for the full story
-and `docs/methodology.md` Stage 5c for how it's used.
+and `docs/methodology.md` Stage 5c for how it's used. A deliberate second free-data pass then re-checked
+every other paid-vendor category for a free alternative and added the four sources above - see
+`docs/data_validation.md` §2 (items 15-19) and `docs/methodology.md` Stage 5d.
 
 ## Repository structure
 
@@ -47,17 +55,21 @@ and `docs/methodology.md` Stage 5c for how it's used.
     a default `validate()` that confirms declared outputs exist), `ApiClient` (shared GET/POST +
     disk-cache behavior), `Pipeline` (the orchestrator that runs stages in order), and the
     `ROOT`/`RAW`/`PROCESSED` path constants.
-  - `pipeline/clients/` - one `ApiClient` subclass per data source (`TigerWebClient`,
-    `CensusReporterClient`, `OverpassClient`, `HcadClient`, `FemaClient`, `TxDotClient`,
-    `OsrmClient`), each just enough to express that source's request shape and caching needs.
+  - `pipeline/clients/` - one `ApiClient` subclass (or equivalent lightweight client) per data source
+    (`TigerWebClient`, `CensusReporterClient`, `OverpassClient`, `HcadClient`, `FemaClient`,
+    `TxDotClient`, `OsrmClient`, `HpdCrimeClient`, `HudLihtcClient`, `LehdClient`,
+    `UsdaFoodAccessClient`, `OvertureClient`), each just enough to express that source's request shape
+    and caching needs.
   - `pipeline/geometry.py` / `pipeline/color.py` - `Geometry` and `ColorRamp`: stateless helper
     classes for distance/point-in-polygon/hull math and the validated map color palettes.
   - `pipeline/stages/` - one `PipelineStage` subclass per pipeline step (`s01_fetch_tracts.py`,
-    `s02_fetch_competitors.py`, ... `s31_generate_slide_assets.py`), each independently runnable.
+    `s02_fetch_competitors.py`, ... `s35_overture_supplement.py`), each independently runnable.
     Numbering has a gap (03 → 13): stages 04-12 were an earlier single-neighborhood draft, superseded
     by the citywide versions and removed rather than left to confuse a rerun. Stage 30 originally
     fetched a static, citywide FEMA flood-polygon file, superseded by the live in-map FEMA fetch in
-    stage 23 and removed - the number was later reused for the real HPD crime-risk stage.
+    stage 23 and removed - the number was later reused for the real HPD crime-risk stage. Stages 32-35
+    (LIHTC, daytime population, food access, Overture cross-check) were added in a second free-data
+    pass after crime data.
 - `run_pipeline.py` - CLI entry point: runs every stage in order (`python run_pipeline.py`), a
   subset (`--only 01 02`), or just lists them (`--list`).
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
@@ -101,6 +113,10 @@ Run order and what each stage does:
 18  enrich_sites_citywide          FEMA flood, verified AADT, competitor distances
 19  drive_times_and_huff           OSRM drive-time trade areas + Huff gravity model
 30  crime_risk                     real HPD NIBRS Part I violent/property crime counts within 0.5mi of each finalist
+32  lihtc_properties                real HUD LIHTC affordable-housing unit counts within 1mi of each finalist
+33  daytime_population              real Census LEHD workplace/job counts within each finalist's 5-min drive trade area
+34  food_access                     real USDA food-access ("food desert") share for each finalist's census tract
+35  overture_supplement             real Overture Maps cross-check of the OSM-sourced competitor data
 20  score_sites_citywide           weighted scorecard + AADT-benchmark gate + citywide ranking
 21  fetch_houston_tract_geometry   tract polygons for the citywide choropleth
 22  isochrone_winner               real OSRM isochrone for the CURRENT #1 scorecard site
@@ -116,9 +132,10 @@ Run order and what each stage does:
 ```
 
 (Stage 23 depends on stages 24-29's outputs, so `pipeline/stages/__init__.py` registers it near the
-end - it runs there rather than in numeric position. Stage 30 (crime risk) similarly runs right after
-19, before scoring, since stage 20 consumes its output - both are slotted into `ALL_STAGES` at the
-point they actually need to run, not in numeric order; `run_pipeline.py` follows that same order.)
+end - it runs there rather than in numeric position. Stages 30 and 32-35 (crime risk, LIHTC, daytime
+population, food access, Overture cross-check) similarly run right after 19, before scoring, since
+stage 20 consumes their outputs - all are slotted into `ALL_STAGES` at the point they actually need to
+run, not in numeric order; `run_pipeline.py` follows that same order.)
 
 Each stage caches its API responses under `data/raw/`, so re-running the pipeline after the first
 time is fast and doesn't re-hit the public APIs. Delete the relevant cache file(s) to force a

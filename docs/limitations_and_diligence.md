@@ -28,7 +28,7 @@ methodology at all.
 | **Crime data reflects reported incidents only** | HPD's NIBRS export (now used as a real 7th scoring factor - see below) is police-recorded crime, not a victimization survey. Some crime goes unreported, and reporting rates can vary by neighborhood - a limitation of any police-recorded crime statistic nationally, not specific to this analysis. It is also a trailing-12-month snapshot, not a multi-year trend. | Reported as real incident counts (violent/property, within 0.5mi, trailing 12mo), not smoothed into a longer trend or reweighted for suspected under-reporting - the raw, real number is more defensible than a guessed correction. |
 | **Competitor travel time in the Huff model and cannibalization overlap is straight-line distance + a 25 mph average-speed assumption, not full OSRM network routing** | Full routing from every one of ~1,600 block groups to every one of 56 arch-rivals (and every existing FD store) would multiply the OSRM call count roughly 60x for a *secondary* input to a relative comparison metric. | Disclosed as a tractability trade-off, not hidden. The candidate site's own travel time - the number that actually varies by which site wins - uses real OSRM network routing throughout, not an approximation. |
 | **Drive-time isochrone is a 128-point approximation (16 bearings × 8 distances), not a parcel-precise flood-fill** | A true flood-fill would require routing to every node on the OSM road network from every candidate - computationally possible but far beyond what a desk screen needs to rank 20 sites. | Documented explicitly as a strong approximation; can miss small dead-end pockets or one-way-street effects at the margins of the shape. |
-| **OSM competitor coverage is not exhaustive** | OpenStreetMap tagging completeness varies by brand and area. Ross Dress for Less returned only 1 Houston match despite operating more locations - almost certainly an OSM tagging gap, not a real store count. | Reported as pulled, not patched with an estimated count. Flagged explicitly rather than presented as complete. |
+| **OSM competitor coverage is not exhaustive citywide** | OpenStreetMap tagging completeness varies by brand and area. Ross Dress for Less returned only 1 Houston match despite operating more locations - almost certainly an OSM tagging gap, not a real store count. | Overture Maps cross-check (Category A closed for the 20 finalists specifically): found 54 real competitor locations within 1mi of the finalists that OSM missed, including a materially significant find near a prior revision's #2 site (see `data_validation.md` §2 item 19). Corrected 8 sites' nearest-competitor distance; the Huff capture model itself was not re-derived against Overture data (disclosed scope boundary, not full citywide re-verification). |
 | **ACS 5-year estimates carry real margins of error** | The Census Bureau's American Community Survey is a sample, not a full count - every estimate has statistical uncertainty by design. | Pulled and reported the real 90% confidence interval for every headline statistic (population, income, poverty, foreign-born share, Spanish-at-home share, household size, zero-vehicle household share, renter-occupied share), using the Bureau's own ratio-MOE propagation formula for derived rates rather than presenting point estimates as exact. Full table in `data_validation.md` §4. |
 
 ## Category B - Boundaries a desk-based GIS analysis cannot cross
@@ -57,18 +57,27 @@ not the arterial the traffic count is drawn from - confirming the driveway/ingre
 available at this specific intersection, not just the nearby arterial's traffic volume, is the single
 highest-value diligence item for this site. See the roadmap's traffic-engineering step below.
 
-The scorecard also shows a real, three-way trade-off worth surfacing directly rather than smoothing
-over: the recommended site's cannibalization risk against Family Dollar's own existing network is
-**High** (1.48 mi from an existing FD, 70.6% trade-area overlap, the lowest net-new population reach
-of the top 5 finalists at 9,679) and its trade-area median income ($61,815) sits above the $20k-$55k
-core demand band, in exchange for by far the lowest real crime reading in the top tier (2 violent + 4
-property Part I incidents within 0.5mi, vs. 24+62 at the #2 site and 60+68 at the #3 site) and the
-strongest traffic and Huff capture of any finalist. None of the top 3 finalists wins on every
-dimension - see `docs/results.md` for the full comparison. A VP weighing real crime exposure most
-heavily gets this recommendation; one weighing store-network cannibalization or core-income-band
-demand most heavily may reasonably prefer the #2 (6600 Stillwell St) or #3 (Brookhaven St & Cullen
-Blvd, Sunnyside) site instead. That judgment call is exactly what this document exists to make
-possible, not obscure.
+The scorecard also shows a real trade-off worth surfacing directly rather than smoothing over: the
+recommended site's cannibalization risk against Family Dollar's own existing network is **High**
+(1.48 mi from an existing FD, 70.6% trade-area overlap, the lowest net-new population reach of the
+top 5 finalists at 9,679) and its trade-area median income ($61,815) sits above the $20k-$55k core
+demand band, in exchange for by far the lowest real crime reading in the top tier (2 violent + 4
+property Part I incidents within 0.5mi, vs. 60+68 at the #2 site) and the strongest traffic and Huff
+capture of any finalist. A VP weighing real crime exposure most heavily gets this recommendation; one
+weighing store-network cannibalization most heavily may reasonably prefer the #2 site (Brookhaven St
+& Cullen Blvd, Sunnyside - Low cannibalization risk, 43,688 net-new population reach) instead. That
+judgment call is exactly what this document exists to make possible, not obscure.
+
+**A separate, more urgent item: 6600 Stillwell St (a prior revision's #2 finalist, now #5) needs an
+independent on-the-ground recheck if it's under consideration for any reason.** A second free-data
+pass (see `docs/methodology.md` Stage 5d) cross-checked the OSM-sourced competitor data against
+Overture Maps and found a real Dollar General ~0.14 mi and a real Family Dollar ~0.24 mi from that
+site that OSM had missed entirely - the earlier OSM-only figures (3.03 mi and 1.01 mi respectively)
+were both substantially wrong. This is a real, verified correction, not a modeling choice - see
+`data_validation.md` §2 item 19 for the full audit trail. It's flagged here specifically because it's
+exactly the kind of on-the-ground fact a desk analysis can get wrong even with real public data, and
+is now the single highest-value diligence item for that particular site if it resurfaces in any future
+comparison.
 
 ## Diligence roadmap: from desk screen to acquisition decision
 
@@ -102,11 +111,11 @@ possible, not obscure.
 4. **Utility availability and permitting check** with the City of Houston - water/sewer/electric
    service confirmation and a parking-code review (Houston's general off-street ratio is roughly 1
    space per 200-300 sq ft of retail, cited as informational context, not a parcel-verified figure).
-5. **Three-way trade-off judgment call.** Weigh the recommended site's lowest-in-field crime exposure
-   and strongest traffic/Huff capture against its High cannibalization risk and above-core-band trade
-   income, versus the #2 site's (6600 Stillwell St) stronger core-income demand and #3 site's
-   (Brookhaven St & Cullen Blvd, Sunnyside) Low cannibalization risk (see above) - a real strategic
-   trade-off for the VP to make explicitly, not one this analysis resolves on its behalf.
+5. **Trade-off judgment call.** Weigh the recommended site's lowest-in-field crime exposure and
+   strongest traffic/Huff capture against its High cannibalization risk and above-core-band trade
+   income, versus the #2 site's (Brookhaven St & Cullen Blvd, Sunnyside) Low cannibalization risk and
+   much higher net-new population reach, but far worse real crime reading (see above) - a real
+   strategic trade-off for the VP to make explicitly, not one this analysis resolves on its behalf.
 
 ## This isn't a one-time disclaimer - it held up under its own audit
 

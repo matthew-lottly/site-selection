@@ -934,11 +934,24 @@ class GenerateMapStage(PipelineStage):
       <li>Nominatim (OpenStreetMap) -- reverse geocoding for site/neighborhood/road verification</li>
       <li>Houston Police Department -- real point-level NIBRS Part I violent/property crime incident exports
       (direct CSV download from houstontx.gov, not the CKAN catalog), trailing 12 months within 0.5mi of each site</li>
+      <li>HUD LIHTC Database -- real, geocoded affordable-housing properties within 1mi of each site (ArcGIS REST)</li>
+      <li>Census LEHD LODES -- real block-level workplace/job counts, real daytime population signal within each
+      site's 5-minute drive trade area</li>
+      <li>USDA ERS Food Access Research Atlas (SNAP-authorized Retailer Access Map) -- real per-tract share of
+      population beyond 0.5mi from a food retailer</li>
+      <li>Overture Maps Places -- free, open (CDLA Permissive 2.0), ML-deduped POI data blending Meta/Microsoft/
+      TomTom/~200 other sources, used as a real cross-check against the OSM-sourced competitor pull</li>
     </ul>
 
     <p style="font-weight:700; margin-bottom:4px;">Specific checks performed against hallucination / error</p>
     <ul style="margin-top:0; padding-left:18px;">
-      <li><b>A sensitivity analysis (re-aggregating the same real scores under 5 different weighting schemes,
+      <li><b>A second free-data pass, run specifically to check nothing obvious and free was missed before
+      finalizing which data sources genuinely require a paid license:</b> re-checked every paid category (mobile
+      foot-traffic data, consumer spending data, commercial real estate data, enterprise traffic data, commercial
+      crime scoring, enhanced business-listings data) for a free alternative, and found one real one (Overture
+      Maps, added above) plus three other real free datasets this model had never used (HUD LIHTC, Census LEHD,
+      USDA Food Access) -- each verified live and added as a real signal rather than assumed available.</li>
+      <li><b>A sensitivity analysis (re-aggregating the same real scores under 6 different weighting schemes,
       Scorecard tab) exposed a real bug that changed the actual recommendation:</b> the freeway-name filter
       correctly rejected station names containing "Freeway," but a legitimate frontage road sharing that name
       (e.g. "Gulf Freeway Frontage Road" -- a real street with real driveway access, common in Houston retail)
@@ -1214,6 +1227,89 @@ class GenerateMapStage(PipelineStage):
               ).add_to(layer)
         for layer in category_layers.values():
             layer.add_to(m)
+
+        # --- Layer: real HUD LIHTC affordable-housing properties (free, off by default) ---
+        lihtc_layer = folium.FeatureGroup(name="HUD LIHTC affordable-housing properties (free, off by default)", show=False)
+        seen_lihtc = set()
+        for p in self.load_csv("lihtc_properties_detail.csv"):
+            key = (p["name"], round(float(p["lat"]), 5), round(float(p["lon"]), 5))
+            if key in seen_lihtc:
+                continue
+            seen_lihtc.add(key)
+            folium.Marker(
+                location=[float(p["lat"]), float(p["lon"])],
+                popup=f"<b style='color:#1F2937;'>{p['name']}</b><br><span style='color:#374151;'>{p['units']} units</span><br><span class='src-note'>Source: HUD LIHTC Database</span>",
+                tooltip=f"LIHTC: {p['name']} ({p['units']} units)",
+                icon=self.competitor_dot_icon("#0f766e"),
+            ).add_to(lihtc_layer)
+        lihtc_layer.add_to(m)
+
+        # --- Layer: real LEHD daytime workplace population (free, off by default) --------
+        daytime_layer = folium.FeatureGroup(name="Daytime workplace population, all Houston block groups (free, off by default)", show=False)
+        bg_daytime = self.load_csv("blockgroup_daytime_population.csv")
+        job_counts = [float(b["daytime_jobs"]) for b in bg_daytime if float(b["daytime_jobs"]) > 0]
+        j_hi = max(job_counts) if job_counts else 1.0
+        for b in bg_daytime:
+            jobs = float(b["daytime_jobs"])
+            if jobs <= 0:
+                continue
+            t = min(1.0, jobs / j_hi)
+            color = ColorRamp.interpolate(t, ColorRamp.SEQUENTIAL_ORANGE)
+            folium.CircleMarker(
+                location=[float(b["lat"]), float(b["lon"])],
+                radius=2 + 8 * t,
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.65,
+                weight=0.5,
+                tooltip=f"{int(jobs):,} real jobs (LEHD block group {b['geoid']})",
+                popup=f"<b style='color:#1F2937;'>Daytime workplace population</b><br><span style='color:#374151;'>{int(jobs):,} jobs</span><br><span class='src-note'>Source: Census LEHD LODES (block group {b['geoid']})</span>",
+            ).add_to(daytime_layer)
+        daytime_layer.add_to(m)
+
+        # --- Layer: real USDA food-access share, finalist tracts (free, off by default) ---
+        food_access_layer = folium.FeatureGroup(name="Food access share, finalist tracts (USDA, free, off by default)", show=False)
+        tract_by_geoid = {f["properties"]["geoid"]: f for f in tracts["features"]}
+        food_access_rows = self.load_csv("site_food_access.csv")
+        fa_shares = [float(r["pct_tract_pop_beyond_half_mi_from_food_retailer"]) for r in food_access_rows]
+        fa_hi = max(fa_shares) if fa_shares else 1.0
+        seen_fa_tracts = set()
+        for r in food_access_rows:
+            geoid = r["tract_geoid"]
+            if geoid in seen_fa_tracts:
+                continue
+            seen_fa_tracts.add(geoid)
+            feat = tract_by_geoid.get(geoid)
+            if feat is None:
+                continue
+            share = float(r["pct_tract_pop_beyond_half_mi_from_food_retailer"])
+            t = (share / fa_hi) if fa_hi > 0 else 0.0
+            color = ColorRamp.interpolate(t, ColorRamp.SEQUENTIAL_ORANGE)
+            folium.GeoJson(
+                feat,
+                style_function=lambda _f, c=color: {"fillColor": c, "color": "#7a2d0f", "weight": 1, "fillOpacity": 0.35},
+                highlight_function=lambda _f: {"weight": 2, "color": "#7a2d0f"},
+                tooltip=f"Tract {geoid}: {share:.1f}% of population beyond 0.5mi from a SNAP-authorized food retailer",
+                popup=f"<b style='color:#1F2937;'>Tract {geoid}</b><br><span style='color:#374151;'>{share:.1f}% of tract population beyond 0.5mi from a SNAP-authorized food retailer</span><br><span class='src-note'>Source: USDA ERS Food Access Research Atlas (SRAM)</span>",
+            ).add_to(food_access_layer)
+        food_access_layer.add_to(m)
+
+        # --- Layer: real Overture-sourced competitors OSM missed (free, off by default) ---
+        overture_layer = folium.FeatureGroup(name="Competitors found by Overture, missed by OSM (free, off by default)", show=False)
+        seen_overture = set()
+        for p in self.load_csv("overture_new_competitors_detail.csv"):
+            key = (p["name"], round(float(p["lat"]), 5), round(float(p["lon"]), 5))
+            if key in seen_overture:
+                continue
+            seen_overture.add(key)
+            folium.Marker(
+                location=[float(p["lat"]), float(p["lon"])],
+                popup=f"<b style='color:#1F2937;'>{p['name']}</b><br><span style='color:#374151;'>Brand: {p['brand']}<br>Found by Overture Maps, not present in the OSM competitor pull</span><br><span class='src-note'>Source: Overture Maps Places</span>",
+                tooltip=f"{p['name']} ({p['brand']}) -- Overture-only find",
+                icon=self.competitor_dot_icon("#b45309"),
+            ).add_to(overture_layer)
+        overture_layer.add_to(m)
 
         # --- Layer: 10 opportunity clusters searched (context) -----------------------
         clusters = self.load_csv("clusters.csv")

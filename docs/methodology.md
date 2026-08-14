@@ -33,6 +33,10 @@ just the first promising area found. This version fixes that - see Stage 2 below
 | 9 | OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist, for the micro-site operational detail | Overpass QL |
 | 10 | Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API |
 | 11 | Houston Police Department (`houstontx.gov`) | Real, point-level NIBRS Part I violent/property crime incidents (offense code, date, lat/lon), direct CSV export, for the crime-risk score | Direct CSV download (not the CKAN catalog - see below) |
+| 12 | HUD LIHTC Database | Real, geocoded, point-level affordable-housing property locations and unit counts | ArcGIS REST (`egis.hud.gov`) |
+| 13 | Census LEHD LODES (WAC) | Real block-level total job counts, for a real daytime/workplace-population demand signal | Direct CSV download (`lehd.ces.census.gov`) |
+| 14 | USDA ERS Food Access Research Atlas (SNAP-authorized Retailer Access Map) | Real per-tract share of population beyond 0.5mi from a food retailer | Direct CSV download (`ers.usda.gov`) |
+| 15 | Overture Maps Foundation Places | Real, open (CDLA Permissive 2.0), ML-deduped POI data, used to cross-check/backfill the OSM-sourced competitor pull | Public GeoParquet on S3, via the official `overturemaps` Python package |
 
 No Census API key, Google Maps key, or paid GIS license was used or required.
 
@@ -220,6 +224,55 @@ back to 2009 - not through the CKAN API at all. This stage closes that gap:
   (Site 20, Inwood) to 147 (Site 8, Fondren Gardens) - a large, real, differentiating spread. Full
   detail in `data/processed/site_crime_risk.csv`.
 
+### Stage 5d - Second free-data pass: LIHTC, daytime population, food access, and an OSM cross-check
+
+After adding real crime data, a deliberate second research pass checked (a) whether any of the paid
+data categories this analysis would otherwise have to flag as unavailable actually have a free
+alternative, and (b) whether any other obvious free dataset for retail site selection had been missed.
+Four real, free, currently-live sources were found and added - full source-by-source verification and
+what was checked and ruled out (Walk Score API, HUD USPS vacancy data, Texas Comptroller sales tax,
+CDC SVI, FBI CDE) is in `data_validation.md` §2 items 15-18.
+
+**Real HUD LIHTC affordable-housing proximity** (`pipeline/stages/s32_lihtc_properties.py`) - HUD's
+Low-Income Housing Tax Credit Database is served as a public ArcGIS REST Feature Service, the same
+access pattern already used for HCAD/FEMA/TxDOT. Queried within 1.0 mile of each finalist for real,
+geocoded property records (project name, unit count). A real, free proxy for concentration of Family
+Dollar's core low-income customer base near a candidate site.
+
+**Real Census LEHD daytime/workplace population** (`pipeline/stages/s33_daytime_population.py`) -
+every other demand signal in this pipeline measures *residents* reachable by drive time; this model
+had zero visibility into the office/retail/industrial workforce that passes a site on a commute or
+lunch break. Census LEHD LODES (the same public data behind the Census Bureau's own OnTheMap tool)
+provides real, free, block-level total job counts. Downloaded Texas's real 2023 Workplace Area
+Characteristics file, aggregated block-level job counts to block-group level (matching the block
+group's first 12 GEOID digits), and summed real job counts within each finalist's already-cached real
+OSRM 5-minute drive-time trade area (reusing script 19's cached durations - no new routing calls).
+
+**Real USDA food-access share** (`pipeline/stages/s34_food_access.py`) - the USDA Economic Research
+Service's Food Access Research Atlas (now distributed as part of the SNAP-authorized Retailer Access
+Map, SRAM) publishes a real, continuous "share of tract population beyond 0.5 mile from a
+SNAP-authorized food retailer" metric per census tract - directly on-topic for a dollar-store
+expansion thesis, since these stores are frequently sited specifically to serve areas with poor
+supermarket access, and this signal was completely absent from every prior revision. (The Atlas's
+binary "low-income AND low-access" flag was checked first and found to read False for all 20
+already-commercially-screened finalists - no differentiating signal for this specific candidate set -
+so the continuous share metric was used instead; both are real Atlas fields, not a threshold invented
+for this project.)
+
+**Real Overture Maps competitor cross-check** (`pipeline/stages/s35_overture_supplement.py`) - this
+project already documented a real OSM coverage gap (Ross Dress for Less undercounted citywide, see
+`data_validation.md` §6). Overture Maps Places - free, open (CDLA Permissive 2.0), blending Meta,
+Microsoft, TomTom, and ~200 other sources with ML-based dedup/QA - was queried within 1.0 mile of each
+finalist and cross-checked against the existing OSM-sourced competitor list. Found **54 real
+competitor locations across the 20 finalists that OSM had missed**, corrected the nearest-competitor
+distance for 8 of the 20 sites, and surfaced one materially significant finding: a real Dollar General
+and a real Family Dollar within a quarter mile of 6600 Stillwell St (the prior revision's #2 site) that
+OSM's data had missed entirely - see `docs/results.md` for the full story. Scope, disclosed rather than
+silently assumed: only the nearest-competitor-distance input to the scorecard is corrected this way;
+the Huff market-capture model is not re-derived against Overture data (a larger change, out of scope
+for this pass - Overture's major-chain coverage for arch-rivals specifically is already strong in OSM,
+unlike the big-box-anchor gap this project originally found).
+
 ### Stage 6 - Weighted scorecard
 
 `pipeline/stages/s20_score_sites_citywide.py`
@@ -232,13 +285,30 @@ proportionally rather than arbitrarily:
 
 | Factor | Weight | Rationale |
 | --- | --- | --- |
-| Trade-area demand (5-min drive population × income fit) | 22% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band |
+| Trade-area demand (blended composite, see below) | 22% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band, now also incorporating real LIHTC/daytime-population/food-access signals |
 | Huff market-capture % | 18% | Comprehensive, distance- and size-weighted competitive pull against direct arch-rivals |
-| Competitive white space (distance to nearest arch-rival) | 13% | Simple, exec-legible cross-check on the Huff score |
+| Competitive white space (distance to nearest arch-rival, Overture-corrected) | 13% | Simple, exec-legible cross-check on the Huff score |
 | Traffic & visibility (verified AADT) | 13% | Passive visibility drives real discount-retail traffic; freeway mainlane counts excluded |
 | Site feasibility & cost (land value/acre, vacant-land bonus) | 14% | Lower acquisition cost and shovel-ready land reduce time-to-open |
 | Flood risk (FEMA zone) | 10% | Any mapped Special Flood Hazard Area is heavily penalized |
 | Crime risk (real HPD Part I incidents, 0.5mi, trailing 12mo) | 10% | More nearby violent/property incidents is penalized (Stage 5c) |
+
+**Trade-area demand is itself a blended composite**, extended this revision to fold in the three new
+demand-side signals from Stage 5d - the same pattern already used for `cost_feasibility_score`
+(land-cost-per-acre blended with a vacant-land bonus into one line), so the top-level factor count
+stays at seven rather than growing indefinitely, while every sub-component stays visible as its own
+column in `scorecard.csv` for transparency:
+
+| Demand sub-component | Sub-weight | Rationale |
+| --- | --- | --- |
+| Residential 5-min drive population × income fit (original signal) | 60% | Still the core, most directly relevant demand metric |
+| Real LIHTC units within 1mi (Stage 5d) | 15% | Concentration of the core low-income customer base |
+| Real LEHD daytime workplace population within 5-min drive (Stage 5d) | 15% | A signal this model had zero visibility into before this revision |
+| Real USDA food-access share (Stage 5d) | 10% | On-topic "underserved area" signal for a dollar-store expansion thesis |
+
+**Competitive white space also carries a real correction this revision**: the nearest-competitor
+distance input is Overture-corrected where Stage 5d's cross-check found a real competitor OSM missed
+(8 of 20 sites), rather than the raw OSM-only reading used in prior revisions.
 
 **The 8,000 AADT industry rule-of-thumb minimum viable-traffic benchmark is enforced as a hard gate
 on the primary recommendation, not just a soft-weighted factor.** The scoring script selects the
@@ -345,8 +415,11 @@ Details** (micro-site operational data including transit distance), **Confidence
   pockets or one-way-street effects; it is a strong approximation, not a parcel-precise flood-fill.
 - Overpass/OSM competitor and road data reflect current OSM tagging completeness. It is generally
   strong in Houston but not exhaustive - e.g., Ross Dress for Less returned only 1 match despite
-  operating more locations in Houston, almost certainly an OSM tagging gap rather than a real count;
-  reported as-is rather than patched with an estimate.
+  operating more locations in Houston, almost certainly an OSM tagging gap rather than a real count.
+  This revision partially closes the gap for the 20 finalists specifically: Stage 5d's Overture Maps
+  cross-check found 54 real competitor locations OSM had missed nearby and corrected 8 sites' nearest-
+  competitor distance - but full citywide OSM completeness (beyond the 20 finalists' immediate
+  vicinity) is still not claimed.
 - No revenue forecast is produced anywhere (see Stages 5 and 5b) - no public store-level sales data
   exists to calibrate one.
 - A real property/violent crime metric **is** produced (Stage 5c) - real HPD NIBRS Part I incident

@@ -28,6 +28,10 @@ same CSV files referenced here.
 | OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist | Overpass QL | Free, no key |
 | Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API | Free, no key |
 | Houston Police Department (`houstontx.gov`) | Real, point-level NIBRS Part I violent/property crime incidents (offense code, date, lat/lon) for the crime-risk score | Direct CSV download | Free, no key |
+| HUD LIHTC Database | Real, geocoded, point-level affordable-housing properties (project name, unit counts) | ArcGIS REST, `egis.hud.gov` | Free, no key |
+| Census LEHD LODES (WAC) | Real block-level total job counts, for a real daytime/workplace-population signal | Direct CSV download, `lehd.ces.census.gov` | Free, no key |
+| USDA ERS Food Access Research Atlas (SRAM) | Real per-tract share of population beyond 0.5mi from a SNAP-authorized food retailer | Direct CSV download, `ers.usda.gov` | Free, no key |
+| Overture Maps Foundation Places | Real, open, ML-deduped POI data used to cross-check the OSM-sourced competitor pull | Public GeoParquet on S3, via the `overturemaps` Python package | Free, open (CDLA Permissive 2.0), no key |
 
 No Census API key, Google Maps key, or paid GIS/mobility-data license (SafeGraph, Placer.ai, Esri)
 was used or is required to reproduce this analysis.
@@ -148,6 +152,50 @@ recommendation.
     Pkwy, Parkridge - 2 violent + 4 property, crime score 96.6/100), which was enough to overtake it
     once a real risk factor previously missing from the model was added. Full before/after comparison
     in `docs/results.md`.
+15. **Second free-data pass - re-checked every paid category for a free alternative, found one
+    (Overture Maps), and found three other free datasets this model had never used.** Rather than
+    finalize a list of "these require a paid license" for the outbound explanation without checking
+    that assumption twice, every paid category considered (mobile foot-traffic data, consumer spending
+    data, commercial real estate data, enterprise traffic data, commercial crime scoring, enhanced
+    business-listings data) was re-researched for a live 2026 free tier or open alternative. Also
+    checked and ruled out as genuinely not free/accessible enough to use: Google Places API and Yelp
+    Fusion API (both ended meaningful free tiers in 2026), Walk Score API (free tier restricted to
+    non-commercial consumer apps by its own terms), HUD's Aggregated USPS Vacant Address Data (access
+    restricted to registered government/non-profit entities, not openly public), and Texas Comptroller
+    local sales-tax data (published at city level only, too coarse for a per-site comparison).
+16. **Real HUD LIHTC affordable-housing data - verified live before building on it.** Queried
+    `egis.hud.gov/arcgis/rest/services/gotit/LIHTCProperties/MapServer/0` directly (`curl`) and
+    confirmed a real, current Feature Service (1,762 Texas records at query time) before writing
+    `pipeline/stages/s32_lihtc_properties.py`. Real unit counts within 1 mile of each finalist range
+    from 0 to 1,189 - a genuine, differentiating signal.
+17. **Real Census LEHD daytime-population data - verified live and reused already-cached routing.**
+    Confirmed the Texas 2023 Workplace Area Characteristics file is live (`curl -I`) before building
+    `pipeline/stages/s33_daytime_population.py`. Deliberately reused the OSRM drive-time durations
+    already cached per site by script 19 rather than re-querying OSRM, since the same block-group
+    prefilter and ordering script 19 and script 24 already rely on made this safe to do without a
+    single new routing call. Real job counts within each finalist's 5-minute drive range from 44 to
+    27,883 - a large, real, differentiating spread.
+18. **Real USDA food-access data - the binary flag showed no variance for this specific candidate set,
+    so the underlying continuous metric was used instead, and that decision is disclosed, not hidden.**
+    The Atlas's standard "low-income AND low-access at 1mi urban/10mi rural" flag
+    (`SD_SRAM_LILATracts_1And10`) read False for all 20 finalists - unsurprising, since these are
+    already commercially-screened, arterial-adjacent intersections, but it meant the flag carried zero
+    differentiating signal for this candidate set specifically. Checked several other real fields in
+    the same Atlas file before choosing `SD_SRAM_lapophalfshare` (share of tract population beyond 0.5
+    mile from a SNAP-authorized food retailer), which showed real variance (0%-31.5%) across the 20
+    finalists. Both are real Atlas fields; neither threshold was invented for this project.
+19. **Real Overture Maps competitor cross-check found a materially significant gap in the prior
+    revision's #2 site.** Cross-checking `pipeline/stages/s35_overture_supplement.py`'s output against
+    the OSM-sourced competitor data found a real Dollar General ~0.14 mi and a real Family Dollar
+    ~0.24 mi from 6600 Stillwell St (the crime-revision's #2 finalist) that OSM had missed entirely -
+    the OSM-only data had reported 3.03 mi and 1.01 mi respectively for those same two figures, both
+    substantially wrong. Sanity-checked every one of the 54 total new finds across all 20 finalists by
+    inspecting the matched brand names directly (`site_overture_supplement.csv`) before trusting the
+    correction - all were exact, known chain names from the same brand list script 02 already
+    classifies against, not generic substring false-positives. Folded into the scorecard's
+    nearest-competitor-distance input (8 of 20 sites corrected); the Huff capture model was
+    deliberately NOT re-derived against Overture data, a disclosed scope boundary (see
+    `docs/methodology.md` Stage 5d), not an oversight.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
@@ -199,12 +247,13 @@ MOE_p = (1/Y) × sqrt(MOE_X² − p² × MOE_Y²)        [if the radicand is neg
 Reproducible in `pipeline/stages/s25_extended_demographics_and_ci.py` (the first six rows) and
 `pipeline/stages/s27_vehicle_tenure_demographics.py` (zero-vehicle and renter-occupied shares).
 
-**A related, non-formal robustness check:** the 5-scenario sensitivity analysis
+**A related, non-formal robustness check:** the 6-scenario sensitivity analysis
 (`pipeline/stages/s28_sensitivity_analysis.py`) is a different kind of check than a statistical confidence
 interval - it re-aggregates real per-factor scores under alternative, defensible weight vectors
-rather than testing sampling uncertainty. The recommendation holds in 3 of 5 scenarios and is never
-worse than a close #2 in the other two; full results in `docs/results.md` and the map's Scorecard
-tab.
+rather than testing sampling uncertainty. The recommendation holds in 5 of 6 scenarios as of this
+revision (up from 4 of 6 before the LIHTC/daytime-population/food-access signals were added, since
+the old residential-only demand metric lost the Demand-Heavy scenario the new blended composite now
+wins); full results in `docs/results.md` and the map's Scorecard tab.
 
 **Sanity cross-check:** the citywide ACS place-level population (2,328,253) is independently close to
 (within ~0.7%) the sum of ACS block-group populations whose centroid falls inside the same real city
@@ -271,10 +320,14 @@ Being clear about the boundary of what public data can support is itself part of
 - **No engineered confirmation of 53-ft delivery-truck turning radius** - only a real, approximate
   parcel bounding-box size is reported (§3) as a directional gut-check, explicitly not a substitute
   for a civil site plan.
-- **No claim of exhaustive OSM competitor coverage.** OpenStreetMap tagging completeness varies; for
-  example, Ross Dress for Less returned only 1 match despite operating more Houston locations,
-  almost certainly an OSM tagging gap rather than a real store count. Reported as pulled, not patched
-  with an estimate.
+- **No claim of exhaustive OSM competitor coverage citywide**, though this revision closes the gap for
+  the 20 finalists specifically. OpenStreetMap tagging completeness varies - Ross Dress for Less
+  returned only 1 citywide match despite operating more Houston locations, almost certainly an OSM
+  tagging gap rather than a real store count. §2 item 19's Overture Maps cross-check found 54 real
+  competitor locations near the 20 finalists that OSM had missed (including a materially significant
+  find near the prior revision's #2 site) and corrected 8 sites' scores accordingly - but that check
+  only covered a 1-mile radius around each of the 20 finalists, not the full city, so citywide OSM
+  completeness beyond that radius is still not claimed.
 - **This is a desk-based screening exercise.** A final go/no-go still requires a site visit, a
   title/zoning check, and formal traffic-engineering sign-off - this analysis is built to make that
   final diligence faster and better-targeted, not to replace it. Full roadmap, organized by whether

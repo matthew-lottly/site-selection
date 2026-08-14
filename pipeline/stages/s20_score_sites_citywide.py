@@ -9,17 +9,19 @@ original 25/20/15/15/15/10 split to make room for a real crime-risk factor
 (script 30, real HPD NIBRS Part I incident data) at the same 10% weight as
 flood risk -- both are risk-mitigation factors, scored the same way,
 penalizing sites with a worse real reading:
-  22% Trade-area demand      -- 5-minute drive-time population, scaled by how
-                                 closely the population-weighted median HH
-                                 income in that trade area sits inside Family
-                                 Dollar's core $20k-$55k customer band
+  22% Trade-area demand      -- a blended composite (see below), still led by
+                                 5-minute drive-time RESIDENTIAL population
+                                 scaled by income fit, now also incorporating
+                                 three real signals this model previously had
+                                 no visibility into at all (scripts 32-34)
   18% Huff market capture     -- population-weighted gravity-model capture
                                  probability against every real nearby
                                  competitor (script 19)
   13% Competitive white space -- straight-line distance to the nearest
-                                 existing direct dollar-store competitor
-                                 (simple, exec-legible cross-check on the
-                                 Huff score)
+                                 existing direct dollar-store competitor,
+                                 corrected where Overture Maps found a real
+                                 competitor OSM missed (script 35) -- simple,
+                                 exec-legible cross-check on the Huff score
   13% Traffic & visibility    -- AADT on the actual frontage/arterial road
                                  (freeway mainlane counts excluded, script 18)
   14% Site feasibility/cost   -- land cost per acre (lower is better), bonus
@@ -29,6 +31,20 @@ penalizing sites with a worse real reading:
   10% Crime risk               -- real HPD Part I violent + property incident
                                  count within 0.5 mi, trailing 12 months
                                  (script 30); more incidents is penalized
+
+Trade-area demand sub-weights (blended the same way cost_feasibility_score
+already blends land-cost-per-acre with a vacant-land bonus into one line --
+each sub-component stays visible as its own column for transparency, only
+the top-level factor count stays fixed at seven):
+  60% Residential 5-min drive population x income fit (original signal)
+  15% Real LIHTC affordable-housing units within 1mi (script 32) -- proxy for
+      concentration of Family Dollar's core low-income customer base
+  15% Real LEHD daytime workplace population within 5-min drive (script 33)
+      -- a signal this model had zero visibility into before: office/retail/
+      industrial workers who pass a site on a commute or lunch break
+  10% Real USDA share of tract population beyond 0.5mi from a SNAP-authorized
+      food retailer (script 34) -- a real, on-topic "underserved area" signal
+      for a dollar-store expansion thesis
 
 Output: data/processed/scorecard.csv (ranked, all 20 citywide candidates)
 """
@@ -56,18 +72,41 @@ class ScoreSitesCitywideStage(PipelineStage):
             trade = {r["hcad_num"]: r for r in csv.DictReader(fh)}
         with open(PROCESSED / "site_crime_risk.csv", encoding="utf-8") as fh:
             crime = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_lihtc.csv", encoding="utf-8") as fh:
+            lihtc = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_daytime_population.csv", encoding="utf-8") as fh:
+            daytime = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_food_access.csv", encoding="utf-8") as fh:
+            food_access = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_overture_supplement.csv", encoding="utf-8") as fh:
+            overture = {r["hcad_num"]: r for r in csv.DictReader(fh)}
 
         hcad_nums = list(sites.keys())
 
-        demand_raw = []
+        residential_demand_raw = []
         for h in hcad_nums:
             pop5 = float(trade[h]["pop_5min_drive"])
             mhi = trade[h]["trade_area_median_income"]
             fit = self.income_fit(float(mhi)) if mhi not in (None, "") else 0.5
-            demand_raw.append(pop5 * (0.4 + 0.6 * fit))
+            residential_demand_raw.append(pop5 * (0.4 + 0.6 * fit))
+        lihtc_raw = [float(lihtc[h]["lihtc_unit_count_1mi"]) for h in hcad_nums]
+        daytime_raw = [float(daytime[h]["daytime_workplace_pop_5min_drive"]) for h in hcad_nums]
+        food_access_raw = [float(food_access[h]["pct_tract_pop_beyond_half_mi_from_food_retailer"]) for h in hcad_nums]
+
+        residential_demand_score = self.minmax(residential_demand_raw, True)
+        lihtc_score = self.minmax(lihtc_raw, True)
+        daytime_score = self.minmax(daytime_raw, True)
+        food_access_score = self.minmax(food_access_raw, True)
+        demand_score = [
+            0.60 * residential_demand_score[i] + 0.15 * lihtc_score[i] + 0.15 * daytime_score[i] + 0.10 * food_access_score[i]
+            for i in range(len(hcad_nums))
+        ]
 
         huff_raw = [float(trade[h]["huff_capture_pct"]) for h in hcad_nums]
-        competition_raw = [float(sites[h]["nearest_dollar_store_mi"]) for h in hcad_nums]
+        # Overture-corrected nearest-competitor distance where it found a real
+        # competitor OSM missed (script 35); falls back to the OSM-only reading
+        # for every other site, unchanged.
+        competition_raw = [float(overture[h]["nearest_dollar_store_mi_incl_overture"]) for h in hcad_nums]
         cost_per_acre_raw = [float(sites[h]["land_value"]) / max(float(sites[h]["acreage"]), 0.01) for h in hcad_nums]
         flood_raw = [0.0 if sites[h]["in_sfha"] == "T" else 1.0 for h in hcad_nums]
 
@@ -83,7 +122,6 @@ class ScoreSitesCitywideStage(PipelineStage):
         ]
         crime_raw = [float(crime[h]["total_index_crime_count_12mo_0_5mi"]) for h in hcad_nums]
 
-        demand_score = self.minmax(demand_raw, True)
         huff_score = self.minmax(huff_raw, True)
         competition_score = self.minmax(competition_raw, True)
         traffic_score = self.minmax(traffic_raw, True)
@@ -122,6 +160,9 @@ class ScoreSitesCitywideStage(PipelineStage):
                     "raw_traffic_aadt_used_for_gate": round(traffic_raw[i]),
                     "nearest_dollar_store_mi": sites[h]["nearest_dollar_store_mi"],
                     "nearest_dollar_store": sites[h]["nearest_dollar_store"],
+                    "nearest_dollar_store_mi_incl_overture": overture[h]["nearest_dollar_store_mi_incl_overture"],
+                    "overture_new_competitors_found_1mi": overture[h]["overture_new_competitors_found_1mi"],
+                    "nearest_family_dollar_mi_incl_overture": overture[h]["nearest_family_dollar_mi_incl_overture"],
                     "pop_5min_drive": trade[h]["pop_5min_drive"],
                     "pop_10min_drive": trade[h]["pop_10min_drive"],
                     "trade_area_median_income": trade[h]["trade_area_median_income"],
@@ -129,6 +170,13 @@ class ScoreSitesCitywideStage(PipelineStage):
                     "violent_crime_count_12mo_0_5mi": crime[h]["violent_crime_count_12mo_0_5mi"],
                     "property_crime_count_12mo_0_5mi": crime[h]["property_crime_count_12mo_0_5mi"],
                     "total_index_crime_count_12mo_0_5mi": crime[h]["total_index_crime_count_12mo_0_5mi"],
+                    "lihtc_unit_count_1mi": lihtc[h]["lihtc_unit_count_1mi"],
+                    "daytime_workplace_pop_5min_drive": daytime[h]["daytime_workplace_pop_5min_drive"],
+                    "pct_tract_pop_beyond_half_mi_from_food_retailer": food_access[h]["pct_tract_pop_beyond_half_mi_from_food_retailer"],
+                    "residential_demand_subscore": round(residential_demand_score[i], 1),
+                    "lihtc_subscore": round(lihtc_score[i], 1),
+                    "daytime_pop_subscore": round(daytime_score[i], 1),
+                    "food_access_subscore": round(food_access_score[i], 1),
                     "demand_score": round(demand_score[i], 1),
                     "huff_score": round(huff_score[i], 1),
                     "competition_score": round(competition_score[i], 1),
