@@ -4,11 +4,13 @@ An end-to-end, reproducible, **citywide** GIS site-selection pipeline for a new 
 location in Houston, TX - built entirely from free, public, key-free data sources. Prepared as a
 Location Intelligence / GIS Analyst case study.
 
-**Recommendation:** Eldridge Parkway & Westhollow Parkway, Parkridge, Houston, TX - selected from 20
-real candidate sites spanning 10 Houston neighborhoods. See [`docs/results.md`](docs/results.md) for the full
-scorecard, reasoning, and the real trade-offs (crime exposure and cannibalization risk vs. the closest
-finalists) - including a materially significant real correction a second free-data pass surfaced,
-[`docs/methodology.md`](docs/methodology.md) for how the pipeline works,
+**Recommendation:** Brookhaven Street & Cullen Boulevard, Sunnyside, Houston, TX - selected from 20
+real candidate sites spanning 10 Houston neighborhoods. Dollar Tree is modeled as a direct competitor
+(not a "sister banner") since Family Dollar and Dollar Tree officially separated on 2025-07-08. See
+[`docs/results.md`](docs/results.md) for the full scorecard, reasoning, and the real trade-offs (this
+site's real Opportunity Zone status and subsidized-housing concentration vs. its weaker crime reading,
+and how it compares to the two other real, close finalists) - including a materially significant real
+correction found along the way, [`docs/methodology.md`](docs/methodology.md) for how the pipeline works,
 [`docs/data_validation.md`](docs/data_validation.md) for the full source catalog, every audit check
 performed (including a bug the sensitivity analysis caught that changed the recommendation), and
 real 90% confidence intervals, and
@@ -40,13 +42,26 @@ alongside it.
 - USDA ERS Food Access Research Atlas (SRAM) - real per-tract food-access share
 - Overture Maps Foundation Places - free, open (CDLA Permissive 2.0) POI data, cross-checked against
   the OSM-sourced competitor pull
+- Census Population Estimates Program (PEP) - real annual City of Houston population estimates,
+  2020-2024, direct CSV release (the PEP's own REST API now requires a key, so this uses the Bureau's
+  keyless direct file instead) - citywide growth-trend context
+- Federal Qualified Opportunity Zones (ArcGIS REST) - real tract-level designation, verified by
+  point-in-polygon intersection against each finalist site
+- HUD Multifamily Properties (ArcGIS REST) - real FHA-insured/HUD-assisted housing properties,
+  geocoded from their real street addresses within 1 mile of each finalist
 
 An earlier revision checked Houston's open-data CKAN catalog for crime data and found it genuinely
 unavailable there. That check missed a separate, real source: HPD's own site publishes point-level
 incident data as direct CSV downloads. See `docs/data_validation.md` §2 (item 14) for the full story
 and `docs/methodology.md` Stage 5c for how it's used. A deliberate second free-data pass then re-checked
-every other paid-vendor category for a free alternative and added the four sources above - see
-`docs/data_validation.md` §2 (items 15-19) and `docs/methodology.md` Stage 5d.
+every other paid-vendor category for a free alternative and added four more sources - see
+`docs/data_validation.md` §2 (items 15-19) and `docs/methodology.md` Stage 5d. A third pass reclassified
+Dollar Tree as a real competitor (a corporate-separation fact, not a data addition), checked retail
+site-selection best practice against the model's methodology, and added the real population-growth-trend
+context above - see `docs/data_validation.md` §2 (items 20-22). A fourth pass specifically re-checked
+for any remaining free retail-site-selection data and added two more real federal sources - Opportunity
+Zones and HUD Multifamily Properties - see `docs/data_validation.md` §2 (items 23-26) and
+`docs/methodology.md` Stage 5e.
 
 ## Repository structure
 
@@ -58,18 +73,21 @@ every other paid-vendor category for a free alternative and added the four sourc
   - `pipeline/clients/` - one `ApiClient` subclass (or equivalent lightweight client) per data source
     (`TigerWebClient`, `CensusReporterClient`, `OverpassClient`, `HcadClient`, `FemaClient`,
     `TxDotClient`, `OsrmClient`, `HpdCrimeClient`, `HudLihtcClient`, `LehdClient`,
-    `UsdaFoodAccessClient`, `OvertureClient`), each just enough to express that source's request shape
-    and caching needs.
+    `UsdaFoodAccessClient`, `OvertureClient`, `CensusPepClient`, `OpportunityZonesClient`,
+    `HudMultifamilyClient`), each just enough to express that source's request shape and caching needs.
   - `pipeline/geometry.py` / `pipeline/color.py` - `Geometry` and `ColorRamp`: stateless helper
     classes for distance/point-in-polygon/hull math and the validated map color palettes.
   - `pipeline/stages/` - one `PipelineStage` subclass per pipeline step (`s01_fetch_tracts.py`,
-    `s02_fetch_competitors.py`, ... `s35_overture_supplement.py`), each independently runnable.
+    `s02_fetch_competitors.py`, ... `s38_hud_multifamily.py`), each independently runnable.
     Numbering has a gap (03 → 13): stages 04-12 were an earlier single-neighborhood draft, superseded
     by the citywide versions and removed rather than left to confuse a rerun. Stage 30 originally
     fetched a static, citywide FEMA flood-polygon file, superseded by the live in-map FEMA fetch in
     stage 23 and removed - the number was later reused for the real HPD crime-risk stage. Stages 32-35
     (LIHTC, daytime population, food access, Overture cross-check) were added in a second free-data
-    pass after crime data.
+    pass after crime data; stage 36 (population growth trend) in a third pass alongside the Dollar
+    Tree recategorization and a best-practice methodology review; stages 37-38 (Opportunity Zones,
+    HUD Multifamily) in a fourth pass specifically re-checking for any remaining free retail-site-
+    selection data.
 - `run_pipeline.py` - CLI entry point: runs every stage in order (`python run_pipeline.py`), a
   subset (`--only 01 02`), or just lists them (`--list`).
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
@@ -117,6 +135,8 @@ Run order and what each stage does:
 33  daytime_population              real Census LEHD workplace/job counts within each finalist's 5-min drive trade area
 34  food_access                     real USDA food-access ("food desert") share for each finalist's census tract
 35  overture_supplement             real Overture Maps cross-check of the OSM-sourced competitor data
+37  opportunity_zones               real federal Opportunity Zone designation, verified by point-in-polygon intersection
+38  hud_multifamily                 real HUD Multifamily assisted-housing unit counts within 1mi of each finalist
 20  score_sites_citywide           weighted scorecard + AADT-benchmark gate + citywide ranking
 21  fetch_houston_tract_geometry   tract polygons for the citywide choropleth
 22  isochrone_winner               real OSRM isochrone for the CURRENT #1 scorecard site
@@ -126,16 +146,18 @@ Run order and what each stage does:
 27  vehicle_tenure_demographics    zero-vehicle household share + renter-occupied share + CIs
 28  sensitivity_analysis           6-scenario re-weighting robustness check on the scorecard
 29  statistical_rigor              Moran's I residual test + spatial block cross-validation metrics
+36  population_trend                real Census PEP Houston population growth trend, 2020-2024 (citywide context)
 23  generate_map_citywide          builds ../index.html + Analysis Dashboard (FEMA polygons load live in-map via NFHL API)
 
 31  generate_slide_assets          optional: real chart images for docs/slides/ (leadership deck), not required for the map or analysis
 ```
 
-(Stage 23 depends on stages 24-29's outputs, so `pipeline/stages/__init__.py` registers it near the
-end - it runs there rather than in numeric position. Stages 30 and 32-35 (crime risk, LIHTC, daytime
-population, food access, Overture cross-check) similarly run right after 19, before scoring, since
-stage 20 consumes their outputs - all are slotted into `ALL_STAGES` at the point they actually need to
-run, not in numeric order; `run_pipeline.py` follows that same order.)
+(Stage 23 depends on stages 24-29 and 36's outputs, so `pipeline/stages/__init__.py` registers it near
+the end - it runs there rather than in numeric position. Stages 30, 32-35, and 37-38 (crime risk,
+LIHTC, daytime population, food access, Overture cross-check, Opportunity Zones, HUD Multifamily)
+similarly run right after 19, before scoring, since stage 20 consumes their outputs - all are slotted
+into `ALL_STAGES` at the point they actually need to run, not in numeric order; `run_pipeline.py`
+follows that same order.)
 
 Each stage caches its API responses under `data/raw/`, so re-running the pipeline after the first
 time is fast and doesn't re-hit the public APIs. Delete the relevant cache file(s) to force a

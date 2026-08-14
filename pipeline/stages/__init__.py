@@ -7,14 +7,14 @@ flood-polygon fetch, superseded by the live in-map FEMA fetch in stage 23 and
 removed -- the number was later reused for the real HPD crime-risk stage
 below rather than left permanently retired.
 
-Note ALL_STAGES is NOT in numeric id order: stages 30 and 32-35 (crime risk,
-LIHTC proximity, daytime population, food access, and the Overture
-competitor cross-check) must all run before stage 20 (scoring) despite their
-higher numbers, since scoring consumes their outputs; stage 23 (map
-generation) reads the outputs of stages 24-29, so it must run after them
-despite its lower number. All are slotted into ALL_STAGES at the point they
-actually need to run, matching the pipeline's real dependency order rather
-than numeric id order.
+Note ALL_STAGES is NOT in numeric id order: stages 30 and 32-35, 37, 38
+(crime risk, LIHTC proximity, daytime population, food access, the Overture
+competitor cross-check, Opportunity Zones, and HUD Multifamily) must all run
+before stage 20 (scoring) despite their higher numbers, since scoring
+consumes their outputs; stage 23 (map generation) reads the outputs of
+stages 24-29 and 36, so it must run after them despite its lower number. All
+are slotted into ALL_STAGES at the point they actually need to run, matching
+the pipeline's real dependency order rather than numeric id order.
 """
 from __future__ import annotations
 
@@ -45,6 +45,8 @@ from .s33_daytime_population import DaytimePopulationStage
 from .s34_food_access import FoodAccessStage
 from .s35_overture_supplement import OvertureSupplementStage
 from .s36_population_trend import PopulationTrendStage
+from .s37_opportunity_zones import OpportunityZonesStage
+from .s38_hud_multifamily import HudMultifamilyStage
 
 ALL_STAGES = [
     FetchTractsStage(),
@@ -62,6 +64,8 @@ ALL_STAGES = [
     DaytimePopulationStage(),
     FoodAccessStage(),
     OvertureSupplementStage(),
+    OpportunityZonesStage(),
+    HudMultifamilyStage(),
     ScoreSitesCitywideStage(),
     FetchHoustonTractGeometryStage(),
     IsochroneWinnerStage(),

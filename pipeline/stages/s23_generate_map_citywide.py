@@ -310,6 +310,14 @@ class GenerateMapStage(PipelineStage):
             "Competitors found by Overture, missed by OSM (free, off by default)", False,
             dot("#b45309", "Real competitor OSM's data missed"),
         )
+        multifamily_content = layer_row(
+            "HUD Multifamily assisted-housing properties (free, off by default)", False,
+            dot("#7c3aed", "Real HUD Multifamily property (assisted units in popup)"),
+        )
+        opp_zone_content = layer_row(
+            "Federal Opportunity Zones, finalist tracts (free, off by default)", False,
+            dot("#fbbf24", "Finalist site in a real federal Qualified Opportunity Zone"),
+        )
 
         return f"""
 <div style="position: fixed; bottom: 20px; left: 12px; z-index: 9999; background: white;
@@ -343,12 +351,20 @@ class GenerateMapStage(PipelineStage):
   {lihtc_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Assisted housing (HUD Multifamily)</div>
+  {multifamily_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Daytime population (Census LEHD)</div>
   {daytime_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Food access (USDA)</div>
   {food_access_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Federal Opportunity Zones</div>
+  {opp_zone_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Overture competitor cross-check</div>
@@ -1101,6 +1117,14 @@ class GenerateMapStage(PipelineStage):
       population beyond 0.5mi from a food retailer</li>
       <li>Overture Maps Places -- free, open (CDLA Permissive 2.0), ML-deduped POI data blending Meta/Microsoft/
       TomTom/~200 other sources, used as a real cross-check against the OSM-sourced competitor pull</li>
+      <li>Census Population Estimates Program (PEP) -- real annual City of Houston population estimates,
+      2020-2024, direct CSV release (keyless, since the PEP's own REST API now requires a registered key) --
+      citywide growth-trend context, not a per-site scored factor</li>
+      <li>Federal Qualified Opportunity Zones (CDFI Fund / Treasury, via ArcGIS) -- real federal
+      tax-advantaged-investment tract designations, checked by real point-in-polygon intersection</li>
+      <li>HUD Multifamily Properties -- real, FHA-insured/HUD-assisted apartment and senior-housing
+      properties, a different federal program than LIHTC (mortgage insurance/project-based assistance,
+      not tax credits)</li>
     </ul>
 
     <p style="font-weight:700; margin-bottom:4px;">Specific checks performed against hallucination / error</p>
@@ -1404,6 +1428,44 @@ class GenerateMapStage(PipelineStage):
                 icon=self.competitor_dot_icon("#0f766e"),
             ).add_to(lihtc_layer)
         lihtc_layer.add_to(m)
+
+        # --- Layer: real HUD Multifamily (FHA-insured/assisted) properties (free, off by default) ---
+        multifamily_layer = folium.FeatureGroup(name="HUD Multifamily assisted-housing properties (free, off by default)", show=False)
+        seen_multifamily = set()
+        for p in self.load_csv("hud_multifamily_detail.csv"):
+            key = (p["name"], round(float(p["lat"]), 5), round(float(p["lon"]), 5))
+            if key in seen_multifamily:
+                continue
+            seen_multifamily.add(key)
+            folium.Marker(
+                location=[float(p["lat"]), float(p["lon"])],
+                popup=f"<b style='color:#1F2937;'>{p['name']}</b><br><span style='color:#374151;'>{p['assisted_units']} assisted units</span><br><span class='src-note'>Source: HUD Multifamily Properties (FHA-insured/assisted)</span>",
+                tooltip=f"HUD Multifamily: {p['name']} ({p['assisted_units']} assisted units)",
+                icon=self.competitor_dot_icon("#7c3aed"),
+            ).add_to(multifamily_layer)
+        multifamily_layer.add_to(m)
+
+        # --- Layer: real federal Qualified Opportunity Zone tracts, finalists only (free, off by default) ---
+        opp_zone_layer = folium.FeatureGroup(name="Federal Opportunity Zones, finalist tracts (free, off by default)", show=False)
+        opp_zone_rows = self.load_csv("site_opportunity_zones.csv")
+        oz_by_hcad = {r["hcad_num"]: r for r in opp_zone_rows}
+        for h, s in sites.items():
+            r = oz_by_hcad.get(h)
+            if not r or r["in_opportunity_zone"] != "True":
+                continue
+            folium.CircleMarker(
+                location=[float(s["lat"]), float(s["lon"])],
+                radius=14,
+                color="#b45309",
+                fill=True,
+                fill_color="#fbbf24",
+                fill_opacity=0.25,
+                weight=2,
+                dash_array="4,3",
+                tooltip=f"{s['site_label']}: sits in a real federal Qualified Opportunity Zone",
+                popup=f"<b style='color:#1F2937;'>Qualified Opportunity Zone</b><br><span style='color:#374151;'>{s['site_label']}</span><br><span class='src-note'>Source: CDFI Fund / Federal_User_Community ArcGIS feature service</span>",
+            ).add_to(opp_zone_layer)
+        opp_zone_layer.add_to(m)
 
         # --- Layer: real LEHD daytime workplace population (free, off by default) --------
         daytime_layer = folium.FeatureGroup(name="Daytime workplace population, all Houston block groups (free, off by default)", show=False)

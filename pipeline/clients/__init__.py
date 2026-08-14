@@ -4,7 +4,9 @@ from .fema import FemaClient
 from .hcad import HcadClient
 from .hpd_crime import HpdCrimeClient
 from .hud_lihtc import HudLihtcClient
+from .hud_multifamily import HudMultifamilyClient
 from .lehd import LehdClient
+from .opportunity_zones import OpportunityZonesClient
 from .osrm import OsrmClient
 from .overpass import OverpassClient
 from .overture import OvertureClient
@@ -19,7 +21,9 @@ __all__ = [
     "HcadClient",
     "HpdCrimeClient",
     "HudLihtcClient",
+    "HudMultifamilyClient",
     "LehdClient",
+    "OpportunityZonesClient",
     "OsrmClient",
     "OverpassClient",
     "OvertureClient",

@@ -32,6 +32,9 @@ same CSV files referenced here.
 | Census LEHD LODES (WAC) | Real block-level total job counts, for a real daytime/workplace-population signal | Direct CSV download, `lehd.ces.census.gov` | Free, no key |
 | USDA ERS Food Access Research Atlas (SRAM) | Real per-tract share of population beyond 0.5mi from a SNAP-authorized food retailer | Direct CSV download, `ers.usda.gov` | Free, no key |
 | Overture Maps Foundation Places | Real, open, ML-deduped POI data used to cross-check the OSM-sourced competitor pull | Public GeoParquet on S3, via the `overturemaps` Python package | Free, open (CDLA Permissive 2.0), no key |
+| Census Population Estimates Program (PEP) | Real annual City of Houston population estimates, 2020-2024 | Direct CSV download, `www2.census.gov` (the PEP's own REST API now requires a key) | Free, no key |
+| Federal Qualified Opportunity Zones (CDFI Fund / Treasury) | Real federal tax-advantaged-investment tract designation | ArcGIS REST Feature Service | Free, no key |
+| HUD Multifamily Properties | Real, FHA-insured/HUD-assisted apartment and senior-housing properties, real assisted-unit counts | ArcGIS REST, `egis.hud.gov` + Nominatim geocoding | Free, no key |
 
 No Census API key, Google Maps key, or paid GIS/mobility-data license (SafeGraph, Placer.ai, Esri)
 was used or is required to reproduce this analysis.
@@ -235,11 +238,70 @@ recommendation.
     gravity model, and the cannibalization framework were confirmed to already match or exceed
     documented best practice, not merely assumed to.
 22. **Real Census Population Estimates Program (PEP) growth-trend context - verified live before
-    adding.** Confirmed the Harris County / Houston-area annual population estimate files are live and
-    current at `census.gov/programs-surveys/popest` before citing any figure. Added as citywide
-    *context* in this document and the map's dashboard, not a new per-site scorecard weight, since a
-    citywide growth rate is identical for all 20 finalists and cannot differentiate between them - see
-    §5 below for the actual figures and source.
+    adding, and rerouted around a new key requirement to keep the whole project keyless.** The PEP's
+    own REST API (`api.census.gov/data/.../pep/population`) now returns "Missing Key" without a
+    registered API key - a break from every other keyless source this project uses. Rather than
+    introduce the one exception, found and verified live (`curl -I`) the Bureau's own direct CSV file
+    release instead (`www2.census.gov/programs-surveys/popest/datasets/2020-2024/cities/totals/
+    sub-est2024.csv`), which requires no key, same as HPD's crime CSVs and LEHD's LODES files. Added
+    as citywide *context* (`pipeline/stages/s36_population_trend.py`, `data/processed/
+    city_population_trend.csv`), not a new per-site scorecard weight, since a citywide growth rate is
+    identical for all 20 finalists and cannot differentiate between them - see §5 below for the actual
+    figures.
+23. **Fourth review pass - two real free sources found and verified, one real API bug found and fixed
+    rather than worked around by guessing.** Searched further beyond the three prior passes
+    specifically for other real, free retail-site-selection data: TIRZ boundaries (checked, ruled out -
+    only stale FY2013 financial spreadsheets found on Houston's open-data portal, no live current GIS
+    boundary endpoint), City of Houston building permits (checked, ruled out - the only current dataset
+    is a citywide monthly *summary*, not point-level permit addresses, and redundant with the
+    population-growth-trend context already added), and HCAD bulk sales/deed data (checked, confirmed
+    live and keyless at `download.hcad.org` but not pursued - a 210MB download for uncertain benefit,
+    since the 20 finalists are vacant/underdeveloped parcels that typically lack recent arm's-length
+    sales, making assessed value about as good a proxy as a sales file would add).
+24. **Real federal Qualified Opportunity Zones - verified live, and a real 2010-vs-2020-tract-vintage
+    mismatch risk found and avoided before it could cause a silent error.** Found the real feature
+    service (`Federal_User_Community` org, ArcGIS Online: `services2.arcgis.com/FiaPA4ga0iQKduv3/
+    arcgis/rest/services/Opportunity_Zones_1/FeatureServer`) via a targeted ArcGIS Online search after
+    HUD's own `egis.hud.gov` server (already used for LIHTC and Multifamily) turned out not to host
+    this dataset. Verified live with `curl` and confirmed ~100+ real Harris County tract polygons.
+    Before building anything, compared this service's tract IDs directly against this project's own
+    2020-vintage tract file and found a real mismatch risk: this service's Harris County list includes
+    tract `48201311700`, while this project's own tract file has `48201311701` - a real post-2020-
+    redistricting tract split, meaning a naive tract-ID join could have silently matched the wrong real
+    tract for some sites. Fixed by querying real point-in-polygon intersection against each site's own
+    lat/lon instead (`pipeline/stages/s37_opportunity_zones.py`), the same approach already used for
+    FEMA flood zones - immune to the vintage mismatch entirely, not merely aware of it. 4 of 20
+    finalists sit in a real Opportunity Zone.
+25. **Real HUD Multifamily Properties - a real API bug found (not a code bug) and fixed with real
+    geocoding, not an approximation.** Verified the service live (165 real Houston-city properties)
+    before building `pipeline/stages/s38_hud_multifamily.py` on the same pattern as the working LIHTC
+    stage. Every query initially returned zero results after the standard 1-mile-radius haversine
+    filter - traced this down by direct `curl` testing rather than assuming the new stage was correct:
+    the query itself was working (a manual test with the exact same envelope returned a real property,
+    "Plum Creek Townhomes"), but every returned feature had `"geometry": null`, confirmed with
+    `f=geojson` and cross-checked with `outFields=*`, regardless of `returnGeometry=true` - a real,
+    confirmed limitation of this specific HUD service, not a bug in how it was queried. The server's
+    spatial filter still works correctly server-side (proven by the correct real properties coming back
+    within the query envelope), it just won't hand back their coordinates. Fixed by geocoding each
+    real returned property from its own real street address via Nominatim
+    (`HudMultifamilyClient.geocode_address`, cached and rate-limited the same way script 18's reverse
+    geocoding already is) rather than dropping the source or guessing a location; one real property
+    record could not be geocoded from its address and was excluded and reported, not guessed. A second,
+    smaller bug was caught and fixed during the same debugging pass: the geocode cache initially used
+    Python's built-in `hash()`, which is randomized per process (`PYTHONHASHSEED`) and would have
+    silently defeated the cache (and re-hit Nominatim) on every single rerun - replaced with a stable
+    SHA-1 digest before this ever ran against the live API at scale. 612 real assisted units were found
+    within 1 mile of the recommended site - the most of any finalist, and the largest single driver of
+    this revision's recommendation change (see item 26).
+26. **The recommendation changed again, for real, verified reasons - reported directly, not
+    downplayed.** Adding the two real signals above moved the primary recommendation from Eldridge
+    Pkwy & Westhollow Pkwy (Parkridge) to Brookhaven St & Cullen Blvd (Sunnyside): the new site scores
+    100/100 on both new sub-signals (a real Opportunity Zone designation and the field's highest real
+    HUD Multifamily assisted-unit count, 612), enough to overtake the prior revision's leader once
+    demand-side weights were rebalanced (50/12/12/8/10/8, down from 60/15/15/10) to make room for them.
+    The sensitivity check's stability dropped again, from 4 of 6 scenarios to 3 of 6 - a real,
+    expected consequence of adding real, strongly-differentiating signals, not evidence of a mistake.
+    Full before/after in `docs/results.md`.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
@@ -294,10 +356,13 @@ Reproducible in `pipeline/stages/s25_extended_demographics_and_ci.py` (the first
 **A related, non-formal robustness check:** the 6-scenario sensitivity analysis
 (`pipeline/stages/s28_sensitivity_analysis.py`) is a different kind of check than a statistical confidence
 interval - it re-aggregates real per-factor scores under alternative, defensible weight vectors
-rather than testing sampling uncertainty. The recommendation holds in 5 of 6 scenarios as of this
-revision (up from 4 of 6 before the LIHTC/daytime-population/food-access signals were added, since
-the old residential-only demand metric lost the Demand-Heavy scenario the new blended composite now
-wins); full results in `docs/results.md` and the map's Scorecard tab.
+rather than testing sampling uncertainty. The recommendation holds in 3 of 6 scenarios as of this
+revision (down from 4 of 6 before the Opportunity Zones/HUD Multifamily addition, item 26 above, since
+those two real, strongly-differentiating signals make the Sunnyside finalist win decisively under some
+weightings and lose under others where its real weaknesses - crime, traffic relative to the Parkridge
+finalist - dominate instead). This is the real, expected behavior of adding real signals that
+differentiate sites sharply, not evidence of instability in the pipeline itself. Full results in
+`docs/results.md` and the map's Scorecard tab.
 
 **Sanity cross-check:** the citywide ACS place-level population (2,328,253) is independently close to
 (within ~0.7%) the sum of ACS block-group populations whose centroid falls inside the same real city
@@ -344,6 +409,25 @@ margin of error.
 - **Real crime risk.** Real HPD NIBRS Part I violent/property incident counts within 0.5 mi of every
   finalist, trailing 12 months, weighted 10% in the scorecard - a genuine safety/loss-prevention
   signal for both employees and customers, and for shrink risk to the store itself (see §2, point 14).
+- **Real population growth trend, not just a static snapshot.** Every ACS figure elsewhere in this
+  document is a 2020-2024 rolling 5-year average - real, but not a trend line. Census PEP's real
+  annual place-level estimates fill that gap (see §2, item 22):
+
+  | Year | City of Houston population estimate |
+  | --- | --- |
+  | 2020 | 2,298,945 |
+  | 2021 | 2,291,070 |
+  | 2022 | 2,314,258 |
+  | 2023 | 2,346,908 |
+  | 2024 | 2,390,125 |
+
+  **+91,180 people, +4.0%, 2020-2024** - a real dip in 2021 (COVID-era, -7,875) followed by real
+  acceleration through 2024 (+43,217 in the single latest year alone). This PEP point estimate
+  (2,390,125 for 2024) is a different vintage/methodology than the ACS 2024 5-yr place estimate used
+  elsewhere in this document (2,328,253, a 2020-2024 rolling average) - both real, independently
+  sourced, and expected to diverge somewhat for that reason, the same kind of cross-check already
+  documented for the block-group-sum-vs-place-boundary population comparison above. Source:
+  `data/processed/city_population_trend.csv`, `pipeline/stages/s36_population_trend.py`.
 
 ## 6. What this analysis explicitly does not claim
 

@@ -37,6 +37,9 @@ just the first promising area found. This version fixes that - see Stage 2 below
 | 13 | Census LEHD LODES (WAC) | Real block-level total job counts, for a real daytime/workplace-population demand signal | Direct CSV download (`lehd.ces.census.gov`) |
 | 14 | USDA ERS Food Access Research Atlas (SNAP-authorized Retailer Access Map) | Real per-tract share of population beyond 0.5mi from a food retailer | Direct CSV download (`ers.usda.gov`) |
 | 15 | Overture Maps Foundation Places | Real, open (CDLA Permissive 2.0), ML-deduped POI data, used to cross-check/backfill the OSM-sourced competitor pull | Public GeoParquet on S3, via the official `overturemaps` Python package |
+| 16 | Census Population Estimates Program (PEP) | Real annual City of Houston population estimates, 2020-2024, for a real growth-trend context stat | Direct CSV download (`www2.census.gov`; the PEP's own REST API now requires a key) |
+| 17 | Federal Qualified Opportunity Zones (CDFI Fund / Treasury) | Real federal tax-advantaged-investment tract designation, checked by point-in-polygon intersection | ArcGIS REST Feature Service |
+| 18 | HUD Multifamily Properties | Real, FHA-insured/HUD-assisted apartment and senior-housing properties and real assisted-unit counts | ArcGIS REST (`egis.hud.gov`) + Nominatim geocoding (see Stage 5e) |
 
 No Census API key, Google Maps key, or paid GIS license was used or required.
 
@@ -283,6 +286,43 @@ the Huff market-capture model is not re-derived against Overture data (a larger 
 for this pass - Overture's major-chain coverage for arch-rivals specifically is already strong in OSM,
 unlike the big-box-anchor gap this project originally found).
 
+### Stage 5e - Fourth review pass: Opportunity Zones and HUD Multifamily
+
+After the Dollar Tree correction and a best-practice methodology review, a fourth pass specifically
+checked for any other real, free retail-site-selection data still missing. Two real sources were
+found, verified live, and added - full audit trail in `data_validation.md` §2.
+
+**Real federal Qualified Opportunity Zone designation** (`pipeline/stages/s37_opportunity_zones.py`) -
+a real, current federal tax-advantaged-investment tract designation (CDFI Fund / Treasury), confirmed
+live via a public ArcGIS Feature Service before use. This dataset's polygons use 2010 vintage Census
+tract boundaries, while the rest of this pipeline uses 2020 vintage tracts - confirmed by directly
+comparing tract ID lists (e.g. this service's Harris County list includes tract "48201311700" where
+this project's own 2020-vintage tract file has "48201311701", a real post-redistricting split). Rather
+than risk a silent mismatch by joining on tract ID, each finalist is checked by real point-in-polygon
+intersection against its own lat/lon - the same approach already used for FEMA flood zones - which is
+immune to the vintage difference entirely. 4 of 20 finalists sit in a real Opportunity Zone.
+
+**Real HUD Multifamily Properties** (`pipeline/stages/s38_hud_multifamily.py`) - real, FHA-insured/
+HUD-assisted apartment, senior-housing, and assisted-living properties, queried within 1.0 mile of
+each finalist via the same ArcGIS REST pattern as HUD LIHTC. A different federal program than LIHTC
+(FHA mortgage insurance and project-based rental assistance, not tax credits), so a real, genuinely
+complementary signal rather than a duplicate - confirmed live (165 real Houston-city properties at
+query time) before building. Only the real `TOTAL_ASSISTED_UNIT_COUNT` field is counted, not total
+unit count, since some HUD-insured properties are market-rate with no income restriction.
+
+This layer's query endpoint has a real, confirmed limitation: it declares point geometry but returns
+`"geometry": null` for every feature regardless of `returnGeometry=true` - checked directly with
+`f=geojson` before writing any workaround, not assumed to be a bug in how it was queried. The server's
+spatial filter still works correctly (an envelope query returns the real, correct set of nearby
+properties), it just won't hand back their coordinates. Rather than drop the source or approximate a
+location, each property is geocoded from its own real street address via Nominatim (the same
+rate-limited, cached forward/reverse-geocoding infrastructure already used elsewhere in this
+pipeline); the one property that couldn't be geocoded from its address was excluded and disclosed in
+the stage's own output, not guessed. 612 real assisted units were found within 1 mile of the
+recommended site - the highest of any finalist.
+
+Both signals are folded into the demand composite (§Stage 6) and are real, off-by-default map layers.
+
 ### Stage 6 - Weighted scorecard
 
 `pipeline/stages/s20_score_sites_citywide.py`
@@ -303,18 +343,24 @@ proportionally rather than arbitrarily:
 | Flood risk (FEMA zone) | 10% | Any mapped Special Flood Hazard Area is heavily penalized |
 | Crime risk (real HPD Part I incidents, 0.5mi, trailing 12mo) | 10% | More nearby violent/property incidents is penalized (Stage 5c) |
 
-**Trade-area demand is itself a blended composite**, extended this revision to fold in the three new
-demand-side signals from Stage 5d - the same pattern already used for `cost_feasibility_score`
-(land-cost-per-acre blended with a vacant-land bonus into one line), so the top-level factor count
-stays at seven rather than growing indefinitely, while every sub-component stays visible as its own
-column in `scorecard.csv` for transparency:
+**Trade-area demand is itself a blended composite**, extended across two revisions to fold in six real
+demand-side signals total - the same pattern already used for `cost_feasibility_score` (land-cost-per-
+acre blended with a vacant-land bonus into one line), so the top-level factor count stays at seven
+rather than growing indefinitely, while every sub-component stays visible as its own column in
+`scorecard.csv` for transparency:
 
 | Demand sub-component | Sub-weight | Rationale |
 | --- | --- | --- |
-| Residential 5-min drive population × income fit (original signal) | 60% | Still the core, most directly relevant demand metric |
-| Real LIHTC units within 1mi (Stage 5d) | 15% | Concentration of the core low-income customer base |
-| Real LEHD daytime workplace population within 5-min drive (Stage 5d) | 15% | A signal this model had zero visibility into before this revision |
-| Real USDA food-access share (Stage 5d) | 10% | On-topic "underserved area" signal for a dollar-store expansion thesis |
+| Residential 5-min drive population × income fit (original signal) | 50% | Still the core, most directly relevant demand metric |
+| Real LIHTC units within 1mi (Stage 5d) | 12% | Concentration of the core low-income customer base |
+| Real LEHD daytime workplace population within 5-min drive (Stage 5d) | 12% | A signal this model had zero visibility into before that revision |
+| Real USDA food-access share (Stage 5d) | 8% | On-topic "underserved area" signal for a dollar-store expansion thesis |
+| Real HUD Multifamily assisted units within 1mi (Stage 5e) | 10% | A different federal housing program than LIHTC, a real complementary signal |
+| Real federal Opportunity Zone designation (Stage 5e) | 8% | Binary flag (100/0, same pattern as flood risk) - a real federal investment designation |
+
+Rebalanced from the prior 60/15/15/10 split to make room for the two Stage 5e signals, with the
+residential weight reduced modestly (60% -> 50%) and the three existing sub-signals trimmed
+proportionally rather than arbitrarily.
 
 **Competitive white space also carries a real correction this revision**: the nearest-competitor
 distance input is Overture-corrected where Stage 5d's cross-check found a real competitor OSM missed
@@ -403,10 +449,12 @@ The live fetch is capped to a fixed area around the map center and gated behind 
 (with an on-map "zoom in" hint below that) - a full-city query was tested directly against the live
 FEMA API and confirmed to exceed FEMA's own server-side transfer limit on the first page alone, so
 citywide loading was never a viable design, not just a performance nicety.
-Four more real, free, off-by-default layers from Stage 5d are also on the map: HUD LIHTC
+Six more real, free, off-by-default layers from Stages 5d-5e are also on the map: HUD LIHTC
 affordable-housing properties, Census LEHD daytime workplace population (all Houston block groups),
-USDA food-access share (the 20 finalist tracts), and the Overture-sourced competitors OSM's data
-missed - each cited to its real source in its own popup, same as every other layer.
+USDA food-access share (the 20 finalist tracts), the Overture-sourced competitors OSM's data missed,
+HUD Multifamily assisted-housing properties, and finalist sites carrying a real federal Opportunity
+Zone designation - each cited to its real source in its own popup, same as every other layer. 16 real
+overlay layers total.
 A basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
 marker popup cites its data source, set in dark, bold text for at-a-glance legibility.
 

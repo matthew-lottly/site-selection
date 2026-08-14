@@ -36,15 +36,22 @@ Trade-area demand sub-weights (blended the same way cost_feasibility_score
 already blends land-cost-per-acre with a vacant-land bonus into one line --
 each sub-component stays visible as its own column for transparency, only
 the top-level factor count stays fixed at seven):
-  60% Residential 5-min drive population x income fit (original signal)
-  15% Real LIHTC affordable-housing units within 1mi (script 32) -- proxy for
+  50% Residential 5-min drive population x income fit (original signal)
+  12% Real LIHTC affordable-housing units within 1mi (script 32) -- proxy for
       concentration of Family Dollar's core low-income customer base
-  15% Real LEHD daytime workplace population within 5-min drive (script 33)
+  12% Real LEHD daytime workplace population within 5-min drive (script 33)
       -- a signal this model had zero visibility into before: office/retail/
       industrial workers who pass a site on a commute or lunch break
-  10% Real USDA share of tract population beyond 0.5mi from a SNAP-authorized
+   8% Real USDA share of tract population beyond 0.5mi from a SNAP-authorized
       food retailer (script 34) -- a real, on-topic "underserved area" signal
       for a dollar-store expansion thesis
+  10% Real HUD Multifamily (FHA-insured/assisted) units within 1mi (script 38)
+      -- a different federal program than LIHTC (mortgage insurance/project-
+      based assistance, not tax credits), so a real, complementary signal,
+      not a duplicate
+   8% Real federal Qualified Opportunity Zone designation (script 37) -- a
+      binary flag (100/0), same pattern as flood risk, since a site's tract
+      either carries the real federal designation or it doesn't
 
 Output: data/processed/scorecard.csv (ranked, all 20 citywide candidates)
 """
@@ -80,6 +87,10 @@ class ScoreSitesCitywideStage(PipelineStage):
             food_access = {r["hcad_num"]: r for r in csv.DictReader(fh)}
         with open(PROCESSED / "site_overture_supplement.csv", encoding="utf-8") as fh:
             overture = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_hud_multifamily.csv", encoding="utf-8") as fh:
+            multifamily = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_opportunity_zones.csv", encoding="utf-8") as fh:
+            opp_zones = {r["hcad_num"]: r for r in csv.DictReader(fh)}
 
         hcad_nums = list(sites.keys())
 
@@ -92,13 +103,22 @@ class ScoreSitesCitywideStage(PipelineStage):
         lihtc_raw = [float(lihtc[h]["lihtc_unit_count_1mi"]) for h in hcad_nums]
         daytime_raw = [float(daytime[h]["daytime_workplace_pop_5min_drive"]) for h in hcad_nums]
         food_access_raw = [float(food_access[h]["pct_tract_pop_beyond_half_mi_from_food_retailer"]) for h in hcad_nums]
+        multifamily_raw = [float(multifamily[h]["hud_multifamily_assisted_unit_count_1mi"]) for h in hcad_nums]
+        opp_zone_raw = [1.0 if opp_zones[h]["in_opportunity_zone"] == "True" else 0.0 for h in hcad_nums]
 
         residential_demand_score = self.minmax(residential_demand_raw, True)
         lihtc_score = self.minmax(lihtc_raw, True)
         daytime_score = self.minmax(daytime_raw, True)
         food_access_score = self.minmax(food_access_raw, True)
+        multifamily_score = self.minmax(multifamily_raw, True)
+        opp_zone_score = [100.0 if f == 1.0 else 0.0 for f in opp_zone_raw]
         demand_score = [
-            0.60 * residential_demand_score[i] + 0.15 * lihtc_score[i] + 0.15 * daytime_score[i] + 0.10 * food_access_score[i]
+            0.50 * residential_demand_score[i]
+            + 0.12 * lihtc_score[i]
+            + 0.12 * daytime_score[i]
+            + 0.08 * food_access_score[i]
+            + 0.10 * multifamily_score[i]
+            + 0.08 * opp_zone_score[i]
             for i in range(len(hcad_nums))
         ]
 
@@ -173,10 +193,14 @@ class ScoreSitesCitywideStage(PipelineStage):
                     "lihtc_unit_count_1mi": lihtc[h]["lihtc_unit_count_1mi"],
                     "daytime_workplace_pop_5min_drive": daytime[h]["daytime_workplace_pop_5min_drive"],
                     "pct_tract_pop_beyond_half_mi_from_food_retailer": food_access[h]["pct_tract_pop_beyond_half_mi_from_food_retailer"],
+                    "hud_multifamily_assisted_unit_count_1mi": multifamily[h]["hud_multifamily_assisted_unit_count_1mi"],
+                    "in_opportunity_zone": opp_zones[h]["in_opportunity_zone"],
                     "residential_demand_subscore": round(residential_demand_score[i], 1),
                     "lihtc_subscore": round(lihtc_score[i], 1),
                     "daytime_pop_subscore": round(daytime_score[i], 1),
                     "food_access_subscore": round(food_access_score[i], 1),
+                    "multifamily_subscore": round(multifamily_score[i], 1),
+                    "opportunity_zone_subscore": round(opp_zone_score[i], 1),
                     "demand_score": round(demand_score[i], 1),
                     "huff_score": round(huff_score[i], 1),
                     "competition_score": round(competition_score[i], 1),
