@@ -6,12 +6,16 @@ vs. not":
   - family_dollar   existing Family Dollar locations. NOT a competitor --
                      this is the company's own network. Relevant for
                      cannibalization risk, not competitive threat (script 24).
-  - arch_rival      Dollar General, Five Below: same target demographic,
-                     footprint, and inventory mix. The real competitive threat.
-  - sister_banner   Dollar Tree: owned by the same parent company (Dollar
-                     Tree, Inc.) as Family Dollar. Different price-point
-                     model, but worth tracking for combo-store potential /
-                     parent-company footprint monitoring.
+  - arch_rival      Dollar General, Five Below, Dollar Tree: same target
+                     demographic, footprint, and inventory mix. The real
+                     competitive threat. Dollar Tree was Family Dollar's
+                     "sister banner" under a shared parent (Dollar Tree, Inc.)
+                     through 2024, but Dollar Tree sold Family Dollar to
+                     private equity (Brigade Capital Management, Macellum
+                     Capital Management, Arkhouse Management) and the two
+                     officially separated on July 8, 2025 -- Family Dollar is
+                     now a standalone company, so Dollar Tree is a real,
+                     same-format competitor, not a related banner.
   - value_grocery    Extreme-value grocers Houston's low-income households
                      split their budget with, incl. two Houston-specific
                      banners: H-E-B's Joe V's Smart Shop and Fiesta's Mi
@@ -87,7 +91,7 @@ out center tags;
         "Family Dollar": "family_dollar",
         "Dollar General": "arch_rival",
         "Five Below": "arch_rival",
-        "Dollar Tree": "sister_banner",
+        "Dollar Tree": "arch_rival",
         "Aldi": "value_grocery",
         "Save A Lot": "value_grocery",
         "Joe V's Smart Shop": "value_grocery",

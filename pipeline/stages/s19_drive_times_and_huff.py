@@ -7,14 +7,17 @@ adds a real Huff gravity market-capture model):
 
 2. Huff gravity market-capture probability: for each block group in a site's
    trade area, compare the candidate site's pull against real nearby ARCH-
-   RIVAL competitors (Dollar General, Five Below -- script 02's "arch_rival"
-   category: same target demographic, footprint, and inventory mix as Family
-   Dollar). Dollar Tree is excluded from this competitive set even though
-   it's a same-format small-box store, because it is Family Dollar's own
-   *sister banner* (both owned by Dollar Tree, Inc.) -- modeling it as a
-   competitive threat would misstate the real business relationship; its
-   proximity is tracked separately as a combo-store/parent-footprint signal.
-   Full grocery/big-box anchors (Walmart, H-E-B, Kroger, Target) are also
+   RIVAL competitors (Dollar General, Five Below, and Dollar Tree -- script
+   02's "arch_rival" category: same target demographic, footprint, and
+   inventory mix as Family Dollar). Dollar Tree was excluded from this
+   competitive set in earlier revisions of this analysis because it was
+   Family Dollar's own *sister banner* under a shared parent, Dollar Tree,
+   Inc. That relationship ended: Dollar Tree sold Family Dollar to private
+   equity (Brigade Capital Management, Macellum Capital Management, Arkhouse
+   Management), and the two officially separated on 2025-07-08. Family
+   Dollar is now a standalone company, so Dollar Tree is modeled as a real,
+   same-format competitive threat, the same as Dollar General and Five
+   Below. Full grocery/big-box anchors (Walmart, H-E-B, Kroger, Target) are also
    excluded: they serve a different shopping mission (a weekly grocery trip
    vs. a quick value/convenience trip), and their much larger square footage
    would mathematically swamp every candidate site's share to a near-zero,

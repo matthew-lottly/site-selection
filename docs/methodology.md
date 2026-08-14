@@ -51,11 +51,12 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
 - Pulled **every current store location relevant to the analysis** from OpenStreetMap across the
   county, categorized the way a real Family Dollar site selector thinks about them (see §Stage 5 -
   this is not just "dollar store vs. not"): **Family Dollar** (61 existing locations - the company's
-  own network, not a competitor); **direct arch-rivals** Dollar General and Five Below (56); **sister
-  banner** Dollar Tree (61, same parent company, different price-point model); **value grocery** -
-  Aldi, Kroger, H-E-B, Fiesta Mart, Food Town, Save A Lot, and two Houston-specific extreme-value
-  banners, Joe V's Smart Shop (H-E-B) and Mi Tienda (Fiesta) (225); and **big-box anchors** Walmart,
-  Target, Burlington, Ross (125) - **528 real stores in total**.
+  own network, not a competitor); **direct arch-rivals** Dollar General, Five Below, and Dollar Tree
+  (117 - Dollar Tree included as a direct competitor since Family Dollar and Dollar Tree officially
+  separated on 2025-07-08, see §Stage 5 for the full story); **value grocery** - Aldi, Kroger, H-E-B,
+  Fiesta Mart, Food Town, Save A Lot, and two Houston-specific extreme-value banners, Joe V's Smart
+  Shop (H-E-B) and Mi Tienda (Fiesta) (225); and **big-box anchors** Walmart, Target, Burlington, Ross
+  (125) - **528 real stores in total**.
 - Scored every tract with a transparent **opportunity ("gap") index**:
 
   ```text
@@ -145,28 +146,37 @@ For each of the 20 finalists:
 
 For each site, estimated a relative market-capture percentage using the classic **Huff gravity
 model**: for every block group in the site's drive-time trade area, the candidate's pull is compared
-against every real nearby **direct arch-rival** (Dollar General, Five Below - same target
-demographic, footprint, and inventory mix as Family Dollar), using each banner's published typical
-prototype square footage as the size/attraction term and a distance-decay exponent of β = 2.0 (the
-standard value in retail gravity-model literature):
+against every real nearby **direct arch-rival** (Dollar General, Five Below, and Dollar Tree - same
+target demographic, footprint, and inventory mix as Family Dollar), using each banner's published
+typical prototype square footage as the size/attraction term and a distance-decay exponent of β = 2.0
+(the standard value in retail gravity-model literature):
 
 ```text
 P(choose site j | block group i) = (Sⱼ / Dᵢⱼ^β) / Σₖ (Sₖ / Dᵢₖ^β)
 ```
 
-Two deliberate exclusions from the Huff competitive set, both tested and confirmed before the design
-choice was made:
+**Dollar Tree is now included as a direct arch-rival - a real correction from earlier revisions of
+this analysis.** Earlier revisions excluded Dollar Tree from the competitive set because it was
+Family Dollar's *sister banner*, both owned by the same parent, Dollar Tree, Inc. That relationship
+ended: Dollar Tree sold Family Dollar to private equity (Brigade Capital Management, Macellum Capital
+Management, and Arkhouse Management), and the two officially separated on **2025-07-08** - Family
+Dollar has been a standalone company since. Modeling Dollar Tree as unrelated network rather than a
+real, same-format competitor would now misstate the actual business relationship, so this revision
+folds it into the arch-rival competitive set. This is a real, verified, dated business fact (confirmed
+via Dollar Tree's own investor-relations press releases and multiple trade-press sources), not a
+judgment call - see `data_validation.md` §2 for the full audit trail and its effect on every site's
+Huff capture percentage.
 
-- **Dollar Tree** - same small-box format, but it is Family Dollar's *sister banner* (both owned by
-  Dollar Tree, Inc.). Modeling it as a competitive threat would misstate the real business
-  relationship; its proximity is tracked separately as a combo-store/parent-footprint signal instead.
+One remaining deliberate exclusion from the Huff competitive set, tested and confirmed before the
+design choice was made:
+
 - **Full grocery/big-box anchors** (Walmart, H-E-B, Kroger, Target) - they serve a different shopping
   mission (a weekly grocery trip vs. a quick value/convenience trip), and their much larger square
   footage mathematically swamps every candidate's share to a uniform near-zero number regardless of
   where the store actually sits.
 
-This mirrors how real dollar-store site selection evaluates competitive threat: against same-format,
-same-parent-independent rivals, not the whole retail landscape.
+This mirrors how real dollar-store site selection evaluates competitive threat: against same-format
+rivals actually competing for the same trip, not the whole retail landscape.
 
 Candidate-site travel time (`Dᵢⱼ`) uses real OSRM network minutes. Competitor travel time (`Dᵢₖ`) is
 approximated from straight-line distance at a 25 mph average urban-arterial speed - a documented
@@ -380,10 +390,10 @@ Built with Folium (Python) on top of Leaflet.js - 100% open source, no API key, 
 static file to GitHub Pages. Layers: real Houston city-limits boundary (off by default for initial
 map clarity); citywide opportunity choropleth (643 tracts, blue sequential ramp with fill opacity
 scaled to score so low-opportunity tracts recede and high-opportunity ones stand out); competitors
-split into 5 toggleable tiers matching the categorization in Stage 1 (Family Dollar always visible
-for the cannibalization check; arch-rivals visible by default; sister banner, value grocery, and
-big-box anchors off by default as context layers) - colors were deliberately chosen from a validated
-cool-hue set (blue/violet/magenta/aqua) that remains visually distinct from the rank-badge color
+split into 4 toggleable tiers matching the categorization in Stage 1 (Family Dollar always visible
+for the cannibalization check; arch-rivals - now including Dollar Tree - visible by default; value
+grocery and big-box anchors off by default as context layers) - colors were deliberately chosen from
+a validated cool-hue set (blue/magenta/aqua) that remains visually distinct from the rank-badge color
 ramp; all 20 candidate sites as clean numbered rank badges (white ring, small footprint) on a
 validated best→worst color ramp, with the recommendation as a distinct gold-ringed star; the 10
 opportunity areas searched; and the real drive-time trade area for the recommended site. A FEMA
@@ -393,8 +403,18 @@ The live fetch is capped to a fixed area around the map center and gated behind 
 (with an on-map "zoom in" hint below that) - a full-city query was tested directly against the live
 FEMA API and confirmed to exceed FEMA's own server-side transfer limit on the first page alone, so
 citywide loading was never a viable design, not just a performance nicety.
+Four more real, free, off-by-default layers from Stage 5d are also on the map: HUD LIHTC
+affordable-housing properties, Census LEHD daytime workplace population (all Houston block groups),
+USDA food-access share (the 20 finalist tracts), and the Overture-sourced competitors OSM's data
+missed - each cited to its real source in its own popup, same as every other layer.
 A basemap switcher offers 5 free tile providers (light, dark, streets, satellite, terrain). Every
 marker popup cites its data source, set in dark, bold text for at-a-glance legibility.
+
+**The legend (bottom-left) is dynamic**, not a static always-on-screen key: every section is tagged
+to the exact real map layer it describes, and JavaScript listening to Leaflet's own
+`overlayadd`/`overlayremove` events shows or hides that section live as the corresponding checkbox is
+toggled in the layer control - so the legend only ever displays what's actually visible on the map,
+for every layer, current and future, without a second source of truth to keep in sync by hand.
 
 A **right-side Analysis Dashboard panel** (toggle button, top-right header) surfaces seven tabs built
 live from the same CSVs referenced throughout this document: **Executive Checks**, the full 20-site
@@ -420,8 +440,24 @@ Details** (micro-site operational data including transit distance), **Confidence
   cross-check found 54 real competitor locations OSM had missed nearby and corrected 8 sites' nearest-
   competitor distance - but full citywide OSM completeness (beyond the 20 finalists' immediate
   vicinity) is still not claimed.
-- No revenue forecast is produced anywhere (see Stages 5 and 5b) - no public store-level sales data
-  exists to calibrate one.
+- No revenue forecast is produced anywhere (see Stages 5 and 5b). The industry-standard technique for
+  this - **analog-store sales forecasting**: profiling the candidate site, finding the retailer's own
+  existing stores with the closest-matching trade-area/site profile, and forecasting from a weighted
+  average of those analogs' real sales performance - requires Family Dollar's own store-level
+  performance data, which no public source provides. Confirmed against current retail site-selection
+  best-practice literature (see `docs/data_validation.md` §2) rather than assumed unavailable.
+- Relatedly, this analysis's **scorecard weights are documented and defensible but judgment-based, not
+  regression-calibrated against real historical store performance** - best practice for a mature
+  retailer is to regress location attributes against actual store outcomes to find which factors
+  really predict success for that specific brand and format. The same missing ingredient (real store
+  performance data) blocks both the revenue forecast above and empirical weight calibration; without
+  it, judgment-based weights informed by the source framework and stated explicitly (§Stage 6) are the
+  correct fallback, not a hidden shortcut.
+- **Distribution-center / logistics proximity was considered and correctly excluded**, not overlooked.
+  Regional distribution centers typically serve a 250-350 mile radius (a single Dollar Tree Southwest
+  DC covers ~700 stores across multiple states) - all 20 Houston finalists sit a few miles apart in
+  the same metro and would be served by the same regional DC regardless of which one is chosen, so
+  this factor cannot differentiate between them at this analysis's geographic scale.
 - A real property/violent crime metric **is** produced (Stage 5c) - real HPD NIBRS Part I incident
   counts within 0.5mi of each site, trailing 12 months, weighted at 10% in the scorecard. An earlier
   revision checked only Houston's open-data CKAN catalog API (genuinely no queryable crime dataset

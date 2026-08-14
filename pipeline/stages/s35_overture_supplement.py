@@ -58,7 +58,6 @@ class OvertureSupplementStage(PipelineStage):
             sites = list(csv.DictReader(fh))
         with open(PROCESSED / "competitors.csv", encoding="utf-8") as fh:
             existing = list(csv.DictReader(fh))
-        true_competitors = [c for c in existing if c["category"] in ("arch_rival", "sister_banner")]
 
         rows = []
         detail_rows = []

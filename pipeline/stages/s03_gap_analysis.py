@@ -33,7 +33,7 @@ class GapAnalysisStage(PipelineStage):
     description = "Score every Harris County tract on demand-vs-supply gap index"
     outputs = (PROCESSED / "tract_scores.csv",)
 
-    DOLLAR_FORMAT_CATEGORIES = {"family_dollar", "arch_rival", "sister_banner"}
+    DOLLAR_FORMAT_CATEGORIES = {"family_dollar", "arch_rival"}
 
     @staticmethod
     def income_fit(mhi: float | None) -> float:

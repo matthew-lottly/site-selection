@@ -50,9 +50,12 @@ class EnrichSitesCitywideStage(PipelineStage):
         with open(PROCESSED / "competitors.csv", encoding="utf-8") as fh:
             stores = list(csv.DictReader(fh))
         family_dollar = [s for s in stores if s["category"] == "family_dollar"]
-        # true competitive threat = arch-rivals (Dollar General, Five Below) + sister
-        # banner (Dollar Tree); Family Dollar's own locations are handled separately
-        true_competitors = [s for s in stores if s["category"] in ("arch_rival", "sister_banner")]
+        # true competitive threat = arch-rivals: Dollar General, Five Below, and Dollar
+        # Tree (a direct competitor since Family Dollar and Dollar Tree officially
+        # separated on 2025-07-08 -- no longer the same-parent "sister banner" this
+        # model treated it as before that split). Family Dollar's own locations are
+        # handled separately for cannibalization, not competition.
+        true_competitors = [s for s in stores if s["category"] == "arch_rival"]
         value_grocery = [s for s in stores if s["category"] == "value_grocery"]
         big_box = [s for s in stores if s["category"] == "big_box_anchor"]
 

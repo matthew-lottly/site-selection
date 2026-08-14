@@ -1,3 +1,4 @@
+from .census_pep import CensusPepClient
 from .census_reporter import CensusReporterClient
 from .fema import FemaClient
 from .hcad import HcadClient
@@ -12,6 +13,7 @@ from .txdot import TxDotClient
 from .usda_food_access import UsdaFoodAccessClient
 
 __all__ = [
+    "CensusPepClient",
     "CensusReporterClient",
     "FemaClient",
     "HcadClient",

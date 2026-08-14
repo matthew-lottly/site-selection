@@ -18,7 +18,7 @@ node/3204058605,Kroger,Kroger,value_grocery,55000,29.7711432,-95.599194,"14344 M
 node/3275482761,Family Dollar,Family Dollar,family_dollar,8500,29.67243,-95.529619,"8646 South Braeswood Boulevard, Houston"
 node/3303484407,Target,Target,big_box_anchor,125000,29.969248,-95.6962852,"25901 Northwest Freeway, Cypress"
 node/3311296099,Target,Target,big_box_anchor,125000,29.7362906,-95.7759881,"23710 Westheimer Parkway, Katy"
-node/3321057929,Dollar Tree,Dollar Tree,sister_banner,9000,30.0917127,-95.640425,
+node/3321057929,Dollar Tree,Dollar Tree,arch_rival,9000,30.0917127,-95.640425,
 node/3321060312,Target,Target,big_box_anchor,125000,30.0917963,-95.6392689,"14302 FM 2920, Tomball"
 node/3390498259,Kroger,Kroger,value_grocery,55000,29.558593,-95.1247749,"16400 El Camino Real, Houston"
 node/3494230793,Target,Target,big_box_anchor,125000,30.0501898,-95.4348629,"19511 North Freeway, Spring"
@@ -29,10 +29,10 @@ node/3832798035,Family Dollar,Family Dollar,family_dollar,8500,29.7182032,-95.29
 node/3903671109,Kroger,Kroger,value_grocery,55000,30.0666789,-95.1871315,"3410 Northpark Drive, Kingwood"
 node/3903896960,Target,Target,big_box_anchor,125000,29.7821551,-95.7160541,"19955 Katy Freeway, Katy"
 node/3905103773,H-E-B,H-E-B,value_grocery,90000,29.7892877,-95.7167418,"1550 North Fry Road, Houston"
-node/3911060264,Dollar Tree,Dollar Tree,sister_banner,9000,29.781717,-95.7492548,
+node/3911060264,Dollar Tree,Dollar Tree,arch_rival,9000,29.781717,-95.7492548,
 node/3911060265,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.7809732,-95.7490959,
 node/4063682495,Family Dollar,Family Dollar,family_dollar,8500,29.8686324,-95.3835231,"7404 Airline Drive, Houston"
-node/4227549107,Dollar Tree,Dollar Tree,sister_banner,9000,29.6184394,-95.4943492,"14404 Hillcroft Avenue, Houston"
+node/4227549107,Dollar Tree,Dollar Tree,arch_rival,9000,29.6184394,-95.4943492,"14404 Hillcroft Avenue, Houston"
 node/4227549132,Dollar General,Dollar General,arch_rival,7400,29.6001742,-95.5260033,"1783 Texas Parkway, Missouri City"
 node/4227549135,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.5973965,-95.5253515,"1530 Independence Boulevard, Missouri City"
 node/4227549140,Family Dollar,Family Dollar,family_dollar,8500,29.5972753,-95.5282135,"2190 Texas Parkway, Missouri City"
@@ -43,18 +43,18 @@ node/4251878623,Joe V's Smart Shop,Joe V's Smart Shop,value_grocery,30000,29.607
 node/4252070153,Walmart Neighborhood Market,Walmart,big_box_anchor,100000,30.0693331,-95.214514,"2165 Northpark Drive, Kingwood"
 node/4265354439,Five Below,Five Below,arch_rival,8500,29.5688904,-95.5703047,"5754 Alvin Sugarland Road, Missouri City"
 node/4289437579,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.8368658,-95.6446754,"4330 F, Houston"
-node/4308060199,Dollar Tree,Dollar Tree,sister_banner,9000,29.9367824,-95.248631,
+node/4308060199,Dollar Tree,Dollar Tree,arch_rival,9000,29.9367824,-95.248631,
 node/4364112595,Family Dollar,Family Dollar,family_dollar,8500,29.8597866,-95.4057467,"436 West Parker Road, Houston"
 node/4484885116,Kroger,Kroger,value_grocery,55000,29.6535678,-95.0321936,"1300 West Fairmont Parkway, La Porte"
 node/4842212281,ALDI,Aldi,value_grocery,17000,29.8229583,-95.4097761,"3938 North Shepherd Drive, Houston"
 node/4882434179,Family Dollar,Family Dollar,family_dollar,8500,29.5878515,-95.4700098,
-node/5180374097,Dollar Tree,Dollar Tree,sister_banner,9000,29.5496961,-95.1300803,
+node/5180374097,Dollar Tree,Dollar Tree,arch_rival,9000,29.5496961,-95.1300803,
 node/5245875821,Family Dollar,Family Dollar,family_dollar,8500,29.8441369,-95.6471012,"4707 North Highway 6, Houston"
 node/5245961915,Family Dollar,Family Dollar,family_dollar,8500,29.8037596,-95.4899267,
 node/5246578669,Kroger,Kroger,value_grocery,55000,29.8126507,-95.7701896,"2700 West Grand Parkway North, Katy"
-node/5246586823,Dollar Tree,Dollar Tree,sister_banner,9000,29.7834884,-95.7940127,
+node/5246586823,Dollar Tree,Dollar Tree,arch_rival,9000,29.7834884,-95.7940127,
 node/5249763729,Burlington,Burlington,big_box_anchor,65000,29.8779269,-95.6560123,"16311 FM529, Houston"
-node/5250892279,Dollar Tree,Dollar Tree,sister_banner,9000,29.88203,-95.6467254,
+node/5250892279,Dollar Tree,Dollar Tree,arch_rival,9000,29.88203,-95.6467254,
 node/5312062072,Family Dollar,Family Dollar,family_dollar,8500,30.0050464,-95.3078824,"7815 FM 1960 Bypass Road West, Humble"
 node/5315597762,Walmart Supercenter,Walmart,big_box_anchor,100000,29.894378,-95.065666,"14215 Fm 2100 Road, Crosby"
 node/5315597977,Walmart Neighborhood Market,Walmart,big_box_anchor,100000,29.4990441,-95.1255913,"2625 West Main Street, League City"
@@ -64,31 +64,31 @@ node/5449778360,Kroger Marketplace,Kroger,value_grocery,55000,30.1185241,-95.381
 node/5461960762,Family Dollar,Family Dollar,family_dollar,8500,29.9201794,-95.4923113,
 node/5651816440,Burlington,Burlington,big_box_anchor,65000,29.5571819,-95.3944572,"2812 Business Center Drive, Pearland"
 node/5843069939,ALDI,Aldi,value_grocery,17000,29.9968762,-95.1736853,"6900 FM 1960 East, Humble"
-node/5867045587,Dollar Tree,Dollar Tree,sister_banner,9000,29.8275853,-95.433001,"1345½ West 43rd Street, Houston"
+node/5867045587,Dollar Tree,Dollar Tree,arch_rival,9000,29.8275853,-95.433001,"1345½ West 43rd Street, Houston"
 node/6252570645,H-E-B,H-E-B,value_grocery,90000,29.8073613,-95.4088622,"2300 North Shepherd Drive, Houston"
 node/6284793859,Five Below,Five Below,arch_rival,8500,29.7364468,-95.5018802,"7525 Westheimer Road, Houston"
 node/6292846505,Family Dollar,Family Dollar,family_dollar,8500,30.0048476,-95.4634042,
-node/6292846514,Dollar Tree,Dollar Tree,sister_banner,9000,30.0067497,-95.4624121,
+node/6292846514,Dollar Tree,Dollar Tree,arch_rival,9000,30.0067497,-95.4624121,
 node/6299354185,Kroger,Kroger,value_grocery,55000,29.7968241,-95.4864439,"1505 Wirt Road, Houston"
-node/6355441543,Dollar Tree,Dollar Tree,sister_banner,9000,30.1018581,-95.2355544,"23741 Eastex Freeway, Porter"
+node/6355441543,Dollar Tree,Dollar Tree,arch_rival,9000,30.1018581,-95.2355544,"23741 Eastex Freeway, Porter"
 node/6655625789,Kroger,Kroger,value_grocery,55000,29.5516946,-95.5843055,"18861 University Boulevard, Sugar Land"
 node/6775257588,Family Dollar,Family Dollar,family_dollar,8500,29.9606721,-95.5518481,"12914 Willow Chase Drive, Houston"
 node/6840644122,H-E-B,H-E-B,value_grocery,90000,29.7688039,-95.3966726,"3663 Washington Avenue, Houston"
-node/6873525060,Dollar Tree,Dollar Tree,sister_banner,9000,29.8205578,-95.4676169,5360 West 34th Street
+node/6873525060,Dollar Tree,Dollar Tree,arch_rival,9000,29.8205578,-95.4676169,5360 West 34th Street
 node/6904082560,Five Below,Five Below,arch_rival,8500,29.8328632,-95.3819057,"4444 North Freeway, Houston"
 node/6911757294,Burlington,Burlington,big_box_anchor,65000,29.8329136,-95.3788659,"4426 North Freeway, Houston"
-node/6911757295,Dollar Tree,Dollar Tree,sister_banner,9000,29.8329062,-95.3793144,"4428 North Freeway, Houston"
-node/6974712287,Dollar Tree,Dollar Tree,sister_banner,9000,30.1252725,-95.45065,
+node/6911757295,Dollar Tree,Dollar Tree,arch_rival,9000,29.8329062,-95.3793144,"4428 North Freeway, Houston"
+node/6974712287,Dollar Tree,Dollar Tree,arch_rival,9000,30.1252725,-95.45065,
 node/7152422412,Target,Target,big_box_anchor,125000,29.7350204,-95.5678172,"10801 Westheimer Road, Houston"
 node/7161674735,Family Dollar,Family Dollar,family_dollar,8500,29.8711919,-95.4047316,"428 West Little York Road, Houston"
 node/7330326431,Joe V's,Joe V's Smart Shop,value_grocery,30000,29.8316216,-95.484882,
 node/7708784356,Aldine Mini Market,Aldi,value_grocery,17000,29.9313432,-95.4012529,"224 Aldine Bender Road, Houston"
-node/7734724402,Dollar Tree,Dollar Tree,sister_banner,9000,29.8224285,-95.4097648,"3832 North Shepherd Drive, Houston"
-node/7874625124,Dollar Tree,Dollar Tree,sister_banner,9000,29.8505954,-95.5033524,"5770 Hollister Street, Houston"
+node/7734724402,Dollar Tree,Dollar Tree,arch_rival,9000,29.8224285,-95.4097648,"3832 North Shepherd Drive, Houston"
+node/7874625124,Dollar Tree,Dollar Tree,arch_rival,9000,29.8505954,-95.5033524,"5770 Hollister Street, Houston"
 node/7925109111,Burlington,Burlington,big_box_anchor,65000,29.787621,-95.5354813,"9730 Katy Freeway, Houston"
 node/7995521916,Kroger,Kroger,value_grocery,55000,29.5298455,-95.5108212,"10250 Highway 6, Missouri City"
 node/8473529797,Dollar General,Dollar General,arch_rival,7400,29.8336081,-95.4452625,
-node/8477396349,Dollar Tree,Dollar Tree,sister_banner,9000,30.0028328,-95.265643,"216 FM 1960 Bypass Road East, Humble"
+node/8477396349,Dollar Tree,Dollar Tree,arch_rival,9000,30.0028328,-95.265643,"216 FM 1960 Bypass Road East, Humble"
 node/8581396975,Burlington,Burlington,big_box_anchor,65000,29.8098119,-95.4549533,"4518 Dacoma Street, Houston"
 node/8581396976,Five Below,Five Below,arch_rival,8500,29.8098394,-95.4537402,"4514 Dacoma Street, Houston"
 node/8596101857,Family Dollar,Family Dollar,family_dollar,8500,29.9117299,-95.5859309,
@@ -107,19 +107,19 @@ node/8623735915,ALDI,Aldi,value_grocery,17000,29.8180432,-95.5447357,"2550 Gessn
 node/8623803023,ALDI,Aldi,value_grocery,17000,29.9078721,-95.5857979,"9251 Jones Road, Houston"
 node/8623809141,ALDI,Aldi,value_grocery,17000,30.0020036,-95.5599323,"9870 Louetta Road, Houston"
 node/8678193945,Mi Tienda,Mi Tienda,value_grocery,40000,29.8699592,-95.3325185,
-node/8695378165,Dollar Tree,Dollar Tree,sister_banner,9000,30.0221566,-95.4323221,
+node/8695378165,Dollar Tree,Dollar Tree,arch_rival,9000,30.0221566,-95.4323221,
 node/8882810737,Kroger,Kroger,value_grocery,55000,29.7823174,-95.5221864,"9325 Katy Freeway, Houston"
 node/9136612188,Burlington,Burlington,big_box_anchor,65000,30.0024178,-95.2804145,"9470 FM 1960 Bypass Road West, Humble"
 node/9225549862,Five Below,Five Below,arch_rival,8500,29.6290434,-95.2380206,
-node/9327602001,Dollar Tree,Dollar Tree,sister_banner,9000,29.5736127,-95.5715743,
+node/9327602001,Dollar Tree,Dollar Tree,arch_rival,9000,29.5736127,-95.5715743,
 node/9506349928,Dollar General,Dollar General,arch_rival,7400,29.5390939,-95.7109044,"6025 FM 762 Road, Richmond"
 node/9795032378,Kroger,Kroger,value_grocery,55000,29.603198,-95.2149315,"11701 South Sam Houston Parkway East, Houston"
 node/9822792164,Five Below,Five Below,arch_rival,8500,29.6376033,-95.5881934,
 node/9826764393,Target,Target,big_box_anchor,125000,29.6026242,-95.264021,"8503 South Sam Houston Parkway East, Houston"
-node/9828788908,Dollar Tree,Dollar Tree,sister_banner,9000,29.9026854,-95.465968,
+node/9828788908,Dollar Tree,Dollar Tree,arch_rival,9000,29.9026854,-95.465968,
 node/9828788909,Family Dollar,Family Dollar,family_dollar,8500,29.902959,-95.4661796,
 node/9847142033,Burlington,Burlington,big_box_anchor,65000,29.6024836,-95.2649678,"8501 South Sam Houston East Parkway, Houston"
-node/9847142034,Dollar Tree,Dollar Tree,sister_banner,9000,29.6024059,-95.2652491,
+node/9847142034,Dollar Tree,Dollar Tree,arch_rival,9000,29.6024059,-95.2652491,
 node/9866040327,Kroger,Kroger,value_grocery,55000,29.6748622,-95.2910328,"6322 Telephone Road, Houston"
 node/9875500336,Food Town,Food Town,value_grocery,40000,29.8194146,-95.0583254,
 node/9875500337,Family Dollar,Family Dollar,family_dollar,8500,29.820181,-95.0583328,
@@ -127,28 +127,28 @@ node/9883922042,Kroger,Kroger,value_grocery,55000,29.7923441,-94.9829718,"6315 G
 node/9884048056,Kroger,Kroger,value_grocery,55000,29.7896563,-95.2009461,"12620 Woodforest Boulevard, Houston"
 node/9888827652,Burlington,Burlington,big_box_anchor,65000,29.9159829,-95.4154162,"10311 Highway 45 North, Houston"
 node/9901351765,Food Town,Food Town,value_grocery,40000,29.7790121,-95.1259129,"435 Sheldon Road, Channelview"
-node/9921713892,Dollar Tree,Dollar Tree,sister_banner,9000,29.733257,-95.6252846,
+node/9921713892,Dollar Tree,Dollar Tree,arch_rival,9000,29.733257,-95.6252846,
 node/9921713898,Burlington,Burlington,big_box_anchor,65000,29.7343437,-95.6271274,
 node/9950054765,Burlington,Burlington,big_box_anchor,65000,30.0887654,-95.5190889,"6545 North Grand Parkway West, Spring"
 node/9953098301,Food Town,Food Town,value_grocery,40000,29.8669271,-95.4858994,
 node/9966693007,Five Below,Five Below,arch_rival,8500,30.0858917,-95.5215462,"6600 Spring Stuebner Road, Spring"
-node/10309429389,Dollar Tree,Dollar Tree,sister_banner,9000,29.6147605,-95.2200611,
+node/10309429389,Dollar Tree,Dollar Tree,arch_rival,9000,29.6147605,-95.2200611,
 node/10312341884,Five Below,Five Below,arch_rival,8500,29.5526205,-95.3847649,"3113 Silverlake Village Drive, Pearland"
 node/10828099524,Dollar General,Dollar General,arch_rival,7400,30.0097285,-95.4461468,
 node/10846649798,Family Dollar,Family Dollar,family_dollar,8500,29.8897532,-95.3944158,
-node/10858840205,Dollar Tree,Dollar Tree,sister_banner,9000,29.6884973,-95.5072559,
-node/11020901874,Dollar Tree,Dollar Tree,sister_banner,9000,30.0191593,-95.3810024,
+node/10858840205,Dollar Tree,Dollar Tree,arch_rival,9000,29.6884973,-95.5072559,
+node/11020901874,Dollar Tree,Dollar Tree,arch_rival,9000,30.0191593,-95.3810024,
 node/11020911336,Dollar General,Dollar General,arch_rival,7400,30.0211814,-95.3790171,3040 FM 1960 East
 node/11098145430,Aldine Express,Aldi,value_grocery,17000,29.9028579,-95.331818,
 node/11228181143,Family Dollar,Family Dollar,family_dollar,8500,29.9822779,-95.4395381,
 node/11365121264,Dollar General,Dollar General,arch_rival,7400,29.7866575,-95.1252961,777 Sheldon Road
 node/11378670149,Family Dollar,Family Dollar,family_dollar,8500,29.7799023,-95.1259266,
-node/11415725686,Dollar Tree,Dollar Tree,sister_banner,9000,29.9196345,-95.4955194,
+node/11415725686,Dollar Tree,Dollar Tree,arch_rival,9000,29.9196345,-95.4955194,
 node/11449844145,Joe V's Smart Shop,Joe V's Smart Shop,value_grocery,30000,29.6803187,-95.1470516,"4203 Red Bluff Road, Pasadena"
 node/11471996894,Food Town,Food Town,value_grocery,40000,29.6611012,-95.2110583,
 node/11471996898,Mi Tienda,Mi Tienda,value_grocery,40000,29.6632548,-95.2087999,1630 Spencer Highway
 node/11569527874,Family Dollar,Family Dollar,family_dollar,8500,29.826047,-95.3606727,
-node/11675220839,Dollar Tree,Dollar Tree,sister_banner,9000,29.9016595,-95.5535643,
+node/11675220839,Dollar Tree,Dollar Tree,arch_rival,9000,29.9016595,-95.5535643,
 node/11728363576,Five Below,Five Below,arch_rival,8500,29.5427118,-95.7485511,"24101 Brazos Town Crossing, Rosenberg"
 node/11786725812,Dollar General,Dollar General,arch_rival,7400,29.9457958,-95.3579982,Houston
 node/11786725813,Family Dollar,Family Dollar,family_dollar,8500,29.978078,-95.489572,"13092 Veterans Memorial Drive, Houston"
@@ -157,13 +157,13 @@ node/11786725815,Family Dollar,Family Dollar,family_dollar,8500,29.94693,-95.466
 node/11786725816,Family Dollar,Family Dollar,family_dollar,8500,29.965706,-95.452178,"2128 Spears Road, Houston"
 node/11786725819,Dollar General,Dollar General,arch_rival,7400,29.9118094,-95.4391636,Houston
 node/11786725820,Five Below,Five Below,arch_rival,8500,29.9139426,-95.4165303,"10261 North Freeway, Houston"
-node/11786725821,Dollar Tree,Dollar Tree,sister_banner,9000,29.9137056,-95.4165706,"10261 North Freeway, Houston"
+node/11786725821,Dollar Tree,Dollar Tree,arch_rival,9000,29.9137056,-95.4165706,"10261 North Freeway, Houston"
 node/11786725822,Family Dollar,Family Dollar,family_dollar,8500,29.91724,-95.404791,"11046 Airline Drive, Houston"
 node/11786725824,Dollar General,Dollar General,arch_rival,7400,29.9312782,-95.4067973,Houston
 node/11786725825,Family Dollar,Family Dollar,family_dollar,8500,29.966469,-95.403385,"657 Rankin Road, Houston"
 node/11786725829,Family Dollar,Family Dollar,family_dollar,8500,29.9494859,-95.4236588,"430 West Greens Road, Houston"
 node/11786725830,Family Dollar,Family Dollar,family_dollar,8500,29.9647359,-95.429903,"703 West Rankin Road, Houston"
-node/11786725831,Dollar Tree,Dollar Tree,sister_banner,9000,29.9892192,-95.4259648,"15135 North Freeway, Houston"
+node/11786725831,Dollar Tree,Dollar Tree,arch_rival,9000,29.9892192,-95.4259648,"15135 North Freeway, Houston"
 node/11786725832,Family Dollar,Family Dollar,family_dollar,8500,29.9941126,-95.4087692,"20741 Imperial Valley Drive, Houston"
 node/11786725833,Family Dollar,Family Dollar,family_dollar,8500,30.022524,-95.41975,"22522 Imperial Valley Drive, Houston"
 node/11786725834,Five Below,Five Below,arch_rival,8500,30.0211537,-95.4365714,"380 fm 1960 West, Houston"
@@ -176,69 +176,69 @@ node/11796305342,Kroger,Kroger,value_grocery,55000,29.6966036,-95.1737224,"2619 
 node/11796305344,Kroger,Kroger,value_grocery,55000,29.5606099,-95.2715022,"3245 Broadway Street, Pearland"
 node/11796305346,Kroger,Kroger,value_grocery,55000,30.0457619,-95.34811,"5671 Treaschwig Road, Spring"
 node/11836006937,Family Dollar,Family Dollar,family_dollar,8500,29.866815,-95.4853341,
-node/11920400027,Dollar Tree,Dollar Tree,sister_banner,9000,29.8790854,-95.7254678,
-node/12000139576,Dollar Tree,Dollar Tree,sister_banner,9000,29.9540266,-95.5453873,"17355 Tomball Parkway, Houston"
+node/11920400027,Dollar Tree,Dollar Tree,arch_rival,9000,29.8790854,-95.7254678,
+node/12000139576,Dollar Tree,Dollar Tree,arch_rival,9000,29.9540266,-95.5453873,"17355 Tomball Parkway, Houston"
 node/12000139577,Five Below,Five Below,arch_rival,8500,29.954189,-95.5457643,
 node/12040685915,Dollar General,Dollar General,arch_rival,7400,30.0219576,-95.4195732,
 node/12042730461,Family Dollar,Family Dollar,family_dollar,8500,29.6756702,-95.2663806,"8404 Winkler Drive, Houston"
-node/12065612931,Dollar Tree,Dollar Tree,sister_banner,9000,30.0504172,-95.235236,"1385 Kingwood Drive, Kingwood"
+node/12065612931,Dollar Tree,Dollar Tree,arch_rival,9000,30.0504172,-95.235236,"1385 Kingwood Drive, Kingwood"
 node/12065612935,Five Below,Five Below,arch_rival,8500,30.0506234,-95.2359833,"1365 Kingwood Drive, Kingwood"
 node/12094057974,Dollar General,Dollar General,arch_rival,7400,29.496585,-95.9128859,"411 South 1st Street, Beasley"
-node/12158386343,Dollar Tree,Dollar Tree,sister_banner,9000,29.8480208,-95.3922107,
-node/12193515241,Dollar Tree,Dollar Tree,sister_banner,9000,29.5887371,-95.5998194,
+node/12158386343,Dollar Tree,Dollar Tree,arch_rival,9000,29.8480208,-95.3922107,
+node/12193515241,Dollar Tree,Dollar Tree,arch_rival,9000,29.5887371,-95.5998194,
 node/12294822755,Dollar General,Dollar General,arch_rival,7400,29.9426327,-95.3040508,
-node/12324824201,Dollar Tree,Dollar Tree,sister_banner,9000,29.7724321,-95.1876584,1238 Uvalde Road
+node/12324824201,Dollar Tree,Dollar Tree,arch_rival,9000,29.7724321,-95.1876584,1238 Uvalde Road
 node/12459731688,Five Below,Five Below,arch_rival,8500,29.7726102,-95.1876665,
 node/12459766776,Dollar General,Dollar General,arch_rival,7400,29.830538,-95.3182295,
-node/12475053661,Dollar Tree,Dollar Tree,sister_banner,9000,29.6453505,-95.6501485,
-node/12534593175,Dollar Tree,Dollar Tree,sister_banner,9000,29.7748944,-95.2360253,
+node/12475053661,Dollar Tree,Dollar Tree,arch_rival,9000,29.6453505,-95.6501485,
+node/12534593175,Dollar Tree,Dollar Tree,arch_rival,9000,29.7748944,-95.2360253,
 node/12542319325,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.7057347,-95.5395381,"8710 Bellaire Boulevard, Houston"
 node/12578111894,Walmart Supercenter,Walmart,big_box_anchor,100000,29.7835112,-95.8040801,"25108 Market Place Drive, Katy"
 node/12604446201,Ross Dress for Less,Ross Dress for Less,big_box_anchor,28000,29.8107861,-95.1667879,5955 East Sam Houston Parkway North
 node/12665341001,Family Dollar,Family Dollar,family_dollar,8500,29.789718,-95.1621332,14650 Woodforest Boulevard
 node/12695453859,H-E-B,H-E-B,value_grocery,90000,29.5785263,-95.5826764,4724 State Highway 6 South
 node/12730036358,Burlington,Burlington,big_box_anchor,65000,29.5839192,-95.6465445,13521 University Boulevard
-node/12879493432,Dollar Tree,Dollar Tree,sister_banner,9000,30.0431373,-95.3827637,
-node/13070911502,Dollar Tree,Dollar Tree,sister_banner,9000,29.7976319,-95.7034772,2424 Greenhouse Road
+node/12879493432,Dollar Tree,Dollar Tree,arch_rival,9000,30.0431373,-95.3827637,
+node/13070911502,Dollar Tree,Dollar Tree,arch_rival,9000,29.7976319,-95.7034772,2424 Greenhouse Road
 node/13158890081,Walmart Supercenter,Walmart,big_box_anchor,100000,29.698222,-95.8419785,"26824 FM 1093, Katy"
 node/13160905412,Walmart,Walmart,big_box_anchor,100000,29.6957347,-95.8424885,"26814 FM 1093, Katy"
 node/13160942592,Five Below,Five Below,arch_rival,8500,29.696664,-95.843563,"26914 FM 1093, Katy"
-node/13161108282,Dollar Tree,Dollar Tree,sister_banner,9000,29.6981672,-95.8442694,"26952 FM 1093, Katy"
+node/13161108282,Dollar Tree,Dollar Tree,arch_rival,9000,29.6981672,-95.8442694,"26952 FM 1093, Katy"
 node/13173728783,Walmart Supercenter,Walmart,big_box_anchor,100000,29.9113655,-95.7292199,
-node/13181305301,Dollar Tree,Dollar Tree,sister_banner,9000,29.8098833,-95.1666411,5809 East Sam Houston Parkway North
+node/13181305301,Dollar Tree,Dollar Tree,arch_rival,9000,29.8098833,-95.1666411,5809 East Sam Houston Parkway North
 node/13203307151,Joe Vs Smart Shop,Joe V's Smart Shop,value_grocery,30000,30.0223376,-95.3827082,
 node/13205412703,Dollar General,Dollar General,arch_rival,7400,29.9013409,-95.3555739,
-node/13248904101,Dollar Tree,Dollar Tree,sister_banner,9000,29.9968838,-95.1727428,
-node/13289525537,Dollar Tree,Dollar Tree,sister_banner,9000,29.9035543,-95.3134253,
+node/13248904101,Dollar Tree,Dollar Tree,arch_rival,9000,29.9968838,-95.1727428,
+node/13289525537,Dollar Tree,Dollar Tree,arch_rival,9000,29.9035543,-95.3134253,
 node/13289540974,Family Dollar,Family Dollar,family_dollar,8500,29.9018425,-95.3145498,
 node/13290030111,Family Dollar,Family Dollar,family_dollar,8500,29.9017778,-95.3343131,
 node/13331570044,Walmart,Walmart,big_box_anchor,100000,29.9134124,-95.4850743,
 node/13345688348,Aldine Food Store,Aldi,value_grocery,17000,29.9324141,-95.4024249,
 node/13376553250,1 Aldine Food Store,Aldi,value_grocery,17000,29.9030359,-95.3259607,
-node/13391170569,Dollar Tree,Dollar Tree,sister_banner,9000,29.9018454,-95.3541708,
+node/13391170569,Dollar Tree,Dollar Tree,arch_rival,9000,29.9018454,-95.3541708,
 node/13409204091,Family Dollar,Family Dollar,family_dollar,8500,29.6740068,-95.2762388,"8219 Broadway Street, Houston"
 node/13424500735,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.9598836,-95.5510372,
 node/13438325308,Dollar General,Dollar General,arch_rival,7400,29.9020984,-95.3375866,
-node/13459304170,Dollar Tree,Dollar Tree,sister_banner,9000,29.6756592,-95.6445982,
+node/13459304170,Dollar Tree,Dollar Tree,arch_rival,9000,29.6756592,-95.6445982,
 node/13502690190,Aldine Food Mart,Aldi,value_grocery,17000,29.9029676,-95.3106624,
 node/13520218579,Five Below,Five Below,arch_rival,8500,29.9854274,-95.4996625,
 node/13520246432,Burlington,Burlington,big_box_anchor,65000,29.9853075,-95.4998901,
-node/13520290313,Dollar Tree,Dollar Tree,sister_banner,9000,29.9872608,-95.4961772,
+node/13520290313,Dollar Tree,Dollar Tree,arch_rival,9000,29.9872608,-95.4961772,
 node/13570636002,Dollar General,Dollar General,arch_rival,7400,29.8213983,-95.0578479,
-node/13582108171,Dollar Tree,Dollar Tree,sister_banner,9000,29.978001,-95.6706902,
+node/13582108171,Dollar Tree,Dollar Tree,arch_rival,9000,29.978001,-95.6706902,
 node/13639843570,Dollar General,Dollar General,arch_rival,7400,29.5557221,-95.7836163,
 node/13650287823,Dollar General,Dollar General,arch_rival,7400,30.0095633,-95.5901751,
 node/13805124014,Burlington,Burlington,big_box_anchor,65000,29.731456,-95.4626883,"5125 Richmond Avenue, Houston"
-node/13809301601,Dollar Tree,Dollar Tree,sister_banner,9000,29.8501808,-95.7181867,
+node/13809301601,Dollar Tree,Dollar Tree,arch_rival,9000,29.8501808,-95.7181867,
 node/13833293303,Dollar General Market,Dollar General,arch_rival,7400,30.0026748,-95.1520767,
 node/13833381701,Five Below,Five Below,arch_rival,8500,29.9995007,-95.1741376,
 node/13893156702,Burlington,Burlington,big_box_anchor,65000,29.9478061,-95.4195819,
 node/13936855947,H-E-B,H-E-B,value_grocery,90000,29.9573283,-95.2072633,
 node/13984515887,Food Town,Food Town,value_grocery,40000,30.0143124,-95.4522663,
-node/13991367102,Dollar Tree,Dollar Tree,sister_banner,9000,29.9794767,-95.5142552,
+node/13991367102,Dollar Tree,Dollar Tree,arch_rival,9000,29.9794767,-95.5142552,
 node/14001050133,Dollar General,Dollar General,arch_rival,7400,29.9639517,-95.2433828,
-node/14055288374,Dollar Tree,Dollar Tree,sister_banner,9000,29.6998625,-95.687079,
-node/14066980962,Dollar Tree,Dollar Tree,sister_banner,9000,30.0422784,-95.4883515,
+node/14055288374,Dollar Tree,Dollar Tree,arch_rival,9000,29.6998625,-95.687079,
+node/14066980962,Dollar Tree,Dollar Tree,arch_rival,9000,30.0422784,-95.4883515,
 way/45493255,H-E-B,H-E-B,value_grocery,90000,29.6984836,-95.2949202,"3111 Woodridge Drive, Houston"
 way/46680443,Walmart Supercenter,Walmart,big_box_anchor,100000,29.6308249,-95.237609,"9598 Rowlett Road, Houston"
 way/49233629,Walmart Supercenter,Walmart,big_box_anchor,100000,29.6440501,-95.573156,"11210 West Airport Boulevard, Stafford"
@@ -336,7 +336,7 @@ way/314361375,Kroger,Kroger,value_grocery,55000,29.9768155,-95.4915026,"13133 Ve
 way/315695620,Food Town,Food Town,value_grocery,40000,29.8694121,-95.3834035,"7426 Airline Drive, Houston"
 way/316352286,Family Dollar,Family Dollar,family_dollar,8500,29.8484499,-95.3627673,"9605 Irvington Boulevard, Houston"
 way/317816016,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.7307504,-95.3109362,
-way/317926073,Dollar Tree,Dollar Tree,sister_banner,9000,30.067074,-95.4309815,"20622 North Freeway, Spring"
+way/317926073,Dollar Tree,Dollar Tree,arch_rival,9000,30.067074,-95.4309815,"20622 North Freeway, Spring"
 way/318320633,Food Town,Food Town,value_grocery,40000,29.9404297,-95.4612947,"2770 North Sam Houston Parkway West, Houston"
 way/319367084,Burlington,Burlington,big_box_anchor,65000,29.9557059,-95.5514994,"8415 FM 1960 West, Houston"
 way/342028535,Kroger,Kroger,value_grocery,55000,29.8288565,-95.4320496,"1352 West 43rd Street, Houston"
@@ -346,7 +346,7 @@ way/346664405,Target,Target,big_box_anchor,125000,29.9186875,-95.605114,"12701 F
 way/366871869,Walmart Supercenter,Walmart,big_box_anchor,100000,29.716183,-95.3129549,"2391 South Wayside Drive, Houston"
 way/368086078,Kroger,Kroger,value_grocery,55000,29.583068,-95.3898665,"11003 Shadow Creek Parkway, Pearland"
 way/371183163,Aldi,Aldi,value_grocery,17000,29.6894581,-95.5015677,"6751 Bissonnet Street, Houston"
-way/374878795,Dollar Tree,Dollar Tree,sister_banner,9000,29.7410251,-95.3770597,"1000 Elgin Street, Houston"
+way/374878795,Dollar Tree,Dollar Tree,arch_rival,9000,29.7410251,-95.3770597,"1000 Elgin Street, Houston"
 way/375578535,Dollar General,Dollar General,arch_rival,7400,29.7400228,-95.3402779,"4002 Polk Street, Houston"
 way/375578541,Kroger,Kroger,value_grocery,55000,29.7397445,-95.3404793,"4000 Polk Street, Houston"
 way/383999053,Kroger,Kroger,value_grocery,55000,29.6692856,-95.4639551,"10306 South Post Oak Road, Houston"
@@ -388,7 +388,7 @@ way/521378899,Target,Target,big_box_anchor,125000,29.7326691,-95.6273463,"2700 E
 way/521640842,Target,Target,big_box_anchor,125000,29.8774046,-95.6474592,"6955 North Highway 6, Houston"
 way/525232727,Kroger,Kroger,value_grocery,55000,29.9246942,-95.2038836,"14221 East Sam Houston Parkway North, Houston"
 way/525232735,Burlington,Burlington,big_box_anchor,65000,29.9276702,-95.2055242,"14353 East Sam Houston Parkway North, Houston"
-way/528128676,Dollar Tree,Dollar Tree,sister_banner,9000,29.6742591,-95.4573026,"9755 Meyer Park Boulevard, Houston"
+way/528128676,Dollar Tree,Dollar Tree,arch_rival,9000,29.6742591,-95.4573026,"9755 Meyer Park Boulevard, Houston"
 way/528128677,Burlington,Burlington,big_box_anchor,65000,29.6746279,-95.4568583,"9751 South Post Oak Road, Houston"
 way/539699148,Joe V's,Joe V's Smart Shop,value_grocery,30000,29.6551861,-95.5131769,7755 West Bellfort Street
 way/540033295,Walmart Supercenter,Walmart,big_box_anchor,100000,29.5518191,-95.1592268,"150 West El Dorado Boulevard, Friendswood"
@@ -434,7 +434,7 @@ way/706790722,Kroger,Kroger,value_grocery,55000,30.0855449,-95.4484315,"2150 Spr
 way/706808181,H-E-B,H-E-B,value_grocery,90000,30.0717349,-95.5019009,"5251 FM 2920, Spring"
 way/707043803,ALDI,Aldi,value_grocery,17000,30.0710988,-95.4519342,"2302 Fm 2920, Spring"
 way/707043835,Walmart Supercenter,Walmart,big_box_anchor,100000,30.0773879,-95.5128161,"21150 Kuykendahl Road, Spring"
-way/708064669,Dollar Tree,Dollar Tree,sister_banner,9000,29.862711,-95.4728391,
+way/708064669,Dollar Tree,Dollar Tree,arch_rival,9000,29.862711,-95.4728391,
 way/740010552,Kroger Marketplace,Kroger,value_grocery,55000,29.9190144,-95.6896318,"9703 Barker Cypress Road, Cypress"
 way/759085631,H-E-B,H-E-B,value_grocery,90000,29.6062492,-95.1269357,"3501 Clear Lake City Boulevard, Houston"
 way/762456911,Baytown H-E-B,H-E-B,value_grocery,90000,29.7955367,-94.9773709,"6430 Garth Road, Baytown"
@@ -450,7 +450,7 @@ way/828902198,Dollar General,Dollar General,arch_rival,7400,29.9837934,-95.40714
 way/839649312,Spring Green Market H-E-B,H-E-B,value_grocery,90000,29.6957581,-95.8160474,"9211 FM 723, Richmond"
 way/840289466,Dollar General,Dollar General,arch_rival,7400,29.9862395,-95.43425,"15045 Ella Boulevard, Houston"
 way/844396650,Grant and Spring Cypress H-E-B,H-E-B,value_grocery,90000,30.0029864,-95.6390211,"14100 Spring Cypress Road, Cypress"
-way/846945461,Dollar Tree,Dollar Tree,sister_banner,9000,29.6986705,-95.4842735,
+way/846945461,Dollar Tree,Dollar Tree,arch_rival,9000,29.6986705,-95.4842735,
 way/847364920,H-E-B,H-E-B,value_grocery,90000,30.0223608,-95.5274032,"7310 Louetta Road, Spring"
 way/849319681,Walmart Supercenter,Walmart,big_box_anchor,100000,29.7680981,-95.1770872,"13750 East Freeway, Houston"
 way/849327255,Kroger,Kroger,value_grocery,55000,29.7896285,-95.159347,"14710 Woodforest Boulevard, Houston"
@@ -478,8 +478,8 @@ way/961092404,Target,Target,big_box_anchor,125000,29.5386458,-95.0228844,"255 Ma
 way/975327838,Dollar General,Dollar General,arch_rival,7400,29.8803085,-95.7025134,
 way/978924749,Family Dollar,Family Dollar,family_dollar,8500,29.7229711,-95.6054726,
 way/984985983,Walmart Supercenter,Walmart,big_box_anchor,100000,29.7355805,-95.5116245,"2727 Dunvale Road, Houston"
-way/993140886,Dollar Tree,Dollar Tree,sister_banner,9000,29.5317255,-95.206313,
-way/999294900,Dollar Tree,Dollar Tree,sister_banner,9000,29.6281257,-95.2355869,
+way/993140886,Dollar Tree,Dollar Tree,arch_rival,9000,29.5317255,-95.206313,
+way/999294900,Dollar Tree,Dollar Tree,arch_rival,9000,29.6281257,-95.2355869,
 way/1002036038,Burlington,Burlington,big_box_anchor,65000,29.6219945,-95.2268997,
 way/1013864525,Dollar General,Dollar General,arch_rival,7400,29.6159264,-95.3747404,
 way/1019229417,Kroger Marketplace,Kroger,value_grocery,55000,29.990267,-95.7365963,"20355 Cypresswood Drive, Cypress"
@@ -501,8 +501,8 @@ way/1128123012,Dollar General,Dollar General,arch_rival,7400,29.5702674,-95.2874
 way/1128123019,Walmart Supercenter,Walmart,big_box_anchor,100000,29.5732266,-95.2830939,"1919 North Main Street, Pearland"
 way/1187881246,Dollar General,Dollar General,arch_rival,7400,30.0334059,-95.3823989,"21735 Aldine Westfield Road, Humble"
 way/1234872732,Dollar General,Dollar General,arch_rival,7400,29.6274246,-95.0191666,
-way/1235653935,Dollar Tree,Dollar Tree,sister_banner,9000,29.5467359,-95.7586866,"24984 Commercial Drive, Rosenberg"
-way/1243139697,Dollar Tree,Dollar Tree,sister_banner,9000,29.8629426,-95.6839254,"6211 Barker Cypress Road, Katy"
+way/1235653935,Dollar Tree,Dollar Tree,arch_rival,9000,29.5467359,-95.7586866,"24984 Commercial Drive, Rosenberg"
+way/1243139697,Dollar Tree,Dollar Tree,arch_rival,9000,29.8629426,-95.6839254,"6211 Barker Cypress Road, Katy"
 way/1247555430,Walmart Neighborhood Market,Walmart,big_box_anchor,100000,29.6520955,-95.6171449,"13322 West Airport Boulevard, Sugar Land"
 way/1255919220,Kroger,Kroger,value_grocery,55000,29.903257,-95.5538577,
 way/1259173759,H-E-B,H-E-B,value_grocery,90000,29.8189252,-95.8055294,
@@ -519,11 +519,11 @@ way/1326179986,Family Dollar,Family Dollar,family_dollar,8500,29.6390591,-95.508
 way/1326187051,Mi Tienda Meat Market,Mi Tienda,value_grocery,40000,29.6554254,-95.5000341,
 way/1327887561,Family Dollar,Family Dollar,family_dollar,8500,29.6273185,-95.4153035,2913 West Orem Drive
 way/1352939371,Food Town,Food Town,value_grocery,40000,29.6376645,-95.617351,"1130 Eldridge Road, Sugar Land"
-way/1354863081,Dollar Tree,Dollar Tree,sister_banner,9000,30.0779963,-95.5154459,"21330 Kuykendahl Road, Spring"
+way/1354863081,Dollar Tree,Dollar Tree,arch_rival,9000,30.0779963,-95.5154459,"21330 Kuykendahl Road, Spring"
 way/1356236811,H-E-B,H-E-B,value_grocery,90000,29.9393255,-95.7600997,"20017 Bridgeland Creek Parkway, Cypress"
 way/1359243670,Family Dollar,Family Dollar,family_dollar,8500,29.931282,-95.3962312,"366 Aldine Bender Road, Houston"
 way/1409601934,Family Dollar,Family Dollar,family_dollar,8500,29.9277954,-95.4532205,"10425 Veterans Memorial Drive, Houston"
-way/1411069978,Dollar Tree,Dollar Tree,sister_banner,9000,29.7396884,-95.5029999,"7560 Westheimer Road, Houston"
+way/1411069978,Dollar Tree,Dollar Tree,arch_rival,9000,29.7396884,-95.5029999,"7560 Westheimer Road, Houston"
 way/1411240794,Target,Target,big_box_anchor,125000,29.7346086,-95.5177456,"8605 Westheimer Road, Houston"
 way/1441709214,Family Dollar,Family Dollar,family_dollar,8500,29.9512608,-95.3910436,"925 Greens Road, Houston"
 way/1491101056,Fiesta Mart,Fiesta Mart,value_grocery,50000,29.8781552,-95.7220445,"20331 FM 529, Katy"

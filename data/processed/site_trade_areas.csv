@@ -1,21 +1,21 @@
 site_label,hcad_num,pop_5min_drive,pop_10min_drive,trade_area_median_income,huff_capture_pct,n_competitors_in_range
-Site 01 (Parkridge) - Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),0582970000612,32879,224098,61815,54.6,3
-Site 02 (Westwood) - South Sam Houston Parkway West & Southwest Freeway Frontage Road (unaddressed vacant tract),0410560010009,29903,223473,44443,39.4,4
-Site 03 (Braeburn) - 9651 GLENFIELD CT,1041420000005,52492,263763,79538,45.3,3
-Site 04 (Westwood) - South Sam Houston Parkway West & West Bellfort Street (unaddressed vacant tract),1243410010006,35001,235298,57530,41.5,4
-Site 05 (Pecan Park) - 6600 STILLWELL ST,0410300000175,44339,228331,55390,44.8,3
-Site 06 (Pecan Park) - Broadway Street & La Porte Freeway (unaddressed vacant tract),0402370000053,37664,167502,50251,50.8,3
-Site 07 (Houston) - South Post Oak Road & South Post Oak Road Frontage Road (unaddressed vacant tract),1142750010016,12770,162242,124423,48.2,3
-Site 08 (Braeburn) - 7818 HILLCROFT ST,0882600000014,64978,300614,60942,39.8,3
-Site 09 (Sunnyside) - 1023 NIAGARA ST,0650090010007,35427,225296,39363,53.0,2
-Site 10 (Sunnyside) - Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),0430390000003,43688,258423,39529,49.0,3
-Site 11 (Pleasantville) - 8200 SIGNET ST,0292450680001,10062,95209,51781,36.4,3
-Site 12 (El Dorado) - Crosby Freeway Frontage Road & East Freeway Frontage Road (unaddressed vacant tract),1152170000007,1781,77540,60703,32.2,3
-Site 13 (North Shadydale) - 7608 LOCKWOOD DR,0570050020012,25365,143106,46851,19.5,9
-Site 14 (Kashmere Gardens) - 5429 CAVALCADE ST,0651240420709,24693,172045,44598,23.0,7
-Site 15 (Fondren Gardens) - Fondren Road & West Airport Boulevard (unaddressed vacant tract),1148490000001,38942,169985,59428,49.4,4
-Site 16 (Fondren Gardens) - 12309 FONDREN RD,0461710000003,38544,162264,55845,48.5,4
-Site 17 (Langwood) - Bingle Road & Northwest Freeway Frontage Road (unaddressed vacant tract),1295900010005,37299,218579,55455,12.0,10
-Site 18 (Inwood) - Tomball Parkway & West Montgomery Road (unaddressed vacant tract),0420760000039,1416,74143,41172,9.4,19
-Site 19 (Minnetex) - 2138 VAN CLEVE ST,0451860000445,11489,76005,79057,35.3,3
-Site 20 (Central Southwest Houston) - 4620 FUQUA ST,0411010000105,20317,80264,52684,50.3,4
+Site 01 (Parkridge) - Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),0582970000612,32879,224098,61815,17.4,10
+Site 02 (Westwood) - South Sam Houston Parkway West & Southwest Freeway Frontage Road (unaddressed vacant tract),0410560010009,29903,223473,44443,14.9,14
+Site 03 (Braeburn) - 9651 GLENFIELD CT,1041420000005,52492,263763,79538,11.6,8
+Site 04 (Westwood) - South Sam Houston Parkway West & West Bellfort Street (unaddressed vacant tract),1243410010006,35001,235298,57530,15.8,14
+Site 05 (Pecan Park) - 6600 STILLWELL ST,0410300000175,44339,228331,55390,30.6,7
+Site 06 (Pecan Park) - Broadway Street & La Porte Freeway (unaddressed vacant tract),0402370000053,37664,167502,50251,33.5,9
+Site 07 (Houston) - South Post Oak Road & South Post Oak Road Frontage Road (unaddressed vacant tract),1142750010016,12770,162242,124423,10.0,9
+Site 08 (Braeburn) - 7818 HILLCROFT ST,0882600000014,64978,300614,60942,9.2,9
+Site 09 (Sunnyside) - 1023 NIAGARA ST,0650090010007,35427,225296,39363,32.4,6
+Site 10 (Sunnyside) - Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),0430390000003,43688,258423,39529,30.1,7
+Site 11 (Pleasantville) - 8200 SIGNET ST,0292450680001,10062,95209,51781,23.8,7
+Site 12 (El Dorado) - Crosby Freeway Frontage Road & East Freeway Frontage Road (unaddressed vacant tract),1152170000007,1781,77540,60703,19.5,7
+Site 13 (North Shadydale) - 7608 LOCKWOOD DR,0570050020012,25365,143106,46851,12.8,17
+Site 14 (Kashmere Gardens) - 5429 CAVALCADE ST,0651240420709,24693,172045,44598,15.0,16
+Site 15 (Fondren Gardens) - Fondren Road & West Airport Boulevard (unaddressed vacant tract),1148490000001,38942,169985,59428,15.2,11
+Site 16 (Fondren Gardens) - 12309 FONDREN RD,0461710000003,38544,162264,55845,14.6,11
+Site 17 (Langwood) - Bingle Road & Northwest Freeway Frontage Road (unaddressed vacant tract),1295900010005,37299,218579,55455,5.4,22
+Site 18 (Inwood) - Tomball Parkway & West Montgomery Road (unaddressed vacant tract),0420760000039,1416,74143,41172,3.5,36
+Site 19 (Minnetex) - 2138 VAN CLEVE ST,0451860000445,11489,76005,79057,25.7,6
+Site 20 (Central Southwest Houston) - 4620 FUQUA ST,0411010000105,20317,80264,52684,25.3,9

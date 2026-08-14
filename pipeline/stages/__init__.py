@@ -44,6 +44,7 @@ from .s32_lihtc_properties import LihtcPropertiesStage
 from .s33_daytime_population import DaytimePopulationStage
 from .s34_food_access import FoodAccessStage
 from .s35_overture_supplement import OvertureSupplementStage
+from .s36_population_trend import PopulationTrendStage
 
 ALL_STAGES = [
     FetchTractsStage(),
@@ -70,6 +71,7 @@ ALL_STAGES = [
     VehicleTenureDemographicsStage(),
     SensitivityAnalysisStage(),
     StatisticalRigorStage(),
+    PopulationTrendStage(),
     GenerateMapStage(),
     GenerateSlideAssetsStage(),
 ]

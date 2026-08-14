@@ -26,8 +26,7 @@ class ColorRamp:
     # label (the required secondary encoding for a 6-8 dE pair).
     COMPETITOR_COLORS = {
         "family_dollar": "#2a78d6",    # blue -- own network, not a competitor
-        "arch_rival": "#e87ba4",       # magenta -- the real competitive threat
-        "sister_banner": "#4a3aa7",    # violet -- same parent company, different format
+        "arch_rival": "#e87ba4",       # magenta -- the real competitive threat (Dollar General, Five Below, Dollar Tree)
         "value_grocery": "#1baf7a",    # aqua -- extreme-value grocery competition
         "big_box_anchor": "#57534e",   # muted stone -- lowest priority, context only
     }

@@ -5,9 +5,10 @@ produced by scripts 01-25.
 
 Symbology:
   - candidate sites: numbered rank badges on a validated best->worst ramp
-  - competitors: 5 categories (Family Dollar / arch-rival / sister banner /
-    value grocery / big-box), all cool hues, validated distinct from each
-    other and from the warm rank-ramp/choropleth colors sharing the map
+  - competitors: 4 categories (Family Dollar / arch-rival, now including
+    Dollar Tree since its 2025-07-08 separation from Family Dollar / value
+    grocery / big-box), all cool hues, validated distinct from each other and
+    from the warm rank-ramp/choropleth colors sharing the map
   - choropleth: blue sequential ramp, opacity scaled to score
   - a right-side sliding dashboard panel: Scorecard / Cannibalization / Confidence
     Intervals / Data Sources & Validation tabs
@@ -37,12 +38,21 @@ class GenerateMapStage(PipelineStage):
 
     MAP_BOUNDS = {"lat_min": 29.52, "lat_max": 30.11, "lon_min": -95.79, "lon_max": -95.01}
 
+    # Single source of truth for each competitor tier's map-layer name: used both as the
+    # folium.FeatureGroup `name=` (what Leaflet's layer control shows and what its
+    # overlayadd/overlayremove events report back) and as the legend row label, so the
+    # two can never drift out of sync with each other.
     COMPETITOR_LABELS = {
         "family_dollar": "Family Dollar (existing -- not a competitor)",
-        "arch_rival": "Direct arch-rival (Dollar General, Five Below)",
-        "sister_banner": "Sister banner (Dollar Tree)",
+        "arch_rival": "Direct arch-rival (Dollar General, Five Below, Dollar Tree)",
         "value_grocery": "Value grocery (Aldi, Joe V's, Mi Tienda, Fiesta, etc.)",
         "big_box_anchor": "Big-box anchor (Walmart, Target, etc.)",
+    }
+    COMPETITOR_LAYER_SHOW = {
+        "family_dollar": True,
+        "arch_rival": True,
+        "value_grocery": False,
+        "big_box_anchor": False,
     }
 
 
@@ -171,8 +181,24 @@ class GenerateMapStage(PipelineStage):
 
 
     def build_legend_html(self, opportunity_ramp_css: str) -> str:
+        """A dynamic legend: every section/row that corresponds to a real, toggleable
+        folium.FeatureGroup is wrapped in a `data-legend-layer="<exact FeatureGroup
+        name>"` container, with its initial display matching that layer's actual
+        default `show=` value. `build_dynamic_legend_script` (JS, injected separately)
+        listens for Leaflet's overlayadd/overlayremove events and shows/hides the
+        matching container live, so the legend always reflects exactly what's
+        currently visible on the map -- nothing shown that isn't on, nothing hidden
+        that is. The section header/divider chrome stays static; only the data rows
+        underneath toggle, so turning every row in a section off leaves a clean
+        (if momentarily empty) header rather than the whole legend jumping around.
+        """
         section_head = "font-weight:700; color:#1F2937; font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:7px;"
         row_text = "color:#374151; font-weight:600;"
+
+        def layer_row(layer_name: str, show_default: bool, inner_html: str) -> str:
+            display = "block" if show_default else "none"
+            safe_name = layer_name.replace('"', "&quot;")
+            return f'<div data-legend-layer="{safe_name}" style="display:{display};">{inner_html}</div>'
 
         def dot(color: str, label: str) -> str:
             return (
@@ -182,8 +208,15 @@ class GenerateMapStage(PipelineStage):
                 f'<span style="{row_text}">{label}</span></div>'
             )
 
+        family_dollar_row = layer_row(
+            self.COMPETITOR_LABELS["family_dollar"],
+            self.COMPETITOR_LAYER_SHOW["family_dollar"],
+            dot("#2a78d6", "Family Dollar (existing network)"),
+        )
         competitor_rows = "".join(
-          dot(ColorRamp.COMPETITOR_COLORS[k], v.split(" (")[0]) for k, v in self.COMPETITOR_LABELS.items() if k != "family_dollar"
+            layer_row(v, self.COMPETITOR_LAYER_SHOW[k], dot(ColorRamp.COMPETITOR_COLORS[k], v.split(" (")[0]))
+            for k, v in self.COMPETITOR_LABELS.items()
+            if k != "family_dollar"
         )
 
         def ramp_dot(color: str) -> str:
@@ -199,13 +232,10 @@ class GenerateMapStage(PipelineStage):
             ramp_dot(ColorRamp.interpolate(i / (RANK_RAMP_DOTS - 1), ColorRamp.STATUS_RAMP)) for i in range(RANK_RAMP_DOTS)
         )
 
-        return f"""
-<div style="position: fixed; bottom: 20px; left: 12px; z-index: 9999; background: white;
-            padding: 14px 16px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.28);
-            font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; max-width: 272px;">
-  <div style="font-weight:700; font-size:13px; color:#1E3A8A; margin-bottom:12px;">Legend</div>
-
-  <div style="{section_head}">Candidate sites (by score)</div>
+        candidate_sites_content = layer_row(
+            "Candidate sites (20, all Houston)",
+            True,
+            f"""
   <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
     <div style="width:22px; height:22px; border-radius:50%; background:#0ca30c; border:2px solid #fff; box-shadow:0 0 0 2px #F5B700, 0 1px 3px rgba(0,0,0,.35); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">&#9733;</div>
     <span style="{row_text}">Recommended site</span>
@@ -218,29 +248,116 @@ class GenerateMapStage(PipelineStage):
   </div>
   <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; margin-bottom:12px; font-weight:600;">
     <span>Best</span><span>Worst</span>
-  </div>
+  </div>""",
+        )
+
+        trade_area_content = layer_row(
+            "Drive-time trade area (recommended site, OSRM)",
+            True,
+            f"""
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.4; border:1px solid #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">5-min drive (OSRM)</span></div>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.14; border:1px dashed #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">10-min drive (OSRM)</span></div>""",
+        )
+
+        opportunity_content = layer_row(
+            "Opportunity score, all Houston tracts (643)",
+            True,
+            f"""
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{opportunity_ramp_css};"></div>
+  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
+    <span>Lower (served)</span><span>Higher (underserved)</span>
+  </div>""",
+        )
+
+        flood_content = layer_row(
+            "FEMA flood zones (NFHL, live API, off by default)",
+            False,
+            f"""
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#93C5FD; opacity:.6; border:1px solid #2563EB; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">FEMA NFHL polygons</span></div>
+  <div style="color:#6B7280; font-size:10.5px; margin-bottom:2px;">Zoom in on a site once toggled on (loads live from FEMA per-area to stay fast). SFHA zones are darker blue.</div>""",
+        )
+
+        boundary_content = layer_row(
+            "Houston city limits", False,
+            dot("#1E3A8A", "City boundary (TIGERweb, dashed outline)"),
+        )
+        clusters_content = layer_row(
+            "Opportunity areas searched (10 neighborhoods)", False,
+            dot("#94A3B8", "Opportunity cluster search radius"),
+        )
+        lihtc_content = layer_row(
+            "HUD LIHTC affordable-housing properties (free, off by default)", False,
+            dot("#0f766e", "Real HUD LIHTC property (unit count in popup)"),
+        )
+        food_access_ramp_css = "linear-gradient(90deg," + ",".join(ColorRamp.SEQUENTIAL_ORANGE) + ")"
+        daytime_content = layer_row(
+            "Daytime workplace population, all Houston block groups (free, off by default)", False,
+            f"""
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{food_access_ramp_css};"></div>
+  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
+    <span>Fewer real jobs</span><span>More real jobs</span>
+  </div>""",
+        )
+        food_access_content = layer_row(
+            "Food access share, finalist tracts (USDA, free, off by default)", False,
+            f"""
+  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{food_access_ramp_css};"></div>
+  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
+    <span>Lower share</span><span>Higher share beyond 0.5mi</span>
+  </div>""",
+        )
+        overture_content = layer_row(
+            "Competitors found by Overture, missed by OSM (free, off by default)", False,
+            dot("#b45309", "Real competitor OSM's data missed"),
+        )
+
+        return f"""
+<div style="position: fixed; bottom: 20px; left: 12px; z-index: 9999; background: white;
+            padding: 14px 16px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.28);
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; max-width: 272px; max-height: 80vh; overflow-y: auto;">
+  <div style="font-weight:700; font-size:13px; color:#1E3A8A; margin-bottom:12px;">Legend</div>
+  <div style="color:#6B7280; font-size:10px; margin-bottom:10px;">Updates live as you toggle layers in the layer control (top-right of the map).</div>
+
+  <div style="{section_head}">Candidate sites (by score)</div>
+  {candidate_sites_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Competitors</div>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:14px; height:14px; border-radius:50%; background:#2a78d6; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.28); display:inline-block; flex-shrink:0;"></span><span style="{row_text}">Family Dollar (existing network)</span></div>
+  {family_dollar_row}
   {competitor_rows}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Trade area (recommended site)</div>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.4; border:1px solid #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">5-min drive (OSRM)</span></div>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="width:16px; height:11px; background:#0D9488; opacity:.14; border:1px dashed #0D9488; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">10-min drive (OSRM)</span></div>
+  {trade_area_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Opportunity score</div>
-  <div style="height:9px; border-radius:5px; margin-bottom:3px; background:{opportunity_ramp_css};"></div>
-  <div style="display:flex; justify-content:space-between; color:#6B7280; font-size:10.5px; font-weight:600;">
-    <span>Lower (served)</span><span>Higher (underserved)</span>
-  </div>
+  {opportunity_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="{section_head}">Flood zones</div>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;"><span style="width:16px; height:11px; background:#93C5FD; opacity:.6; border:1px solid #2563EB; display:inline-block; flex-shrink:0;"></span><span style="{row_text}">FEMA NFHL polygons</span></div>
-  <div style="color:#6B7280; font-size:10.5px; margin-bottom:2px;">Toggle on the layer control, then zoom in on a site (loads live from FEMA per-area to stay fast). SFHA zones are darker blue.</div>
+  {flood_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Affordable housing (HUD LIHTC)</div>
+  {lihtc_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Daytime population (Census LEHD)</div>
+  {daytime_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Food access (USDA)</div>
+  {food_access_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Overture competitor cross-check</div>
+  {overture_content}
+
+  <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
+  <div style="{section_head}">Boundaries & search areas</div>
+  {boundary_content}
+  {clusters_content}
 
   <div style="border-top:1px solid #E5E7EB; margin:10px 0;"></div>
   <div style="color:#6B7280; font-size:10.5px;">Full scorecard, cannibalization math, confidence
@@ -460,6 +577,49 @@ class GenerateMapStage(PipelineStage):
     }});
 
     if (mapRef.hasLayer(femaLayerRef)) loadFemaFromApi(mapRef, femaLayerRef);
+  }}
+
+  bindWhenReady();
+}})();
+"""
+
+    @staticmethod
+    def build_dynamic_legend_script(map_name: str) -> str:
+        """Keep the legend (build_legend_html) in sync with which layers are actually
+    toggled on, live. Leaflet's built-in layer control fires 'overlayadd'/
+    'overlayremove' on the map itself whenever a checkbox changes, with
+    `e.name` equal to the exact string passed to that FeatureGroup's `name=`
+    -- the same string build_legend_html tags each legend section with via
+    `data-legend-layer`. No per-layer wiring needed here: this listens once,
+    generically, for every current and future layer, as long as the legend
+    section's data attribute matches that layer's real name exactly.
+
+    Same "poll until the folium-generated map variable exists" pattern as
+    build_fema_frontend_loader_script, since this script can run before
+    folium's own map-initialization script has executed.
+    """
+        return f"""
+(function() {{
+  const mapVarName = '{map_name}';
+
+  function cssEscape(s) {{
+    return (window.CSS && CSS.escape) ? CSS.escape(s) : s.replace(/["\\\\]/g, '\\\\$&');
+  }}
+
+  function setLegendLayerVisible(name, visible) {{
+    document.querySelectorAll('[data-legend-layer="' + cssEscape(name) + '"]').forEach(function(el) {{
+      el.style.display = visible ? 'block' : 'none';
+    }});
+  }}
+
+  function bindWhenReady() {{
+    const mapRef = window[mapVarName];
+    if (!mapRef) {{
+      setTimeout(bindWhenReady, 40);
+      return;
+    }}
+    mapRef.on('overlayadd', function(ev) {{ setLegendLayerVisible(ev.name, true); }});
+    mapRef.on('overlayremove', function(ev) {{ setLegendLayerVisible(ev.name, false); }});
   }}
 
   bindWhenReady();
@@ -1189,16 +1349,17 @@ class GenerateMapStage(PipelineStage):
             ).add_to(gap_layer)
         gap_layer.add_to(m)
 
-        # --- Layer: competitors, 5 categories -----------------------------------------
+        # --- Layer: competitors, 4 categories -----------------------------------------
         # Family Dollar gets its own always-on layer: existing FD locations are the
         # company's own network (cannibalization question), not a competitive threat,
         # and that distinction is the single most important competitor fact here.
+        # Dollar Tree is grouped into arch-rivals, not a separate "sister banner" tier --
+        # Family Dollar and Dollar Tree officially separated on 2025-07-08 (Dollar Tree
+        # sold Family Dollar to private equity), so Dollar Tree is now a real, same-format
+        # competitor rather than a same-parent-company banner.
         category_layers = {
-            "family_dollar": folium.FeatureGroup(name="Family Dollar (existing)", show=True),
-            "arch_rival": folium.FeatureGroup(name="Direct arch-rivals (Dollar General, Five Below)", show=True),
-            "sister_banner": folium.FeatureGroup(name="Sister banner (Dollar Tree)", show=False),
-            "value_grocery": folium.FeatureGroup(name="Value grocery (Aldi, Joe V's, Fiesta, etc.)", show=False),
-            "big_box_anchor": folium.FeatureGroup(name="Big-box anchors (Walmart, Target, etc.)", show=False),
+            k: folium.FeatureGroup(name=v, show=self.COMPETITOR_LAYER_SHOW[k])
+            for k, v in self.COMPETITOR_LABELS.items()
         }
 
         for c in competitors:
@@ -1423,6 +1584,7 @@ class GenerateMapStage(PipelineStage):
 
         folium.LayerControl(collapsed=False).add_to(m)
         m.get_root().script.add_child(folium.Element(self.build_fema_frontend_loader_script(m.get_name(), flood_layer.get_name())))
+        m.get_root().script.add_child(folium.Element(self.build_dynamic_legend_script(m.get_name())))
         plugins.Fullscreen(position="topright").add_to(m)
         m.fit_bounds([[29.60, -95.65], [29.98, -95.20]])
 

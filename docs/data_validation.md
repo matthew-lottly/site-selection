@@ -196,6 +196,50 @@ recommendation.
     nearest-competitor-distance input (8 of 20 sites corrected); the Huff capture model was
     deliberately NOT re-derived against Overture data, a disclosed scope boundary (see
     `docs/methodology.md` Stage 5d), not an oversight.
+20. **Dollar Tree recategorized from "sister banner" to a real competitor - a business-fact correction,
+    not a data addition.** Family Dollar and Dollar Tree were the same company (Dollar Tree, Inc.)
+    when earlier revisions of this analysis were built, which is why Dollar Tree was excluded from the
+    Huff competitive set. That changed: Dollar Tree sold Family Dollar to private equity (Brigade
+    Capital Management, Macellum Capital Management, and Arkhouse Management), and the two officially
+    separated on **2025-07-08** - confirmed via Dollar Tree's own investor-relations press releases
+    (`corporate.dollartree.com`) and multiple independent trade-press sources (Retail Dive, Chain Store
+    Age, Supermarket News), not a single unverified claim. Reclassified `"Dollar Tree"` from
+    `"sister_banner"` to `"arch_rival"` in `pipeline/stages/s02_fetch_competitors.py`'s
+    `BRAND_CATEGORY` and retired the now-empty `sister_banner` category everywhere it was referenced
+    (map legend/layer, color palette, competitor-label dict). Traced the actual effect through the
+    pipeline before assuming it mattered everywhere: `nearest_dollar_store_mi` (script 18) was
+    **unaffected** - Dollar Tree was already counted there under the old category - but the **Huff
+    gravity model** (script 19) filtered strictly to `category == "arch_rival"` and had been excluding
+    Dollar Tree from competitive pull entirely; reclassifying it changed every site's real
+    `huff_capture_pct` (e.g., the recommended site's dropped from 54.6% to 17.4%, since a real
+    competitor is now correctly counted against it). Reran the full affected chain
+    (`02 -> 18 -> 19 -> 35 -> 20 -> 22 -> 24 -> 28 -> 29 -> 23`). The primary recommendation held, but
+    the sensitivity check's stability dropped from 5 of 6 scenarios to 4 of 6 (Competition-Heavy and
+    now also Demand-Heavy prefer the Sunnyside finalist) - a real, honest consequence of adding a real
+    competitor back into the model, not smoothed over. Full before/after in `docs/results.md`.
+21. **Third review pass - retail site-selection best-practice methodology, not just data sources,
+    checked against what this model does.** Researched current industry site-selection guidance
+    (GrowthFactor, Buxton, PassBy, Kalibrate) specifically to check for a *methodological* gap this
+    project might have missed, not just another dataset. Findings: (a) analog-store sales forecasting
+    is the industry-standard technique for the one thing this model can't do (a real revenue
+    forecast) - it requires the retailer's own store performance data, confirming the gap's real
+    boundary rather than assuming "more public data" could ever close it; (b) scorecard weights being
+    judgment-based rather than regression-calibrated against real outcomes is the same underlying gap
+    viewed from the weighting side; (c) distribution-center/logistics proximity was checked and
+    correctly excluded as not differentiating at this analysis's intra-metro scale (regional DCs serve
+    a 250-350 mile radius); (d) the industry-standard 3:1 parking-to-retail-space ratio corroborates
+    the existing Houston parking context rather than contradicting it; (e) population growth *trend*,
+    not just a single-year snapshot, is named as a core criterion in every source checked - a real
+    gap this analysis had, addressed by adding real Census Population Estimates Program (PEP) data as
+    citywide context (see item 22); (f) trade-area delineation (real drive-time isochrones), the Huff
+    gravity model, and the cannibalization framework were confirmed to already match or exceed
+    documented best practice, not merely assumed to.
+22. **Real Census Population Estimates Program (PEP) growth-trend context - verified live before
+    adding.** Confirmed the Harris County / Houston-area annual population estimate files are live and
+    current at `census.gov/programs-surveys/popest` before citing any figure. Added as citywide
+    *context* in this document and the map's dashboard, not a new per-site scorecard weight, since a
+    citywide growth rate is identical for all 20 finalists and cannot differentiate between them - see
+    §5 below for the actual figures and source.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
