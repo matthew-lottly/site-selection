@@ -27,6 +27,7 @@ same CSV files referenced here.
 | Nominatim (OpenStreetMap) | Reverse geocoding - road identity, neighborhood identity | REST API | Free, no key, rate-limited to 1 req/sec (respected throughout) |
 | OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist | Overpass QL | Free, no key |
 | Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API | Free, no key |
+| Houston Police Department (`houstontx.gov`) | Real, point-level NIBRS Part I violent/property crime incidents (offense code, date, lat/lon) for the crime-risk score | Direct CSV download | Free, no key |
 
 No Census API key, Google Maps key, or paid GIS/mobility-data license (SafeGraph, Placer.ai, Esri)
 was used or is required to reproduce this analysis.
@@ -106,13 +107,13 @@ recommendation.
     the new top-scoring, benchmark-clearing site. Documented here rather than quietly folded into the
     final numbers because a validation process is only credible if it's shown catching something
     real, not just asserted.
-11. **Property crime - investigated, confirmed unavailable, not estimated.** Checked
-    `data.houstontx.gov`'s CKAN catalog directly (`package_search`, `package_show`) for a queryable
-    crime dataset. Found none: Houston publishes crime data only as static HTML report pages, and a
-    `police-transparency-hub` package exists with zero attached resources. Rather than scrape an
-    unstable HTML format or estimate a risk score, this was dropped as a candidate metric entirely and
-    documented as a real data-availability gap (see `limitations_and_diligence.md`) - the same
-    standard applied to every other unverifiable claim in this analysis.
+11. **Property crime - initially checked via the wrong door, then found and added (see item 14).**
+    An earlier revision checked `data.houstontx.gov`'s CKAN catalog directly (`package_search`,
+    `package_show`) for a queryable crime dataset and found none: Houston's CKAN catalog genuinely
+    only lists static HTML report pages, and a `police-transparency-hub` package exists there with
+    zero attached resources. That check was real and its finding about the CKAN catalog specifically
+    is still correct - but it stopped one door too early. See item 14 below for the real source that
+    check missed, and `docs/methodology.md` Stage 5c for how it's now used.
 12. **FEMA flood-layer transfer-limit bug, found and fixed.** The map's FEMA NFHL overlay
     (`pipeline/stages/s23_generate_map_citywide.py`) originally queried the live FEMA API for whatever the
     current map viewport was. Tested directly against the live API at the map's citywide starting
@@ -129,6 +130,24 @@ recommendation.
     would have silently rendered the winner marker in whatever ramp color its rank happened to be
     the moment the raw #1 fails the AADT benchmark - contradicting the legend's fixed "gold-ringed
     star" promise. Fixed by making the winner's fill and ring color constants, independent of rank.
+14. **Property crime - the real source that item 11's check missed, found and added.** Item 11's
+    CKAN-catalog check was correct as far as it went, but it only checked one access path. Houston
+    Police Department separately publishes real, point-level NIBRS Part I crime incident data (offense
+    code, occurrence date, beat, and exact lat/lon) as direct CSV downloads on its own site
+    (`houstontx.gov/police/cs/xls/NIBRSPublicView{year}.csv`), free, keyless, and current through the
+    most recent monthly refresh - not through the CKAN API at all, so the earlier check never saw it.
+    Verified directly (`curl -I`) that the file is live and downloadable before building anything on
+    top of it. Added as `pipeline/stages/s30_crime_risk.py`: real violent (murder, rape, robbery,
+    aggravated assault) and property (burglary, larceny-theft, motor vehicle theft) Part I incident
+    counts within 0.5 miles of each finalist, trailing 12 months (Aug 2025-Jul 2026), loaded from
+    **47,283 real qualifying incidents citywide**. Folded into the scorecard as a real 7th factor at
+    10% weight (`docs/methodology.md` Stage 6), with the other weights rebalanced proportionally
+    rather than arbitrarily. **This changed the actual recommendation**: the previous top site
+    (6600 Stillwell St, Pecan Park) has a real, materially worse crime reading nearby (24 violent + 62
+    property incidents within 0.5mi, crime score 41.8/100) than the new #1 (Eldridge Pkwy & Westhollow
+    Pkwy, Parkridge - 2 violent + 4 property, crime score 96.6/100), which was enough to overtake it
+    once a real risk factor previously missing from the model was added. Full before/after comparison
+    in `docs/results.md`.
 
 ## 3. Documented simplifications (disclosed, not hidden)
 
@@ -173,7 +192,7 @@ For the three derived rates (poverty, foreign-born, Spanish-at-home), the MOE is
 inputs' MOEs - it is propagated using the Census Bureau's own published formula for a proportion
 `p = X/Y` (from *A Compass for Understanding and Using American Community Survey Data*, Appendix A):
 
-```
+```text
 MOE_p = (1/Y) × sqrt(MOE_X² − p² × MOE_Y²)        [if the radicand is negative, use the + form instead]
 ```
 
@@ -229,14 +248,21 @@ margin of error.
   housing share were pulled for the same reason - a discount-retail format depends more on
   walkable/visible neighborhood presence in car-light tracts, and renter-heavy tracts skew toward the
   household-budget profile Family Dollar's core categories serve.
+- **Real crime risk.** Real HPD NIBRS Part I violent/property incident counts within 0.5 mi of every
+  finalist, trailing 12 months, weighted 10% in the scorecard - a genuine safety/loss-prevention
+  signal for both employees and customers, and for shrink risk to the store itself (see §2, point 14).
 
 ## 6. What this analysis explicitly does not claim
 
 Being clear about the boundary of what public data can support is itself part of not hallucinating:
 
 - **No predicted revenue dollar figure**, anywhere (see §2, point 9).
-- **No property/violent crime metric.** Investigated directly against Houston's open data portal and
-  confirmed unavailable as a queryable dataset - see §2, point 11. Not scraped, not estimated.
+- **A real property/violent crime metric IS produced** (see §2, point 14) - real HPD NIBRS Part I
+  incident counts, not an estimate. What it does *not* claim: NIBRS incident data reflects
+  *reported* crime only, not a survey of actual victimization (some crime goes unreported, and
+  reporting rates can vary by neighborhood) - the same caveat that applies to any police-recorded
+  crime statistic nationally, not specific to this analysis. It is also a snapshot of a trailing
+  12-month window, not a long-run trend.
 - **No verified deed-restriction / restrictive-covenant status** for any parcel - this requires a
   title search, which no public API provides. Flagged per-site in the Site Details dashboard tab
   rather than assumed clear.

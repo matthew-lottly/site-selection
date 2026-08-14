@@ -562,6 +562,7 @@ class GenerateMapStage(PipelineStage):
         county_tracts: list[dict],
         ext_demo: dict[str, dict],
         rigor_rows: list[dict],
+        crime: dict[str, dict],
     ) -> str:
         winner = next((r for r in scorecard if r.get("primary_recommendation") == "True"), scorecard[0])
         h = winner["hcad_num"]
@@ -617,6 +618,11 @@ class GenerateMapStage(PipelineStage):
         land_value = self._parse_float(site.get("land_value")) or 0.0
         value_per_acre = (land_value / acreage) if acreage > 0 else None
 
+        crime_row = crime.get(h, {})
+        violent_crime = int(self._parse_float(crime_row.get("violent_crime_count_12mo_0_5mi")) or 0)
+        property_crime = int(self._parse_float(crime_row.get("property_crime_count_12mo_0_5mi")) or 0)
+        total_crime = int(self._parse_float(crime_row.get("total_index_crime_count_12mo_0_5mi")) or 0)
+
         rows = [
             ("Macro demand", "5-min trade-area median HHI", f"${hhi_5:,.0f}" if hhi_5 else "n/a", "$20k-$55k", "Pass" if hhi_5 is not None and 20000 <= hhi_5 <= 55000 else "Watch"),
             ("Macro demand", "SNAP household share (nearest tract proxy)", f"{snap_proxy:.1f}%", "> 18%", "Pass" if snap_proxy > 18 else "Watch"),
@@ -642,7 +648,9 @@ class GenerateMapStage(PipelineStage):
             ("Physical/risk/cost", "Parcel size", f"{acreage:.2f} acres", "1.0-2.5 acres", "Pass" if 1.0 <= acreage <= 2.5 else ("Watch" if 0.5 <= acreage < 1.0 else "Fail")),
             ("Physical/risk/cost", "Appraised land value", f"${land_value:,.0f}", "Feasibility input", "Info"),
             ("Physical/risk/cost", "Appraised land value per acre", f"${value_per_acre:,.0f}/acre" if value_per_acre else "n/a", "Feasibility screening", "Info"),
-            ("Physical/risk/cost", "Local property crime density", "No queryable Houston open-data API", "Required for final diligence", "Gap"),
+            ("Physical/risk/cost", "Violent crime incidents (real HPD Part I, 0.5mi, trailing 12mo)", str(violent_crime), "Lower is better", "Info"),
+            ("Physical/risk/cost", "Property crime incidents (real HPD Part I, 0.5mi, trailing 12mo)", str(property_crime), "Lower is better", "Info"),
+            ("Physical/risk/cost", "Total index crime incidents (0.5mi, trailing 12mo)", str(total_crime), "Lower is better", "Info"),
         ]
 
         body_rows = "".join(
@@ -737,11 +745,12 @@ class GenerateMapStage(PipelineStage):
           <td style="padding:6px 8px; text-align:right;">{r['traffic_score']}</td>
           <td style="padding:6px 8px; text-align:right;">{r['cost_feasibility_score']}</td>
           <td style="padding:6px 8px; text-align:right;">{r['flood_score']}</td>
+          <td style="padding:6px 8px; text-align:right;">{r['crime_score']}</td>
           <td style="padding:6px 8px; text-align:center;">{aadt_badge}</td>
         </tr>""")
         return f"""
     <p style="color:#374151; font-size:12.5px; margin:0 0 10px;">All 20 real citywide candidates, ranked by weighted score
-    (25% demand, 20% Huff capture, 15% competitive gap, 15% traffic, 15% cost/feasibility, 10% flood risk).
+    (22% demand, 18% Huff capture, 13% competitive gap, 13% traffic, 14% cost/feasibility, 10% flood risk, 10% crime risk).
     The <b>primary recommendation</b> is the highest-scoring site that also clears the 8,000 AADT minimum-traffic
     benchmark (&#10003; column) -- a higher raw score that fails the benchmark is shown but not selected. Full detail: <code>data/processed/scorecard.csv</code>.</p>
     <div style="overflow-x:auto;">
@@ -751,7 +760,8 @@ class GenerateMapStage(PipelineStage):
         <th style="padding:6px 8px; text-align:right;">Total</th><th style="padding:6px 8px; text-align:right;">Demand</th>
         <th style="padding:6px 8px; text-align:right;">Huff</th><th style="padding:6px 8px; text-align:right;">Comp.</th>
         <th style="padding:6px 8px; text-align:right;">Traffic</th><th style="padding:6px 8px; text-align:right;">Cost</th>
-        <th style="padding:6px 8px; text-align:right;">Flood</th><th style="padding:6px 8px; text-align:center;">&ge;8k AADT</th>
+        <th style="padding:6px 8px; text-align:right;">Flood</th><th style="padding:6px 8px; text-align:right;">Crime</th>
+        <th style="padding:6px 8px; text-align:center;">&ge;8k AADT</th>
       </tr></thead>
       <tbody>{"".join(rows_html)}</tbody>
     </table>
@@ -850,12 +860,12 @@ class GenerateMapStage(PipelineStage):
     (haversine edge lengths) -- a gut-check on whether the lot is plausibly large enough, not a certified survey.</p>
     <p style="color:#92400E; background:#FEF3C7; font-size:11.5px; padding:6px 8px; border-radius:6px; margin:0 0 10px;">
     <b>Not verifiable from any public data source</b> (flagged rather than guessed): deed restrictions / restrictive
-    covenants (requires a title search), median-break / divided-highway ingress-egress geometry, an engineered
-    53-ft delivery-truck turning radius (requires a civil site plan), and property crime risk (Houston publishes
-    crime statistics as HTML report pages, not a queryable API or downloadable dataset -- see the Data Validation
-    tab). Houston has no municipal zoning -- the general off-street parking ratio (city code, roughly 1 space per
-    200-300 sq ft of retail) is cited as informational context in the Data Validation tab, not computed as a
-    parcel-specific verified figure.</p>
+    covenants (requires a title search), median-break / divided-highway ingress-egress geometry, and an engineered
+    53-ft delivery-truck turning radius (requires a civil site plan). Houston has no municipal zoning -- the
+    general off-street parking ratio (city code, roughly 1 space per 200-300 sq ft of retail) is cited as
+    informational context in the Data Validation tab, not computed as a parcel-specific verified figure. Real
+    property/violent crime risk (HPD NIBRS Part I incidents, 0.5mi, trailing 12mo) IS now covered -- see the
+    Executive Checks and Scorecard tabs.</p>
     <div style="overflow-x:auto;">
     <table style="border-collapse:collapse; width:100%; font-size:12px; color:#1F2937;">
       <thead><tr style="background:#F3F4F6; text-align:left; border-bottom:2px solid #D1D5DB;">
@@ -922,6 +932,8 @@ class GenerateMapStage(PipelineStage):
       <li>TxDOT -- Annual Average Daily Traffic (AADT), verified by reverse-geocoding each station</li>
       <li>OSRM -- real drive-time routing + Huff gravity market-capture model</li>
       <li>Nominatim (OpenStreetMap) -- reverse geocoding for site/neighborhood/road verification</li>
+      <li>Houston Police Department -- real point-level NIBRS Part I violent/property crime incident exports
+      (direct CSV download from houstontx.gov, not the CKAN catalog), trailing 12 months within 0.5mi of each site</li>
     </ul>
 
     <p style="font-weight:700; margin-bottom:4px;">Specific checks performed against hallucination / error</p>
@@ -942,11 +954,15 @@ class GenerateMapStage(PipelineStage):
       of the nearest genuine arterial or frontage-road reading.</li>
       <li>Each site's neighborhood was independently reverse-geocoded rather than inherited from its search
       cluster, after finding a case where the two disagreed.</li>
-      <li>Property crime / security risk was investigated as a candidate metric and explicitly NOT added: Houston's
-      open data portal (data.houstontx.gov) does not publish a queryable crime API or downloadable incident
-      dataset -- only static HTML report pages -- so no per-site crime figure could be sourced without either
-      scraping an unstable format or estimating, and estimating would be exactly the kind of fabrication this
-      analysis avoids. Reported as a real data-availability limitation, not silently skipped.</li>
+      <li><b>Property/violent crime risk was re-investigated and a real source found.</b> The original check
+      queried only Houston's open-data CKAN catalog (data.houstontx.gov, <code>package_search</code>/
+      <code>package_show</code>), which genuinely has no queryable crime dataset. That check missed that HPD's
+      own site separately publishes real, point-level NIBRS Part I incident data (offense code, date, lat/lon) as
+      direct CSV downloads, free and keyless, back to 2009. Added as a real 7th scoring factor (10% weight):
+      violent + property incident counts within 0.5mi of each site, trailing 12 months, classified using the
+      standard FBI UCR Part I definition (murder, rape, robbery, aggravated assault = violent; burglary,
+      larceny-theft, motor vehicle theft = property) -- not scraped or estimated, and not the same thing as the
+      CKAN catalog that was checked before.</li>
       <li>Parcels appraising under $15,000/acre were screened out -- found to be HOA common areas and drainage
       easements miscoded as vacant commercial land in HCAD, not real buildable sites.</li>
       <li>A duplicate real parcel found by two overlapping search areas is counted once, not twice.</li>
@@ -1011,6 +1027,7 @@ class GenerateMapStage(PipelineStage):
       county_tracts: list[dict],
       ext_demo: dict[str, dict],
       rigor_rows: list[dict],
+      crime_map: dict[str, dict],
     ) -> str:
         return f"""
 <div id="dash-drawer">
@@ -1033,7 +1050,7 @@ class GenerateMapStage(PipelineStage):
     </div>
   </div>
   <div class="dash-body">
-    <div class="dash-tab-content active" id="tab-exec">{self.build_executive_indicator_table(scorecard, sites, trade, canib_map, micro_map, ci_rows, isochrone, houston_tracts, county_tracts, ext_demo, rigor_rows)}</div>
+    <div class="dash-tab-content active" id="tab-exec">{self.build_executive_indicator_table(scorecard, sites, trade, canib_map, micro_map, ci_rows, isochrone, houston_tracts, county_tracts, ext_demo, rigor_rows, crime_map)}</div>
     <div class="dash-tab-content" id="tab-scorecard">{self.build_scorecard_table(scorecard)}{self.build_sensitivity_table(sensitivity)}</div>
     <div class="dash-tab-content" id="tab-cannibalization">{self.build_cannibalization_table(cannibalization)}</div>
     <div class="dash-tab-content" id="tab-microsite">{self.build_microsite_table(microsite)}</div>
@@ -1064,6 +1081,7 @@ class GenerateMapStage(PipelineStage):
         trade = {r["hcad_num"]: r for r in self.load_csv("site_trade_areas.csv")}
         cannibalization = {r["hcad_num"]: r for r in self.load_csv("cannibalization.csv")}
         microsite = {r["hcad_num"]: r for r in self.load_csv("microsite_details.csv")}
+        crime_map = {r["hcad_num"]: r for r in self.load_csv("site_crime_risk.csv")}
         ci_rows = self.load_csv("city_confidence_intervals.csv")
         extended_demo = {r["geoid"]: r for r in self.load_csv("tract_extended_demographics.csv")}
         houston_tracts = self.load_csv("houston_tracts.csv")
@@ -1304,6 +1322,7 @@ class GenerateMapStage(PipelineStage):
           county_tracts,
           extended_demo,
           rigor_rows,
+          crime_map,
         )))
 
         folium.LayerControl(collapsed=False).add_to(m)

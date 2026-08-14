@@ -1,6 +1,7 @@
 from .census_reporter import CensusReporterClient
 from .fema import FemaClient
 from .hcad import HcadClient
+from .hpd_crime import HpdCrimeClient
 from .osrm import OsrmClient
 from .overpass import OverpassClient
 from .tigerweb import HARRIS_COUNTY_FIPS, HARRIS_STATE_FIPS, TigerWebClient
@@ -10,6 +11,7 @@ __all__ = [
     "CensusReporterClient",
     "FemaClient",
     "HcadClient",
+    "HpdCrimeClient",
     "OsrmClient",
     "OverpassClient",
     "TigerWebClient",

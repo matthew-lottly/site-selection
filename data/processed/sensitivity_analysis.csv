@@ -1,6 +1,7 @@
 scenario,weights,primary_recommendation,primary_recommendation_neighborhood,primary_recommendation_score,raw_top_score_site,raw_top_score_value,same_as_base_recommendation
-Base (documented),"demand=25%, huff=20%, competition=15%, traffic=15%, cost=15%, flood=10%",6600 STILLWELL ST,Pecan Park,79.4,6600 STILLWELL ST,79.4,True
-Traffic-Heavy,"demand=15%, huff=15%, competition=10%, traffic=35%, cost=15%, flood=10%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,84.5,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),84.5,False
-Cost-Heavy,"demand=20%, huff=15%, competition=10%, traffic=10%, cost=35%, flood=10%",6600 STILLWELL ST,Pecan Park,85.2,6600 STILLWELL ST,85.2,True
-Competition-Heavy,"demand=15%, huff=30%, competition=30%, traffic=10%, cost=10%, flood=5%",Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),Sunnyside,83.4,Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),83.4,False
-Demand-Heavy,"demand=45%, huff=15%, competition=10%, traffic=10%, cost=10%, flood=10%",6600 STILLWELL ST,Pecan Park,79.8,6600 STILLWELL ST,79.8,True
+Base (documented),"demand=22%, huff=18%, competition=13%, traffic=13%, cost=14%, flood=10%, crime=10%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,78.5,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),78.5,True
+Traffic-Heavy,"demand=13%, huff=13%, competition=9%, traffic=35%, cost=12%, flood=9%, crime=9%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,86.1,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),86.1,True
+Cost-Heavy,"demand=17%, huff=13%, competition=9%, traffic=9%, cost=35%, flood=8%, crime=9%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,82.4,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),82.4,True
+Competition-Heavy,"demand=13%, huff=27%, competition=27%, traffic=9%, cost=9%, flood=5%, crime=10%",Brookhaven Street & Cullen Boulevard (unaddressed vacant tract),Sunnyside,76.5,Broadway Street & La Porte Freeway (unaddressed vacant tract),77.2,False
+Demand-Heavy,"demand=40%, huff=13%, competition=9%, traffic=9%, cost=9%, flood=10%, crime=10%",7818 HILLCROFT ST,Braeburn,76.3,7818 HILLCROFT ST,76.3,False
+Crime-Heavy,"demand=15%, huff=15%, competition=10%, traffic=10%, cost=10%, flood=10%, crime=30%",Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),Parkridge,83.8,Eldridge Parkway & Westhollow Parkway (unaddressed vacant tract),83.8,True

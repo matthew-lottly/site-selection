@@ -4,24 +4,31 @@ layer collected so far into a transparent, min-max-normalized weighted
 scorecard spanning all 10 Houston neighborhoods evaluated, and select the
 citywide recommendation.
 
-Weights (documented so the VP can interrogate the call):
-  25% Trade-area demand      -- 5-minute drive-time population, scaled by how
+Weights (documented so the VP can interrogate the call). Rebalanced from the
+original 25/20/15/15/15/10 split to make room for a real crime-risk factor
+(script 30, real HPD NIBRS Part I incident data) at the same 10% weight as
+flood risk -- both are risk-mitigation factors, scored the same way,
+penalizing sites with a worse real reading:
+  22% Trade-area demand      -- 5-minute drive-time population, scaled by how
                                  closely the population-weighted median HH
                                  income in that trade area sits inside Family
                                  Dollar's core $20k-$55k customer band
-  20% Huff market capture     -- population-weighted gravity-model capture
+  18% Huff market capture     -- population-weighted gravity-model capture
                                  probability against every real nearby
                                  competitor (script 19)
-  15% Competitive white space -- straight-line distance to the nearest
+  13% Competitive white space -- straight-line distance to the nearest
                                  existing direct dollar-store competitor
                                  (simple, exec-legible cross-check on the
                                  Huff score)
-  15% Traffic & visibility    -- AADT on the actual frontage/arterial road
+  13% Traffic & visibility    -- AADT on the actual frontage/arterial road
                                  (freeway mainlane counts excluded, script 18)
-  15% Site feasibility/cost   -- land cost per acre (lower is better), bonus
+  14% Site feasibility/cost   -- land cost per acre (lower is better), bonus
                                  for shovel-ready vacant land
   10% Flood risk              -- any mapped Special Flood Hazard Area (FEMA
                                  Zone A/AE/etc.) is heavily penalized
+  10% Crime risk               -- real HPD Part I violent + property incident
+                                 count within 0.5 mi, trailing 12 months
+                                 (script 30); more incidents is penalized
 
 Output: data/processed/scorecard.csv (ranked, all 20 citywide candidates)
 """
@@ -47,6 +54,8 @@ class ScoreSitesCitywideStage(PipelineStage):
             sites = {r["hcad_num"]: r for r in csv.DictReader(fh)}
         with open(PROCESSED / "site_trade_areas.csv", encoding="utf-8") as fh:
             trade = {r["hcad_num"]: r for r in csv.DictReader(fh)}
+        with open(PROCESSED / "site_crime_risk.csv", encoding="utf-8") as fh:
+            crime = {r["hcad_num"]: r for r in csv.DictReader(fh)}
 
         hcad_nums = list(sites.keys())
 
@@ -72,6 +81,7 @@ class ScoreSitesCitywideStage(PipelineStage):
             fallback_aadt if sites[h]["aadt_on_freeway"] == "True" else float(sites[h]["aadt"])
             for h in hcad_nums
         ]
+        crime_raw = [float(crime[h]["total_index_crime_count_12mo_0_5mi"]) for h in hcad_nums]
 
         demand_score = self.minmax(demand_raw, True)
         huff_score = self.minmax(huff_raw, True)
@@ -79,18 +89,20 @@ class ScoreSitesCitywideStage(PipelineStage):
         traffic_score = self.minmax(traffic_raw, True)
         cost_score = self.minmax(cost_per_acre_raw, False)
         flood_score = [100.0 if f == 1.0 else 0.0 for f in flood_raw]
+        crime_score = self.minmax(crime_raw, False)  # fewer real nearby incidents scores higher
         vacant_bonus = [10 if "Vacant" in sites[h]["site_type"] else 0 for h in hcad_nums]
 
         rows = []
         for i, h in enumerate(hcad_nums):
             cost_component = min(100.0, cost_score[i] + vacant_bonus[i])
             total = (
-                0.25 * demand_score[i]
-                + 0.20 * huff_score[i]
-                + 0.15 * competition_score[i]
-                + 0.15 * traffic_score[i]
-                + 0.15 * cost_component
+                0.22 * demand_score[i]
+                + 0.18 * huff_score[i]
+                + 0.13 * competition_score[i]
+                + 0.13 * traffic_score[i]
+                + 0.14 * cost_component
                 + 0.10 * flood_score[i]
+                + 0.10 * crime_score[i]
             )
             rows.append(
                 {
@@ -114,12 +126,16 @@ class ScoreSitesCitywideStage(PipelineStage):
                     "pop_10min_drive": trade[h]["pop_10min_drive"],
                     "trade_area_median_income": trade[h]["trade_area_median_income"],
                     "huff_capture_pct": trade[h]["huff_capture_pct"],
+                    "violent_crime_count_12mo_0_5mi": crime[h]["violent_crime_count_12mo_0_5mi"],
+                    "property_crime_count_12mo_0_5mi": crime[h]["property_crime_count_12mo_0_5mi"],
+                    "total_index_crime_count_12mo_0_5mi": crime[h]["total_index_crime_count_12mo_0_5mi"],
                     "demand_score": round(demand_score[i], 1),
                     "huff_score": round(huff_score[i], 1),
                     "competition_score": round(competition_score[i], 1),
                     "traffic_score": round(traffic_score[i], 1),
                     "cost_feasibility_score": round(cost_component, 1),
                     "flood_score": round(flood_score[i], 1),
+                    "crime_score": round(crime_score[i], 1),
                     "total_score": round(total, 1),
                 }
             )
@@ -152,12 +168,12 @@ class ScoreSitesCitywideStage(PipelineStage):
             writer.writeheader()
             writer.writerows(rows)
 
-        print(f"{'#':<5}{'ScoreRk':<8}{'Neighborhood':<14}{'Site':<40}{'Demand':>7}{'Huff':>6}{'Comp':>6}{'Traf':>6}{'Cost':>6}{'Flood':>6}{'TOTAL':>7}  AADT>=8k?", file=sys.stderr)
+        print(f"{'#':<5}{'ScoreRk':<8}{'Neighborhood':<14}{'Site':<40}{'Demand':>7}{'Huff':>6}{'Comp':>6}{'Traf':>6}{'Cost':>6}{'Flood':>6}{'Crime':>6}{'TOTAL':>7}  AADT>=8k?", file=sys.stderr)
         for i, r in enumerate(rows, 1):
             tag = " <- PRIMARY RECOMMENDATION" if r["primary_recommendation"] else ""
             print(
                 f"{i:<5}{r['raw_score_rank']:<8}{r['neighborhood']:<14}{r['address'][:39]:<40}{r['demand_score']:>7}{r['huff_score']:>6}"
-                f"{r['competition_score']:>6}{r['traffic_score']:>6}{r['cost_feasibility_score']:>6}{r['flood_score']:>6}{r['total_score']:>7}  "
+                f"{r['competition_score']:>6}{r['traffic_score']:>6}{r['cost_feasibility_score']:>6}{r['flood_score']:>6}{r['crime_score']:>6}{r['total_score']:>7}  "
                 f"{'yes' if r['meets_8000_aadt_benchmark'] else 'NO'}{tag}",
                 file=sys.stderr,
             )

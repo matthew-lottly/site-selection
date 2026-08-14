@@ -1,12 +1,12 @@
 """Step 28: Multi-scenario sensitivity analysis -- does the recommendation
 hold up under different, defensible weighting schemes, or is it an artifact
-of the specific 25/20/15/15/15/10 split chosen in script 20?
+of the specific 22/18/13/13/14/10/10 split chosen in script 20?
 
 Re-weights the SAME already-normalized 0-100 per-factor subscores computed
 in script 20 (demand, Huff capture, competitive gap, traffic, cost/
-feasibility, flood risk) under 5 scenarios, and re-applies the same
-8,000-AADT primary-recommendation gate to each. No new data is fetched --
-this is a pure re-aggregation check on real, already-computed scores.
+feasibility, flood risk, crime risk) under 5 scenarios, and re-applies the
+same 8,000-AADT primary-recommendation gate to each. No new data is fetched
+-- this is a pure re-aggregation check on real, already-computed scores.
 
 Output: data/processed/sensitivity_analysis.csv
 """
@@ -26,16 +26,18 @@ class SensitivityAnalysisStage(PipelineStage):
 
     # Each scenario's weights sum to 100. "Base" is script 20's documented split.
     SCENARIOS = {
-        "Base (documented)":       {"demand": 25, "huff": 20, "competition": 15, "traffic": 15, "cost": 15, "flood": 10},
-        "Traffic-Heavy":           {"demand": 15, "huff": 15, "competition": 10, "traffic": 35, "cost": 15, "flood": 10},
-        "Cost-Heavy":              {"demand": 20, "huff": 15, "competition": 10, "traffic": 10, "cost": 35, "flood": 10},
-        "Competition-Heavy":       {"demand": 15, "huff": 30, "competition": 30, "traffic": 10, "cost": 10, "flood": 5},
-        "Demand-Heavy":            {"demand": 45, "huff": 15, "competition": 10, "traffic": 10, "cost": 10, "flood": 10},
+        "Base (documented)":       {"demand": 22, "huff": 18, "competition": 13, "traffic": 13, "cost": 14, "flood": 10, "crime": 10},
+        "Traffic-Heavy":           {"demand": 13, "huff": 13, "competition": 9,  "traffic": 35, "cost": 12, "flood": 9,  "crime": 9},
+        "Cost-Heavy":              {"demand": 17, "huff": 13, "competition": 9,  "traffic": 9,  "cost": 35, "flood": 8,  "crime": 9},
+        "Competition-Heavy":       {"demand": 13, "huff": 27, "competition": 27, "traffic": 9,  "cost": 9,  "flood": 5,  "crime": 10},
+        "Demand-Heavy":            {"demand": 40, "huff": 13, "competition": 9,  "traffic": 9,  "cost": 9,  "flood": 10, "crime": 10},
+        "Crime-Heavy":             {"demand": 15, "huff": 15, "competition": 10, "traffic": 10, "cost": 10, "flood": 10, "crime": 30},
     }
 
     FACTOR_COLUMN = {
         "demand": "demand_score", "huff": "huff_score", "competition": "competition_score",
         "traffic": "traffic_score", "cost": "cost_feasibility_score", "flood": "flood_score",
+        "crime": "crime_score",
     }
 
     def run(self) -> None:

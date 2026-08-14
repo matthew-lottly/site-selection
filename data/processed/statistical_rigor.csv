@@ -8,5 +8,5 @@ spatial_block_cv_r2_std,0.292,Lower is more stable,Info,Fold-to-fold variability
 spatial_block_cv_n_folds,11,>= 6 preferred,Pass,Number of spatial holdout folds used.
 ols_in_sample_rmse,815.720,Context only,Info,In-sample fit for the tract-level OLS model.
 ols_in_sample_r2,0.646,Context only,Info,In-sample R^2 for the tract-level OLS model.
-winner_nearest_arch_rival_distance_mi,3.03,> 1.5 mi preferred,Pass,Winner's nearest direct arch-rival (Dollar General).
-winner_nearest_arch_rival_drive_time_min,7.4,> 5 min preferred,Pass,Winner-to-nearest-arch-rival OSRM network drive time.
+winner_nearest_arch_rival_distance_mi,5.62,> 1.5 mi preferred,Pass,Winner's nearest direct arch-rival (Five Below).
+winner_nearest_arch_rival_drive_time_min,15.3,> 5 min preferred,Pass,Winner-to-nearest-arch-rival OSRM network drive time.

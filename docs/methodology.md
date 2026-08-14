@@ -32,6 +32,7 @@ just the first promising area found. This version fixes that - see Stage 2 below
 | 8 | Nominatim (OpenStreetMap) | Reverse geocoding - confirms each site's real neighborhood and verifies what road each traffic count and each parcel actually sits on | REST API |
 | 9 | OpenStreetMap / Overpass API | Real transit stops (bus stops, transit platforms) near each finalist, for the micro-site operational detail | Overpass QL |
 | 10 | Census Reporter API (ACS B25044, B25003) | Zero-vehicle household share and renter-occupied housing share, per tract and city-wide, with margins of error | REST API |
+| 11 | Houston Police Department (`houstontx.gov`) | Real, point-level NIBRS Part I violent/property crime incidents (offense code, date, lat/lon), direct CSV export, for the crime-risk score | Direct CSV download (not the CKAN catalog - see below) |
 
 No Census API key, Google Maps key, or paid GIS license was used or required.
 
@@ -53,7 +54,7 @@ No Census API key, Google Maps key, or paid GIS license was used or required.
   Target, Burlington, Ross (125) - **528 real stores in total**.
 - Scored every tract with a transparent **opportunity ("gap") index**:
 
-  ```
+  ```text
   demand_index          = population × income_fit(median_HH_income) × (1 + poverty_rate)
   competitive_gap_index  = min(distance_to_nearest_dollar_store_mi, 3.0) / 3.0
   gap_score              = demand_index × competitive_gap_index
@@ -145,7 +146,7 @@ demographic, footprint, and inventory mix as Family Dollar), using each banner's
 prototype square footage as the size/attraction term and a distance-decay exponent of β = 2.0 (the
 standard value in retail gravity-model literature):
 
-```
+```text
 P(choose site j | block group i) = (Sⱼ / Dᵢⱼ^β) / Σₖ (Sₖ / Dᵢₖ^β)
 ```
 
@@ -195,32 +196,60 @@ adapted to only use real, computable inputs:
    same underlying question (how much of this trade area is genuinely incremental) with a real,
    computed proxy instead.
 
+### Stage 5c - Crime risk
+
+`pipeline/stages/s30_crime_risk.py`
+
+A real property/violent crime metric was investigated in an earlier revision and dropped as
+unavailable - that check queried only Houston's open-data CKAN catalog (`data.houstontx.gov`,
+`package_search`/`package_show`), which genuinely has no queryable crime dataset. That check missed a
+separate, real source: **Houston Police Department's own site publishes point-level NIBRS incident
+data as direct CSV downloads** (offense code, occurrence date, beat, and lat/lon), free and keyless,
+back to 2009 - not through the CKAN API at all. This stage closes that gap:
+
+- Downloaded the real 2025 and 2026 NIBRS Public View exports directly from HPD, filtered to the
+  trailing 12 months (Aug 2025-Jul 2026, matching the most recent published refresh of the 2026 file).
+- Classified offenses using the standard FBI UCR Part I "index crime" definition - the same standard
+  used nationally for retail crime-risk screening, not an ad hoc one: **violent** = murder (09A), rape
+  (11A-11D), robbery (120), aggravated assault (13A); **property** = burglary (220), larceny/theft
+  (23A-23H), motor vehicle theft (240).
+- Counted real incidents within a fixed 0.5-mile radius of each of the 20 finalists. Because the
+  radius is identical for every site, raw incident counts are already an apples-to-apples comparison
+  without a separate per-capita normalization step.
+- Loaded **47,283 real qualifying incidents citywide** for the window; per-site counts range from 1
+  (Site 20, Inwood) to 147 (Site 8, Fondren Gardens) - a large, real, differentiating spread. Full
+  detail in `data/processed/site_crime_risk.csv`.
+
 ### Stage 6 - Weighted scorecard
 
 `pipeline/stages/s20_score_sites_citywide.py`
 
 Each metric was min-max normalized across the 20 finalists (0-100) and combined with documented
-weights:
+weights. The original 25/20/15/15/15/10 split was rebalanced to make room for the real crime-risk
+factor above at the same 10% weight as flood risk - both are risk-mitigation factors that penalize a
+worse reading rather than reward a better one - with the other five factors scaled down
+proportionally rather than arbitrarily:
 
 | Factor | Weight | Rationale |
 | --- | --- | --- |
-| Trade-area demand (5-min drive population × income fit) | 25% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band |
-| Huff market-capture % | 20% | Comprehensive, distance- and size-weighted competitive pull against direct arch-rivals |
-| Competitive white space (distance to nearest arch-rival) | 15% | Simple, exec-legible cross-check on the Huff score |
-| Traffic & visibility (verified AADT) | 15% | Passive visibility drives real discount-retail traffic; freeway mainlane counts excluded |
-| Site feasibility & cost (land value/acre, vacant-land bonus) | 15% | Lower acquisition cost and shovel-ready land reduce time-to-open |
+| Trade-area demand (5-min drive population × income fit) | 22% | Rooftops within an easy drive, weighted toward the $20k-$55k core customer band |
+| Huff market-capture % | 18% | Comprehensive, distance- and size-weighted competitive pull against direct arch-rivals |
+| Competitive white space (distance to nearest arch-rival) | 13% | Simple, exec-legible cross-check on the Huff score |
+| Traffic & visibility (verified AADT) | 13% | Passive visibility drives real discount-retail traffic; freeway mainlane counts excluded |
+| Site feasibility & cost (land value/acre, vacant-land bonus) | 14% | Lower acquisition cost and shovel-ready land reduce time-to-open |
 | Flood risk (FEMA zone) | 10% | Any mapped Special Flood Hazard Area is heavily penalized |
+| Crime risk (real HPD Part I incidents, 0.5mi, trailing 12mo) | 10% | More nearby violent/property incidents is penalized (Stage 5c) |
 
 **The 8,000 AADT industry rule-of-thumb minimum viable-traffic benchmark is enforced as a hard gate
 on the primary recommendation, not just a soft-weighted factor.** The scoring script selects the
 **primary recommendation** as the highest-scoring site that *also* clears the benchmark; a
 higher-raw-score site that fails it stays visible in the scorecard (tagged) for transparency but is
 not selectable as "the" recommendation. In the current run the top raw-scoring site also clears the
-benchmark on its own - the gate's practical effect is excluding a different, lower-ranked site
-(1023 Niagara St, 1,547 vpd, a real but low reading) from ever becoming the recommendation regardless
-of how well it scores on the other five factors - but earlier in this project's development the gate
-did override the raw #1, which is exactly why it's implemented as a hard rule rather than left to the
-weighted average. See `docs/results.md` for the current ranking, and
+benchmark on its own - the gate's practical effect is excluding several lower-ranked, AADT-failing
+sites (e.g. Broadway St & La Porte Fwy, 2,651 vpd, a real but low reading) from ever becoming the
+recommendation regardless of how well they score on the other six factors - but earlier in this
+project's development the gate did override the raw #1, which is exactly why it's implemented as a
+hard rule rather than left to the weighted average. See `docs/results.md` for the current ranking, and
 `docs/data_validation.md` §2 for how a related classification bug (freeway vs. frontage road in the
 traffic-count matching) was found and fixed via the sensitivity analysis in Stage 8b below.
 
@@ -262,10 +291,12 @@ Two things a first pass at this analysis was missing:
   renter-heavy tract skews toward exactly the household-budget profile Family Dollar's core
   categories serve. Surfaced in the map's tract popups and Confidence Intervals dashboard tab.
 - **Multi-scenario sensitivity analysis**: re-aggregates the same already-normalized 0-100 per-factor
-  subscores from Stage 6 under 5 different, defensible weighting schemes (Traffic-Heavy, Cost-Heavy,
-  Competition-Heavy, Demand-Heavy, plus the documented Base split), re-applying the same AADT gate to
-  each. No new data is fetched - this is a pure re-aggregation check on whether the recommendation is
-  an artifact of the specific weights chosen, or holds up under alternative, equally defensible ones.
+  subscores from Stage 6 under 6 different, defensible weighting schemes (Traffic-Heavy, Cost-Heavy,
+  Competition-Heavy, Demand-Heavy, Crime-Heavy, plus the documented Base split), re-applying the same
+  AADT gate to each. The Crime-Heavy scenario (30% weight on the Stage 5c crime score) was added
+  specifically to stress-test how load-bearing the new crime factor is on the recommendation. No new
+  data is fetched - this is a pure re-aggregation check on whether the recommendation is an artifact
+  of the specific weights chosen, or holds up under alternative, equally defensible ones.
   Building this check is what surfaced the freeway/frontage-road classification bug documented in
   `docs/data_validation.md` §2 - an implausible score under one scenario traced back to a real error
   in Stage 4's traffic-count matching, which was then fixed and changed the actual recommendation.
@@ -318,9 +349,11 @@ Details** (micro-site operational data including transit distance), **Confidence
   reported as-is rather than patched with an estimate.
 - No revenue forecast is produced anywhere (see Stages 5 and 5b) - no public store-level sales data
   exists to calibrate one.
-- No property/violent crime metric is produced. Houston's open data portal was checked directly (its
-  CKAN catalog API) and has no queryable crime dataset, only static HTML report pages - investigated
-  and explicitly dropped rather than scraped or estimated.
+- A real property/violent crime metric **is** produced (Stage 5c) - real HPD NIBRS Part I incident
+  counts within 0.5mi of each site, trailing 12 months, weighted at 10% in the scorecard. An earlier
+  revision checked only Houston's open-data CKAN catalog API (genuinely no queryable crime dataset
+  there) and stopped, missing HPD's own direct CSV export; see `docs/data_validation.md` §2 for the
+  full correction.
 - Deed restrictions, median-break/ingress-egress geometry, and engineered truck-turning-radius
   confirmation are not covered by any public data source used here and are explicitly flagged as
   unverified (Stage 4, Site Details dashboard tab) rather than guessed.
