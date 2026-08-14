@@ -10,7 +10,8 @@ How the Recommendation Was Built
 - Constraint: only free, public, reproducible data - no paid vendor data, nothing hand-typed
 - Screened all 1,115 Harris County census tracts, kept the 643 actually inside Houston city limits
 - Found 10 opportunity areas at least 2.75 miles apart, then 275 real HCAD parcels, then 20 finalist sites
-- Every finalist enriched with real traffic, flood zone, drive-time demand, and competition data
+- Every finalist enriched with real traffic, flood zone, drive-time demand, competition, crime, and
+  affordable/assisted-housing data - 18 free public sources total, four rounds of adding real signals
 
 ## IMAGE
 

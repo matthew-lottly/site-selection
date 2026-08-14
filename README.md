@@ -92,11 +92,13 @@ Zones and HUD Multifamily Properties - see `docs/data_validation.md` §2 (items 
   subset (`--only 01 02`), or just lists them (`--list`).
 - `data/raw/` - cached raw API responses (so re-running the pipeline doesn't hammer public APIs)
 - `data/processed/` - clean CSV/GeoJSON outputs consumed by later stages and the map
-- `docs/` - methodology, results, data validation, limitations & diligence roadmap, and a
-  presentation outline, plus PowerPoint build assets (`powerpoint_starter.md`,
-  `powerpoint_slide_copy.md`, `powerpoint_speaker_notes.md`)
+- `docs/` - methodology, results, data validation, limitations & diligence roadmap, and an email
+  deliverable summarizing data sources and next steps for a non-technical audience
+  (`email_to_family_dollar.md`)
 - `docs/slides/` - a paste-ready, 12-file leadership slide deck (one markdown file per slide, real
-  chart images included) - see `docs/slides/00_INDEX.md` for how to build it in Google Slides
+  chart images included) - see `docs/slides/00_INDEX.md` for how to build it in Google Slides. This is
+  the current deck; an earlier PowerPoint-oriented draft covering the same ground in prose form was
+  removed once this became the paste-ready version.
 - `index.html` - the generated interactive web map (repo root, for GitHub Pages)
 
 ## Running the pipeline

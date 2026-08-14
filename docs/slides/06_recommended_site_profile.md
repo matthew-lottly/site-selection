@@ -2,21 +2,26 @@
 
 ## PASTE INTO SLIDE - TITLE
 
-Why 6600 Stillwell St Wins
+Why Brookhaven St & Cullen Blvd Wins
 
 ## PASTE INTO SLIDE - BODY
 
-6600 Stillwell St, Pecan Park - HCAD account 0410300000175
+Brookhaven Street & Cullen Boulevard, Sunnyside - HCAD account 0430390000003
 
-- 0.81-acre vacant commercial parcel, $123,494 land value - shovel-ready, no demolition
-- 19,656 vehicles/day verified on Gulf Freeway Frontage Road, clears the 8,000 AADT benchmark
-- 44,339 people within a real 5-minute drive; 228,331 within 10 minutes
-- $55,390 trade-area median income - squarely inside the $20k-$55k core discount-retail demand band
-- 44.8% modeled market capture against nearby direct arch-rivals (Dollar General, Five Below)
+- 0.66-acre vacant commercial parcel, $373,516 land value - shovel-ready, no demolition
+- 20,532 vehicles/day verified on Cullen Boulevard (TxDOT 2025 AADT), clears the 8,000 AADT benchmark
+- 43,688 people within a real 5-minute drive; $39,529 trade-area median income
+- Real federal Opportunity Zone designation, verified by point-in-polygon intersection
+- 612 real HUD-assisted housing units within 1 mile - more than any other finalist
+- 30.1% modeled market capture against every real nearby arch-rival (Dollar General, Five Below, and
+  Dollar Tree, now correctly scored as a direct competitor)
 - FEMA Zone X - outside the mapped flood hazard area
+- Lowest cannibalization risk of any strong finalist: 4.07 mi from the nearest existing Family Dollar, 0% overlap
 
 ## SPEAKER NOTES
 
-Explain why this site wins operationally: real traffic, real demand, low acquisition
-cost, low flood risk. The one number intentionally not on this slide is
-cannibalization risk - that is the next slide's whole point, do not preempt it here.
+Explain why this site wins operationally: real traffic, real demand, low cannibalization
+risk, low flood risk, plus two federal signals (Opportunity Zone, HUD-assisted housing
+concentration) that align directly with Family Dollar's core low-income customer base.
+The one number intentionally not on this slide is crime - that is the next slide's whole
+point, do not preempt it here.

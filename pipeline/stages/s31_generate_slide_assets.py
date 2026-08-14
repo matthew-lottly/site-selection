@@ -56,7 +56,7 @@ class GenerateSlideAssetsStage(PipelineStage):
         OUT / "pipeline_funnel.png",
         OUT / "site_map.png",
         OUT / "top5_scores.png",
-        OUT / "cannibalization_tradeoff.png",
+        OUT / "key_tradeoff.png",
         OUT / "sensitivity.png",
         OUT / "confidence_intervals.png",
     )
@@ -192,52 +192,60 @@ class GenerateSlideAssetsStage(PipelineStage):
         self.save(fig, "top5_scores.png")
 
     # ---------------------------------------------------------------------------
-    def chart_cannibalization(self) -> None:
-        scorecard = {r["hcad_num"]: r for r in self.load("scorecard.csv")}
-        canib = {r["hcad_num"]: r for r in self.load("cannibalization.csv")}
-        winner_h = next(h for h, r in scorecard.items() if r["primary_recommendation"] == "True")
-        runner_h = next(h for h, r in scorecard.items() if r["raw_score_rank"] == "2")
+    def chart_key_tradeoff(self) -> None:
+        """The real trade-off, computed dynamically rather than hardcoded to a
+        specific rank or site name -- so this stays accurate if a future rerun
+        changes which finalist wins or which one has the strongest crime
+        reading. Contrasts the recommended site against whichever other top-5
+        finalist has the best real crime score, on both crime and the two
+        positive investment signals (HUD Multifamily units, Opportunity Zone)."""
+        top5 = sorted(self.load("scorecard.csv"), key=lambda r: int(r["raw_score_rank"]))[:5]
+        winner = next(r for r in top5 if r["primary_recommendation"] == "True")
+        contrast = max((r for r in top5 if r is not winner), key=lambda r: float(r["crime_score"]))
 
         rows = [
-            ("Recommended\n" + scorecard[winner_h]["neighborhood"], canib[winner_h], GREEN),
-            ("#2 Alternate\n" + scorecard[runner_h]["neighborhood"], canib[runner_h], BLUE),
+            ("Recommended\n" + winner["neighborhood"], winner, GREEN),
+            ("Best crime reading\n" + contrast["neighborhood"], contrast, BLUE),
         ]
 
         fig, axes = plt.subplots(1, 2, figsize=(9.5, 4.2))
 
         ax = axes[0]
-        vals = [float(r["net_new_population_reach"]) for _, r, _ in rows]
+        vals = [float(r["crime_score"]) for _, r, _ in rows]
         colors = [c for _, _, c in rows]
         bars = ax.bar([0, 1], vals, color=colors, width=0.55, zorder=3)
-        for i, v in enumerate(vals):
-            ax.text(i, v + max(vals) * 0.02, f"{v:,.0f}", ha="center", fontsize=11, fontweight="bold", color=INK)
+        for i, (_, r, _) in enumerate(rows):
+            v, viol, prop = float(r["crime_score"]), r["violent_crime_count_12mo_0_5mi"], r["property_crime_count_12mo_0_5mi"]
+            ax.text(i, v + 4, f"{v:.1f}/100", ha="center", fontsize=11, fontweight="bold", color=INK)
+            ax.text(i, v + 12, f"{viol}v / {prop}p, 0.5mi", ha="center", fontsize=8.7, color=MUTED)
         ax.set_xticks([0, 1])
         ax.set_xticklabels([r[0] for r in rows], fontsize=9.5)
-        ax.set_title("Net-new population reach", fontsize=11.5, fontweight="bold", color=INK)
+        ax.set_title("Real crime score (100 = safest)", fontsize=11.5, fontweight="bold", color=INK)
         ax.spines[["top", "right"]].set_visible(False)
         ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
         ax.set_axisbelow(True)
-        ax.set_ylim(0, max(vals) * 1.22)
+        ax.set_ylim(0, 118)
+        ax.set_yticks([0, 20, 40, 60, 80, 100])
 
         ax = axes[1]
-        vals = [float(r["nearest_family_dollar_mi"]) for _, r, _ in rows]
-        risk = [r["cannibalization_risk"].split(" (")[0] for _, r, _ in rows]
+        vals = [float(r["hud_multifamily_assisted_unit_count_1mi"]) for _, r, _ in rows]
+        oz = [r["in_opportunity_zone"] == "True" for _, r, _ in rows]
         bars = ax.bar([0, 1], vals, color=colors, width=0.55, zorder=3)
-        for i, (v, rk) in enumerate(zip(vals, risk)):
-            badge_color = GREEN if rk == "Low" else ColorRamp.STATUS_RAMP[-1]
-            ax.text(i, v + max(vals) * 0.15, f"{rk} risk", ha="center", fontsize=9.5, fontweight="bold", color=badge_color)
-            ax.text(i, v + max(vals) * 0.05, f"{v:.2f} mi", ha="center", fontsize=11, fontweight="bold", color=INK)
+        for i, (v, in_oz) in enumerate(zip(vals, oz)):
+            ax.text(i, v + max(vals + [1]) * 0.05, f"{v:.0f} units", ha="center", fontsize=11, fontweight="bold", color=INK)
+            oz_color = GREEN if in_oz else MUTED
+            ax.text(i, v + max(vals + [1]) * 0.16, "Opportunity Zone" if in_oz else "No Opportunity Zone", ha="center", fontsize=8.7, fontweight="bold", color=oz_color)
         ax.set_xticks([0, 1])
         ax.set_xticklabels([r[0] for r in rows], fontsize=9.5)
-        ax.set_title("Distance to nearest existing Family Dollar", fontsize=11.5, fontweight="bold", color=INK)
+        ax.set_title("HUD-assisted housing units, 1mi + Opportunity Zone", fontsize=11.5, fontweight="bold", color=INK)
         ax.spines[["top", "right"]].set_visible(False)
         ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
         ax.set_axisbelow(True)
-        ax.set_ylim(0, max(vals) * 1.45)
+        ax.set_ylim(0, max(vals + [1]) * 1.42)
 
-        fig.suptitle("The one real trade-off: recommended site vs. #2 alternate", fontsize=13, fontweight="bold", color=INK, y=1.04)
+        fig.suptitle("The real trade-off: weakest crime reading vs. strongest real investment signals", fontsize=13, fontweight="bold", color=INK, y=1.04)
         fig.tight_layout()
-        self.save(fig, "cannibalization_tradeoff.png")
+        self.save(fig, "key_tradeoff.png")
 
     # ---------------------------------------------------------------------------
     def chart_sensitivity(self) -> None:
@@ -267,7 +275,8 @@ class GenerateSlideAssetsStage(PipelineStage):
             plt.Rectangle((0, 0), 1, 1, facecolor=ColorRamp.STATUS_RAMP[1], label="A different site wins"),
         ]
         ax.legend(handles=handles, loc="upper right", frameon=True, fontsize=9.5, facecolor="white", edgecolor=GRID)
-        ax.set_title("Recommendation holds in 3 of 5 alternative weighting scenarios", fontsize=13, fontweight="bold", color=INK, pad=12)
+        n_stable = sum(stable)
+        ax.set_title(f"Recommendation holds in {n_stable} of {len(rows)} alternative weighting scenarios", fontsize=13, fontweight="bold", color=INK, pad=12)
         fig.tight_layout()
         self.save(fig, "sensitivity.png")
 
@@ -312,7 +321,7 @@ class GenerateSlideAssetsStage(PipelineStage):
         self.chart_pipeline_funnel()
         self.chart_site_map()
         self.chart_top5_scores()
-        self.chart_cannibalization()
+        self.chart_key_tradeoff()
         self.chart_sensitivity()
         self.chart_confidence_intervals()
         print("\nAll slide chart images written to", OUT)

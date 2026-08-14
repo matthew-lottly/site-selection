@@ -13,9 +13,13 @@ What Leadership Can Inspect Live
 - Open-source web map (Folium/Leaflet), no API key, deployable as a static file to GitHub Pages
 - Citywide opportunity choropleth across 643 Houston tracts, plus all 20 candidate sites as rank badges
 - The recommendation is a distinct gold-ringed star, always visually separate from the rank colors
-- Toggleable layers: 5 competitor tiers, city boundary, FEMA flood zones, drive-time trade area
-- Right-side Analysis Dashboard: scorecard, cannibalization, confidence intervals, and model-rigor tabs,
-  built live from the same data behind this deck
+- 16 real, toggleable overlay layers: 4 competitor tiers, city boundary, FEMA flood zones, drive-time
+  trade area, HUD LIHTC and HUD Multifamily properties, Opportunity Zones, LEHD daytime population,
+  USDA food access, and the Overture competitor cross-check - each with a dynamic legend that only
+  shows while that layer is actually switched on
+- Right-side Analysis Dashboard, 7 tabs: Executive Checks, Scorecard, Cannibalization, Site Details,
+  Confidence Intervals, Model Rigor, and Sources & Validation - built live from the same data behind
+  this deck
 
 ## SCREENSHOTS TO TAKE YOURSELF
 

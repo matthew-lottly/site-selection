@@ -11,10 +11,11 @@ Houston Family Dollar Site Recommendation
 
 ## PASTE INTO SLIDE - BODY
 
-Recommendation: acquire 6600 Stillwell St, Pecan Park, Houston, TX
+Recommendation: acquire land at Brookhaven Street & Cullen Boulevard, Sunnyside, Houston, TX
 
 - Selected from 20 real candidate parcels across 10 Houston neighborhoods
 - Citywide screen of all 1,115 Harris County census tracts, not one submarket
+- Real federal Opportunity Zone designation + the most HUD-assisted housing (612 units) of any finalist
 - Verified traffic, strong trade-area demand, low flood risk, benchmark-gated score
 
 ## IMAGE

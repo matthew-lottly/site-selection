@@ -29,8 +29,8 @@ numbers would no longer match.
 | 3 | `03_scope_and_pipeline.md` | How the Recommendation Was Built | `pipeline_funnel.png` |
 | 4 | `04_data_sources_validation.md` | Why This Analysis Is Defensible | none |
 | 5 | `05_top_finalists.md` | Top 5 of 20 Citywide Finalists | `top5_scores.png` |
-| 6 | `06_recommended_site_profile.md` | Why 6600 Stillwell St Wins | none |
-| 7 | `07_key_tradeoff.md` | Cannibalization vs. Net-New Reach | `cannibalization_tradeoff.png` |
+| 6 | `06_recommended_site_profile.md` | Why Brookhaven St & Cullen Blvd Wins | none |
+| 7 | `07_key_tradeoff.md` | Weakest Crime Reading, Strongest Real Investment Signals | `key_tradeoff.png` |
 | 8 | `08_robustness_check.md` | Sensitivity Analysis: Does the Pick Hold Up? | `sensitivity.png` |
 | 9 | `09_confidence_intervals.md` | How Uncertain Are the Underlying Numbers? | `confidence_intervals.png` |
 | 10 | `10_interactive_map.md` | What Leadership Can Inspect Live | your own screenshot(s) of `index.html` |
@@ -62,16 +62,23 @@ exactly what to capture.
 
 ## Q&A backup points
 
-- Why no revenue forecast? No public store-level sales data exists to calibrate a defensible dollar model.
-- Why include the #2 alternate? It reduces cannibalization risk and preserves flexibility during diligence.
+- Why no revenue forecast? No public store-level sales data exists to calibrate a defensible dollar model;
+  the named industry-standard fix is analog-store sales forecasting, which requires Family Dollar's own data.
+- Why does the recommendation carry the field's worst crime score? Reported plainly rather than smoothed
+  over - it's the real trade-off against a real Opportunity Zone designation and the largest nearby
+  concentration of HUD-assisted housing of any finalist. See slide 7.
 - Why trust the traffic number? Every AADT match was reverse-geocoded and verified to be a real
-  frontage road, not a freeway mainline count - a bug in that exact check was found and fixed during
-  the build (see `docs/data_validation.md` #2, item 10).
-- Why no property crime metric? Investigated directly against Houston's open data portal; no queryable
-  dataset exists, so it was dropped rather than estimated.
+  arterial road, not a freeway mainline count - a bug in that exact check was found and fixed during
+  the build (see `docs/data_validation.md` §2, item 10).
+- Why did the recommendation change from an earlier revision? A fourth research pass found two more
+  real, free federal data sources (Opportunity Zones, HUD Multifamily) that materially favor this site -
+  a real result of the model getting more complete, not a tuning choice. See `docs/results.md`.
+- Why is Dollar Tree counted as a competitor now? Dollar Tree sold Family Dollar to private equity and
+  the two officially separated on 2025-07-08 - it's a real competitor now, not a "sister banner."
 
-## Superseded files
+## Superseded files (removed)
 
-The older `powerpoint_starter.md`, `powerpoint_slide_copy.md`, `powerpoint_speaker_notes.md`, and
-`presentation_outline.md` in `docs/` cover similar ground in prose form and can still be used as
-background reading, but this `docs/slides/` folder is the paste-ready version with real chart images.
+Earlier drafts of this deck (`powerpoint_starter.md`, `powerpoint_slide_copy.md`,
+`powerpoint_speaker_notes.md`, `presentation_outline.md`) covered the same ground in prose form under
+a stale recommendation and have been removed - this `docs/slides/` folder is the current, paste-ready
+version with real, regenerated chart images.
